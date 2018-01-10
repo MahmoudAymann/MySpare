@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity
     Toolbar mToolBar;
     TextView mToolbarText;
     ImageView mToolbarIcon;
-
+   protected DrawerLayout mDrawer;
+   protected NavigationView navigationView;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +50,13 @@ public class MainActivity extends AppCompatActivity
 
         initUI();
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawer, mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -120,59 +121,19 @@ public class MainActivity extends AppCompatActivity
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
             public void onStartTabSelected(NavigationTabBar.Model model, int index) {
-                switch (index){
-                    case 0:
-                        mToolbarText.setText("الملف الشخصي");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_profile_color_24dp));                        break;
-                    case 1:
-                        mToolbarText.setText("الإشعارات");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_notification_color_24dp));
-                        break;
-                    case 2:
-                        mToolbarText.setText("إضافة");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_add_color_24dp));
-                        break;
-                    case 3:
-                        mToolbarText.setText("المفضلة");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_favourite_white_24dp));
-                        break;
-                    case 4:
-                        mToolbarText.setText("القائمة الرئيسية");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
 
-                }
             }
 
             @Override
             public void onEndTabSelected(NavigationTabBar.Model model, int index) {
-
+                addToolbarTitleAndIcons(index);
             }
         });
 
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-
-                switch (position){
-                    case 0:
-                        mToolbarText.setText("الملف الشخصي");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_profile_color_24dp));                        break;
-                    case 1:
-                        mToolbarText.setText("الإشعارات");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_notification_color_24dp));
-                        break;
-                    case 2:
-                        mToolbarText.setText("إضافة");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_add_color_24dp));
-                        break;
-                    case 3:
-                        mToolbarText.setText("المفضلة");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_favourite_white_24dp));
-                        break;
-                    case 4:
-                        mToolbarText.setText("القائمة الرئيسية");
-                        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
-                }
+                addToolbarTitleAndIcons(position);
             }
 
             @Override
@@ -206,6 +167,30 @@ public class MainActivity extends AppCompatActivity
         navigationTabBar.setBadgeBgColor(Color.RED);
         navigationTabBar.setBadgeSize(30);
     }//end initUi
+
+    private void addToolbarTitleAndIcons(int index) {
+
+        switch (index){
+            case 0:
+                mToolbarText.setText("الملف الشخصي");
+                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_profile_color_24dp));                        break;
+            case 1:
+                mToolbarText.setText("الإشعارات");
+                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_notification_color_24dp));
+                break;
+            case 2:
+                mToolbarText.setText("إضافة");
+                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_add_color_24dp));
+                break;
+            case 3:
+                mToolbarText.setText("المفضلة");
+                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_favourite_white_24dp));
+                break;
+            case 4:
+                mToolbarText.setText("القائمة الرئيسية");
+                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
+        }//end switch
+    }
 
     @Override
     public void onBackPressed() {

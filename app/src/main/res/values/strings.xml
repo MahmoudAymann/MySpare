@@ -31,4 +31,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="button_more_text">المزيد</string>
+    <string name="model">الموديل:</string>
 </resources>

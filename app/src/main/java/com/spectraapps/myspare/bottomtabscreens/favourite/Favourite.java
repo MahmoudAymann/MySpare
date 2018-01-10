@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.favourite;
+package com.spectraapps.myspare.bottomtabscreens.favourite;
 
 
 import android.content.res.Configuration;

@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.favourite;
+package com.spectraapps.myspare.bottomtabscreens.favourite;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

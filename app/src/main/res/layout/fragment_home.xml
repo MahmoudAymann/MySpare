@@ -1,25 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.spectraapps.myspare.mainscreen.home.Home"
-    android:weightSum="3">
+    tools:context="com.spectraapps.myspare.bottomtabscreens.home.Home">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,26 +36,23 @@
                     android:scaleType="fitXY" />
 
                 <TextView
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الهيكل الخارجى"
-                    android:textSize="18sp"
+                    android:text="الهيكل الداخلى"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            android:layout_gravity="center"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp">
+            android:layout_marginStart="5dp"
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,18 +64,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:scaleType="fitXY"
-                    />
+                    android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@+id/name_text"
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الهيكل الداخلى"
-                    android:textSize="18sp"
+                    android:text="الهيكل الخارجى"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -84,17 +80,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,30 +103,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:scaleType="fitXY"
-                     />
+                    android:scaleType="fitXY" />
 
                 <TextView
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الميكانيكا"
-                    android:textSize="18sp"
+                    android:text="الكهرباء"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            android:layout_gravity="center"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp">
+            android:layout_marginStart="5dp"
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -141,17 +134,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:scaleType="fitXY"
-                    />
+                    android:scaleType="fitXY" />
 
                 <TextView
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الكهرباء"
-                    android:textSize="18sp"
+                    android:text="الميكانيكا"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -159,17 +150,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -181,30 +173,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:scaleType="fitXY"
-                     />
+                    android:scaleType="fitXY" />
 
                 <TextView
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الإطارات"
-                    android:textSize="18sp"
+                    android:text="الإكسسوارات"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="100dp"
-            android:layout_height="145dp"
-            android:layout_gravity="center"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="2dp"
-            android:layout_weight="1"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp">
+            android:layout_marginStart="5dp"
+            android:layout_weight="2"
+            app:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,17 +207,17 @@
                     android:scaleType="fitXY" />
 
                 <TextView
-                    style="@style/TextShadow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الإكسسوارات"
-                    android:textSize="18sp"
+                    android:text="الإطارات"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
-
     </LinearLayout>
+
+
 </LinearLayout>
 

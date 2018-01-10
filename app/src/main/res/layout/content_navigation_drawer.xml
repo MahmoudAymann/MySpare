@@ -1,43 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.spectraapps.myspare.MainActivity"
-    tools:showIn="@layout/app_bar_navigation_drawer"
-    android:orientation="vertical">
-
-    <!--
-    <FrameLayout
-        android:id="@+id/frame_main"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-    -->
+    tools:showIn="@layout/app_bar_navigation_drawer">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <devlight.io.library.ntb.NavigationTabBar
-        android:id="@+id/ntb_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:ntb_badge_gravity="top"
-        app:ntb_badge_position="center"
-        android:background="@android:color/white"
-        app:ntb_scaled="true"
-        app:ntb_swiped="true"
-        app:ntb_badged="true"
-        app:ntb_tinted="true"
-        app:ntb_active_color="@color/colorAccent"
-        app:ntb_inactive_color="@color/white_gray"
-        app:ntb_badge_title_color="@android:color/white"
-        app:ntb_badge_size="10dp"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/bottom_navigation_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

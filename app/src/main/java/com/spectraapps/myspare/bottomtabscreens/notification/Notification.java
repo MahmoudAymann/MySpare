@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.notification;
+package com.spectraapps.myspare.bottomtabscreens.notification;
 
 
 import android.content.res.Configuration;
@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.mainscreen.favourite.RecyclerFavouriteAdapter;
-import com.spectraapps.myspare.mainscreen.home.*;
 
 import java.util.ArrayList;
 

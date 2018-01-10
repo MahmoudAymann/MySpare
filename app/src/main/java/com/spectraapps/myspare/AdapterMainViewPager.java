@@ -4,11 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.spectraapps.myspare.mainscreen.additem.AddItem;
-import com.spectraapps.myspare.mainscreen.favourite.Favourite;
-import com.spectraapps.myspare.mainscreen.home.Home;
-import com.spectraapps.myspare.mainscreen.notification.Notification;
-import com.spectraapps.myspare.mainscreen.profile.Profile;
+import com.spectraapps.myspare.bottomtabscreens.additem.AddItem;
+import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
+import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
+import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 
 /**
  * Created by MahmoudAyman on 02/01/2018.

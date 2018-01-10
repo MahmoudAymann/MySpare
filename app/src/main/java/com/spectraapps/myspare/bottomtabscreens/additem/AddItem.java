@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.additem;
+package com.spectraapps.myspare.bottomtabscreens.additem;
 
 
 import android.os.Bundle;

@@ -1,19 +1,14 @@
-package com.spectraapps.myspare.mainscreen.profile;
+package com.spectraapps.myspare.bottomtabscreens.profile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.helper.MenueHelper;
-import com.spectraapps.myspare.mainscreen.favourite.FavouriteData;
 
 import java.util.ArrayList;
 

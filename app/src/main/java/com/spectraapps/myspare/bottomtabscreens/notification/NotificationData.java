@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.notification;
+package com.spectraapps.myspare.bottomtabscreens.notification;
 
 /**
  * Created by MahmoudAyman on 04/01/2018.

@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.mainscreen.profile;
+package com.spectraapps.myspare.bottomtabscreens.profile;
 
 
 import android.content.res.Configuration;
@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.mainscreen.favourite.FavouriteData;
-import com.spectraapps.myspare.mainscreen.favourite.RecyclerFavouriteAdapter;
 
 import java.util.ArrayList;
 
@@ -26,11 +24,9 @@ public class Profile extends Fragment {
     RecyclerProfileAdapter mRecyclerProfileAdapter;
     ArrayList<ProfileData> mProfileDataList;
 
-
     public Profile() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +45,7 @@ public class Profile extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
 
-        mProfileDataList = new ArrayList<ProfileData>();
+        mProfileDataList = new ArrayList<>();
         mProfileDataList.add(new ProfileData("اسم المنتج"));
         mProfileDataList.add(new ProfileData("اسم المنتج"));
         mProfileDataList.add(new ProfileData("اسم المنتج"));
@@ -67,5 +63,4 @@ public class Profile extends Fragment {
 
         return rootView;
     }
-
 }

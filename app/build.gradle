@@ -36,10 +36,19 @@ dependencies {
     implementation("com.mikepenz:materialdrawer:6.0.2@aar") {
         transitive = true
     }
-//required support lib modules
+    //required support lib modules
     implementation "com.android.support:support-annotations:26.1.0"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
+    //circle imageview
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+    //popup layout search
+    compile 'com.github.michaelye.easydialog:easydialog:1.4'
+    //spinner
+    compile 'com.github.ganfra:material-spinner:2.0.0'
+   //rounded corners layouts
+    compile 'com.jcminarro:RoundKornerLayouts:0.3.1'
+
 
 }
