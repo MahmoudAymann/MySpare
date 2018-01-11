@@ -17,9 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.mikepenz.materialdrawer.DrawerBuilder;
 
 import java.util.ArrayList;
 
@@ -33,13 +30,13 @@ public class MainActivity extends AppCompatActivity
     Toolbar mToolBar;
     TextView mToolbarText;
     ImageView mToolbarIcon;
-   protected DrawerLayout mDrawer;
-   protected NavigationView navigationView;
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    protected DrawerLayout mDrawer;
+    protected NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_drawer);
+        setContentView(R.layout.activity_main);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
         mToolBar = findViewById(R.id.main_toolbar);

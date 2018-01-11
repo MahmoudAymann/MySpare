@@ -33,4 +33,9 @@
     </string>
     <string name="button_more_text">المزيد</string>
     <string name="model">الموديل:</string>
+    <string name="kind_model">النوع:</string>
+    <string name="product_num">رقم المنتج:</string>
+    <string name="enter_num">أدخل الرقم</string>
+    <string name="brand">الماركة:</string>
+    <string name="phone_num">011180310921</string>
 </resources>

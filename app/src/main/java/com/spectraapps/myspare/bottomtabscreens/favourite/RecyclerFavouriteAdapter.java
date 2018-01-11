@@ -118,5 +118,4 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
     }//end class menu
     //////////////////////////////////////////////
 
-
 }//end class adapter

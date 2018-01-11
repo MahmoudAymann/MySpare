@@ -18,7 +18,7 @@ public class SplashScreen extends Activity {
         Animation animation = AnimationUtils.loadAnimation(SplashScreen.this, R.anim.splash_anim);
         animation.setInterpolator(new LinearInterpolator());
         animation.setRepeatCount(Animation.INFINITE);
-        animation.setDuration(1000);
+        animation.setDuration(500);
 
         ImageView splash = findViewById(R.id.splach_screen);
         splash.startAnimation(animation);
