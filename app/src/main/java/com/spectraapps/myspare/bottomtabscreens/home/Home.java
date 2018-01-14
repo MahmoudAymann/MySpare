@@ -20,7 +20,8 @@ public class Home extends Fragment {
     ImageView image1,image2,image3,image4,image5,image6;
     CardView cardView1,cardView2;
 
-    public Home() {
+    public Home()
+    {
         // Required empty public constructor
     }
 

@@ -32,8 +32,11 @@ dependencies {
     //BottomNavLiv
     compile 'devlight.io:navigationtabbar:1.2.5'
     compile 'com.android.support:cardview-v7:26.1.0'
-
-    //required support lib modules
+//any view animation
+    compile 'com.android.support:support-compat:26.1.0'
+    compile 'com.daimajia.easing:library:2.0@aar'
+    compile 'com.daimajia.androidanimations:library:2.3@aar'
+    //required support lib modules image slider
     implementation "com.android.support:support-annotations:26.1.0"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
@@ -46,6 +49,8 @@ dependencies {
     compile 'com.github.ganfra:material-spinner:2.0.0'
     //rounded corners layouts
     compile 'com.jcminarro:RoundKornerLayouts:0.3.1'
+    //login progress button
+    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 
 
 }

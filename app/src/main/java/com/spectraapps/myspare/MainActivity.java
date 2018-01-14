@@ -37,12 +37,13 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+        //getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
         mToolbarIcon = findViewById(R.id.toolbar_icon);
-        mToolbarText.setText("القائمة الرئيسية");
+        mToolbarText.setText(R.string.home_title);
         mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
 
         initUI();
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_add_black_24dp),
-                        Color.parseColor(colors[2]))
+                        Color.parseColor(colors[0]))
                         //.selectedIcon(getResources().getDrawable(R.drawable.ic_seventh))
                         //.title("Diploma")
                         //.badgeTitle("state")

@@ -25,7 +25,6 @@ import com.michael.easydialog.EasyDialog;
 
 public class Products extends AppCompatActivity {
     ImageButton button;
-    TextView textView;
     EditText editText;
     Spinner spinner1,spinner2,spinner3;
     CardView cardView;

@@ -1,14 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.spectraapps.myspare.login.LoginActivity"
+    android:padding="@dimen/activity_horizontal_margin"
+    tools:context="com.spectraapps.myspare.login.RegisterActivity"
     android:background="@drawable/app_background">
 
     <ScrollView
@@ -27,13 +25,47 @@
                 android:src="@drawable/app_logo"/>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/textinput_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@android:color/white">
+
+                <EditText
+                    android:id="@+id/reg_nameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:drawableStart="@drawable/ic_person_white_24dp"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@android:color/white">
+
+                <EditText
+                    android:id="@+id/reg_phoneET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_phone_number"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:drawableStart="@drawable/ic_mobile_24dp"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@android:color/white">
 
                 <AutoCompleteTextView
-                    android:id="@+id/emailET"
+                    android:id="@+id/reg_emailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
@@ -45,54 +77,30 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/textinput_pass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@android:color/white">
 
                 <EditText
-                    android:id="@+id/passwordET"
+                    android:id="@+id/reg_passwordET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
                     android:drawableStart="@drawable/ic_lock_white_nav_24dp"/>
-
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/button_register"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_sign_up"
                 android:textStyle="bold"
                 android:background="@color/colorAccent"/>
-
-            <Button
-                android:id="@+id/button_Register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/Register"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_gravity="bottom"
-                android:background="@android:color/darker_gray"/>
-
-            <Button
-                android:id="@+id/button_later"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/skip_now_butoon"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_gravity="bottom"
-                android:background="@drawable/button_border_only"/>
 
         </LinearLayout>
     </ScrollView>

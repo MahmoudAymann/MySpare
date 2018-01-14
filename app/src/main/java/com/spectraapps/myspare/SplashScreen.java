@@ -8,6 +8,8 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import com.spectraapps.myspare.login.LoginActivity;
+
 public class SplashScreen extends Activity {
 
     @Override
@@ -31,7 +33,7 @@ public class SplashScreen extends Activity {
 
              @Override
              public void onAnimationEnd(Animation animation) {
-                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                 Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
                  startActivity(intent);
                  finish();
              }
