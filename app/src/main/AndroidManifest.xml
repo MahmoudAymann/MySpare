@@ -37,9 +37,9 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".ProductDetail" />
+        <activity android:name=".product.productdetail.ProductDetail" />
 
-        <activity android:name=".Products" />
+        <activity android:name=".product.ProductsActivity" />
 
         <activity android:name=".login.RegisterActivity"
             android:windowSoftInputMode="stateHidden"/>

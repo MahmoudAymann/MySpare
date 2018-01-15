@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity
     ViewPager mViewPager;
     Toolbar mToolBar;
     TextView mToolbarText;
-    ImageView mToolbarIcon;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
@@ -42,9 +41,9 @@ public class MainActivity extends AppCompatActivity
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
-        mToolbarIcon = findViewById(R.id.toolbar_icon);
+
         mToolbarText.setText(R.string.home_title);
-        mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
+        //mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
 
         initUI();
 
@@ -170,29 +169,30 @@ public class MainActivity extends AppCompatActivity
 
         switch (index){
             case 0:
-                mToolbarText.setText("الملف الشخصي");
-                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_profile_color_24dp));                        break;
+                mToolbarText.setText(getString(R.string.profile_title));
+                //mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_profile_color_24dp));                        break;
+                break;
             case 1:
-                mToolbarText.setText("الإشعارات");
-                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_notification_color_24dp));
+                mToolbarText.setText(getString(R.string.notifications_title));
+               // mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_notification_color_24dp));
                 break;
             case 2:
-                mToolbarText.setText("إضافة");
-                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_add_color_24dp));
+                mToolbarText.setText(getString(R.string.add_title));
+                //mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_add_color_24dp));
                 break;
             case 3:
-                mToolbarText.setText("المفضلة");
-                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_favourite_white_24dp));
+                mToolbarText.setText(getString(R.string.favourite));
+               // mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_favourite_white_24dp));
                 break;
             case 4:
-                mToolbarText.setText("القائمة الرئيسية");
-                mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
+                mToolbarText.setText(getString(R.string.home_title));
+               // mToolbarIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this,R.drawable.ic_home_color_24dp));
         }//end switch
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

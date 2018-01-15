@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">MySpare</string>
     <string name="home_title">القائمة الرئيسية</string>
-    <string name="phone_num">01118031092</string>
     <string name="title_notifications">إشعارات</string>
     <string name="logoscreen">لوجو</string>
     <string name="favourite">المفضلة</string>
@@ -27,4 +26,17 @@
     <string name="action_sign_up">تسجيل جديد</string>
     <string name="name">الاسم</string>
     <string name="enter_phone_number">رقم الهاتف</string>
+    <string name="product_detail">بيانات المنتج</string>
+    <string name="account">الحساب</string>
+    <string name="update_accountInfo">تحديث معلومات الحساب</string>
+    <string name="update_password">تحديث كلمة المرور</string>
+    <string name="contactwithus">التواصل معنا</string>
+    <string name="privacy_statements">سياسة الخصوصية والإستخدام</string>
+    <string name="contact_us">إتصل بنا</string>
+    <string name="about">عن التطبيق</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="navigation_drawer_open">فتح</string>
+    <string name="navigation_drawer_close">غلق</string>
+    <string name="profile_title">الملف الشخصى</string>
+    <string name="notifications_title">الإشعارات</string>
 </resources>

@@ -3,37 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="الحساب">
-        <menu>
-        <item
-            android:id="@+id/account_nav"
-            android:icon="@drawable/ic_account_nav_24dp"
-            android:title="تحديث معلومات الحساب" />
-        <item
-            android:id="@+id/updatePass_nav"
-            android:icon="@drawable/ic_lock_nav_24dp"
-            android:title="تحديث كلمة المرور" />
+    <group>
+        <item android:title="@string/account">
+            <menu>
+                <item
+                    android:id="@+id/account_nav"
+                    android:icon="@drawable/ic_account_nav_24dp"
+                    android:title="@string/update_accountInfo" />
+                <item
+                    android:id="@+id/updatePass_nav"
+                    android:icon="@drawable/ic_lock_nav_24dp"
+                    android:title="@string/update_password" />
+            </menu>
+        </item>
+    </group>
+    <group>
+        <item android:title="@string/contactwithus">
+            <menu>
+                <item
+                    android:id="@+id/nav_privacy"
+                    android:icon="@drawable/ic_assignment_nav_24dp"
+                    android:title="@string/privacy_statements" />
+                <item
+                    android:id="@+id/nav_callus"
+                    android:icon="@drawable/ic_call_nav_24dp"
+                    android:title="@string/contact_us" />
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/ic_info_nav_24dp"
+                    android:title="@string/about" />
+            </menu>
+        </item>
+    </group>
+    <group>
         <item
             android:id="@+id/logout_nav"
             android:icon="@drawable/ic_power_nav_24dp"
-            android:title="تسجيل الخروج" />
-        </menu>>
-    </item>
-    <item android:title="التواصل معنا">
-        <menu>
-            <item
-                android:id="@+id/nav_privacy"
-                android:icon="@drawable/ic_assignment_nav_24dp"
-                android:title="سياسة الخصوصية والإستخدام" />
-            <item
-                android:id="@+id/nav_callus"
-                android:icon="@drawable/ic_call_nav_24dp"
-                android:title="إتصل بنا" />
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/ic_info_nav_24dp"
-                android:title="عن التطبيق" />
-        </menu>
-    </item>
-
+            android:title="@string/logout" />
+    </group>
 </menu>

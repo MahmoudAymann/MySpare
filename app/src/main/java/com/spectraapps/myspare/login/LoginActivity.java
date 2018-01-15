@@ -23,8 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     //UI references.
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
-    TextInputLayout textInputLayout;
-
+    TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
 
     Button mSignInButton, mRegisterButton, mSkipButton;
 
@@ -33,7 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
+        textInputLayoutEmail = findViewById(R.id.textinput_email);
+        textInputLayoutPassword = findViewById(R.id.textinput_pass);
+
         mEmailEditText = findViewById(R.id.emailET);
         mPasswordEditText = findViewById(R.id.passwordET);
 
@@ -80,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             YoYo.with(Techniques.Shake)
                     .duration(700)
                     .repeat(1)
-                    .playOn(mEmailEditText);
+                    .playOn(textInputLayoutEmail);
             return false;
         }
     }
@@ -89,8 +90,11 @@ public class LoginActivity extends AppCompatActivity {
        if (password.length() > 4 || password.length() == 0)
            return true;
        else {
-           mPasswordEditText.setError(getString(R.string.error_invalid_password)
-           );
+           mPasswordEditText.setError(getString(R.string.error_invalid_password));
+           YoYo.with(Techniques.Shake)
+                   .duration(700)
+                   .repeat(1)
+                   .playOn(textInputLayoutPassword);
            return false;
        }
     }

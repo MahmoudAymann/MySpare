@@ -1,46 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.spectraapps.myspare.MainActivity"
-    android:orientation="vertical">
-    
-    
-    <include layout="@layout/content_navigation_drawer" />
+    android:orientation="vertical"
+    tools:context="com.spectraapps.myspare.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+
+    <!-- <include layout="@layout/content_navigation_drawer" /> -->
+    <!--
+    <include
+        android:id="@+id/include"
+        layout="@layout/bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+-->
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="">
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:text="toolbar_title"
-                android:textAllCaps="true"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center" />
-
-            <ImageView
-                android:id="@+id/toolbar_icon"
-                android:src="@android:drawable/ic_menu_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-    
-</android.support.design.widget.CoordinatorLayout>
+
+    <devlight.io.library.ntb.NavigationTabBar
+        android:id="@+id/ntb_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:ntb_active_color="@color/colorAccent"
+        app:ntb_badge_gravity="top"
+        app:ntb_badge_position="center"
+        app:ntb_badge_size="10dp"
+        app:ntb_badge_title_color="@android:color/white"
+        app:ntb_badged="true"
+        app:ntb_inactive_color="@color/white_gray"
+        app:ntb_scaled="true"
+        app:ntb_swiped="true"
+        app:ntb_tinted="true" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/ntb_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="@+id/ntb_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

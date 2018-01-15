@@ -32,6 +32,8 @@ dependencies {
     //BottomNavLiv
     compile 'devlight.io:navigationtabbar:1.2.5'
     compile 'com.android.support:cardview-v7:26.1.0'
+    //rounded imageview inside cardView
+    compile 'com.joooonho:selectableroundedimageview:1.0.1'
 //any view animation
     compile 'com.android.support:support-compat:26.1.0'
     compile 'com.daimajia.easing:library:2.0@aar'

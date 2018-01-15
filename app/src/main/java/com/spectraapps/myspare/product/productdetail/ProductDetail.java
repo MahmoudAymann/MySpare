@@ -1,4 +1,4 @@
-package com.spectraapps.myspare;
+package com.spectraapps.myspare.product.productdetail;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.spectraapps.myspare.R;
 
 import java.util.HashMap;
 
@@ -28,7 +29,8 @@ public class ProductDetail extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         mToolbar = findViewById(R.id.productDetail_toolbar);
-        mToolbar.setTitle("بيانات المنتج");
+
+        mToolbar.setTitle(getString(R.string.product_detail));
 
         mDemoSlider =  findViewById(R.id.slider);
         pagerIndicator = findViewById(R.id.custom_indicator);
@@ -37,10 +39,10 @@ public class ProductDetail extends AppCompatActivity
 
     private void imageSliderInitilaize() {
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("Hannibal",R.drawable.car_tires);
-        file_maps.put("Big Bang Theory",R.drawable.car_battery);
-        file_maps.put("House of Cards",R.drawable.car_accessories);
-        file_maps.put("Game of Thrones", R.drawable.car_inside);
+        file_maps.put("car 1",R.drawable.car_tires);
+        file_maps.put("car 2",R.drawable.car_battery);
+        file_maps.put("car 3",R.drawable.car_accessories);
+        file_maps.put("car 4", R.drawable.car_inside);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
