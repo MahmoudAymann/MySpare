@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fbutton="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
@@ -13,22 +14,6 @@
         android:layout_height="50dp"
         android:baselineAligned="false"
         android:orientation="horizontal">
-
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:visibility="visible"
-            app:corner_radius="10dp">
-
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:id="@+id/textBack1"
@@ -51,6 +36,22 @@
 
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
+        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+            android:id="@+id/roundKornerLinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:visibility="visible"
+            app:corner_radius="10dp">
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -65,22 +66,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
-
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:visibility="visible"
-            app:corner_radius="10dp">
-
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:id="@+id/textBack2"
@@ -103,6 +88,22 @@
 
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
+        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+            android:id="@+id/roundKornerLinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:visibility="visible"
+            app:corner_radius="10dp">
+
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -117,22 +118,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:visibility="visible"
-            app:corner_radius="10dp">
-
-            <Spinner
-                android:id="@+id/spinner3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:id="@+id/textBack3"
@@ -155,6 +140,22 @@
 
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
+        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+            android:id="@+id/roundKornerLinearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:visibility="visible"
+            app:corner_radius="10dp">
+
+            <Spinner
+                android:id="@+id/spinner3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -168,29 +169,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:orientation="vertical"
-            app:corner_radius="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/textBack3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/roundKornerLinearLayout2">
-
-            <EditText
-                android:id="@+id/editText1_pop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:hint="@string/enter_num"
-                android:inputType="number"
-                android:textAlignment="center" />
-
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
             android:id="@+id/textBack4"
@@ -219,17 +197,36 @@
                 android:textStyle="bold" />
 
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+            android:id="@+id/roundKornerLinearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:orientation="vertical"
+            app:corner_radius="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/textBack3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundKornerLinearLayout2">
+
+            <EditText
+                android:id="@+id/editText1_pop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/enter_num"
+                android:inputType="number"
+                android:textAlignment="center" />
+
+        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_update"
-        style="@style/Widget.AppCompat.Button.Borderless"
+    <info.hoang8f.widget.FButton
+        android:id="@+id/flatButton"
+        android:text="@string/update"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/rounded_yellow_background"
-        android:text="تحديث"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
 </LinearLayout>

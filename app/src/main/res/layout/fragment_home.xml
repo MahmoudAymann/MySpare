@@ -1,16 +1,17 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.spectraapps.myspare.bottomtabscreens.home.Home"
     android:id="@+id/farmeHome">
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
             android:layout_weight="2"
             app:cardCornerRadius="3dp">
 
@@ -44,7 +44,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الهيكل الداخلى"
+                    android:text="@string/main_inside"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -75,7 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الهيكل الخارجى"
+                    android:text="@string/main_outside"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -95,7 +95,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
             android:layout_weight="2"
             app:cardCornerRadius="3dp">
 
@@ -116,7 +115,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الكهرباء"
+                    android:text="@string/main_electricity"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -126,7 +125,6 @@
             android:id="@+id/card_4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_weight="2"
             app:cardCornerRadius="3dp">
@@ -148,7 +146,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الميكانيكا"
+                    android:text="@string/main_mechanic"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -168,7 +166,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
             android:layout_weight="2"
             app:cardCornerRadius="3dp">
 
@@ -189,7 +186,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الإكسسوارات"
+                    android:text="@string/main_accessories"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -199,7 +196,6 @@
             android:id="@+id/card_6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_weight="2"
             app:cardCornerRadius="3dp">
@@ -221,7 +217,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:gravity="center"
-                    android:text="الإطارات"
+                    android:text="@string/main_tires"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold" />
             </LinearLayout>

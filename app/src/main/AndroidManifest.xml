@@ -21,7 +21,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
-
         <activity
             android:name=".SplashScreen"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
@@ -31,18 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="stateHidden" />
-
-        <activity android:name=".product.productdetail.ProductDetail" />
-
-        <activity android:name=".product.ProductsActivity" />
-
-        <activity android:name=".login.RegisterActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".login.RegisterActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".bottomtabscreens.additem.AddItemActivity"/>
     </application>
 
 </manifest>

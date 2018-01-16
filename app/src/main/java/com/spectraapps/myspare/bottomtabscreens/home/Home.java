@@ -4,15 +4,13 @@ package com.spectraapps.myspare.bottomtabscreens.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.spectraapps.myspare.BlankFragment;
+import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.product.ProductsActivity;
 import com.spectraapps.myspare.R;
 import com.squareup.picasso.Picasso;
@@ -42,25 +40,18 @@ public class Home extends Fragment {
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent1 = new Intent(getActivity(), ProductsActivity.class);
-                //intent1.putExtra("card1","Inside Body");
-                //startActivity(intent1);
-
-                Fragment fragment = new BlankFragment();
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction transaction = fm.beginTransaction();
-                transaction.replace(R.id.farmeHome, fragment);
-                transaction.commit();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_inside));
             }
         });
 
         cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(getActivity(), ProductsActivity.class);
-                intent2.putExtra("card1","Outside Body");
-                startActivity(intent2);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_outside));
             }
         });
 
@@ -68,36 +59,36 @@ public class Home extends Fragment {
         cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent3 = new Intent(getActivity(), ProductsActivity.class);
-                intent3.putExtra("card1","Electricity");
-                startActivity(intent3);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_electricity));
             }
         });
 
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent4 = new Intent(getActivity(), ProductsActivity.class);
-                intent4.putExtra("card1","Mechanic");
-                startActivity(intent4);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_mechanic));
             }
         });
 
         cardView5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent5 = new Intent(getActivity(), ProductsActivity.class);
-                intent5.putExtra("card1","Accessories");
-                startActivity(intent5);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_accessories));
             }
         });
 
         cardView6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent6 = new Intent(getActivity(), ProductsActivity.class);
-                intent6.putExtra("card1","Tires");
-                startActivity(intent6);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                MainActivity.mToolbarText.setText(getString(R.string.main_tires));
             }
         });
 

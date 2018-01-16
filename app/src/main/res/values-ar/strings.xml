@@ -5,7 +5,7 @@
     <string name="title_notifications">إشعارات</string>
     <string name="logoscreen">لوجو</string>
     <string name="favourite">المفضلة</string>
-    <string name="additem">إضافة عنصر</string>
+    <string name="add_title">إضافة عنصر</string>
     <string name="action_settings">الضبط</string>
     <string name="title_activity_login">تسجيل الدخول</string>
     <string name="prompt_email">الإيميل</string>
@@ -39,4 +39,11 @@
     <string name="navigation_drawer_close">غلق</string>
     <string name="profile_title">الملف الشخصى</string>
     <string name="notifications_title">الإشعارات</string>
+    <string name="main_inside">الهيكل الداخلى</string>
+    <string name="main_outside">الهيكل الخارجى</string>
+    <string name="main_electricity">الكهرباء</string>
+    <string name="main_mechanic">الميكانيكا</string>
+    <string name="main_tires">الإطارات</string>
+    <string name="main_accessories">الاكسسوارات</string>
+    <string name="update">تحديث</string>
 </resources>
