@@ -34,7 +34,7 @@ import info.hoang8f.widget.FButton;
 public class ProductsActivity extends Fragment {
     FloatingActionButton fabButton;
     EditText editText;
-    Spinner spinner1, spinner2, spinner3;
+    Spinner spinner1, spinner2, spinner3, spinner5;
 
     RecyclerView recyclerView;
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
@@ -116,6 +116,7 @@ public class ProductsActivity extends Fragment {
         spinner1 = popupView.findViewById(R.id.spinner1);
         spinner2 = popupView.findViewById(R.id.spinner2);
         spinner3 = popupView.findViewById(R.id.spinner3);
+        spinner5 = popupView.findViewById(R.id.spinner5);
         FButton fButton = popupView.findViewById(R.id.flatButton);
         fButton.setButtonColor(getResources().getColor(R.color.dark_yellow));
         fButton.setShadowColor(getResources().getColor(R.color.white_gray));
@@ -126,10 +127,17 @@ public class ProductsActivity extends Fragment {
         String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.my_custom_dropdown_hint_item_layout, ITEMS);
         adapter.setDropDownViewResource(R.layout.my_custom_hint_item_layout);
+
+
+        String[] ITEMS2 = {"Egypt", "Qatar", "Seria", "US", "KSA", "GCM"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), R.layout.my_custom_dropdown_hint_item_layout, ITEMS2);
+        adapter.setDropDownViewResource(R.layout.my_custom_hint_item_layout);
+
+
         spinner1.setAdapter(adapter);
         spinner2.setAdapter(adapter);
         spinner3.setAdapter(adapter);
-
+        spinner5.setAdapter(adapter2);
         editText = popupView.findViewById(R.id.editText1_pop);
     }
 

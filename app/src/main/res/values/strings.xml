@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MySpare</string>
+    <string name="app_name" translatable="false">MySpare</string>
     <string name="title_notifications">Notifications</string>
     <string name="logoscreen">logoScreen</string>
 
@@ -50,4 +50,14 @@
     <string name="main_tires">Tires</string>
     <string name="main_accessories">Accessories</string>
     <string name="update">Update</string>
+    <string name="addItem_ar_name">Ar. Name</string>
+    <string name="hintET_name">enter the name</string>
+    <string name="addItem_en_name">En. Name</string>
+    <string name="country">Country</string>
+    <string name="manufactur_year">Year</string>
+    <string name="enter_year">enter year</string>
+    <string name="body_kind">Body</string>
+    <string name="cost">Cost</string>
+    <string name="hintET_cost">enter cost</string>
+    <string name="currency">Currency</string>
 </resources>

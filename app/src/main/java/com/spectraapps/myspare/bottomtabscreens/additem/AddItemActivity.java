@@ -1,5 +1,6 @@
 package com.spectraapps.myspare.bottomtabscreens.additem;
 
+
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class AddItemActivity extends AppCompatActivity {
     TextView mToolbarTilte;
     Button mToolbarButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +28,7 @@ public class AddItemActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.additem_toolbar);
         mToolbarTilte = findViewById(R.id.toolbar_title);
         mToolbarButton = findViewById(R.id.toolbar_button);
-
         mToolbarTilte.setText(getString(R.string.add_title));
-
-        ConstraintLayout view = findViewById(R.id.add_wholeView);
-        YoYo.with(Techniques.Bounce).duration(500).repeat(0).playOn(view);
-
 
         mToolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +37,9 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
+        ConstraintLayout view = findViewById(R.id.add_wholeView);
+        YoYo.with(Techniques.Bounce).duration(500).repeat(0).playOn(view);
 
-    }
+    }//end onCreate()
+
 }

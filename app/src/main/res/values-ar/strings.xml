@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MySpare</string>
     <string name="home_title">القائمة الرئيسية</string>
     <string name="title_notifications">إشعارات</string>
     <string name="logoscreen">لوجو</string>
@@ -46,4 +45,8 @@
     <string name="main_tires">الإطارات</string>
     <string name="main_accessories">الاكسسوارات</string>
     <string name="update">تحديث</string>
+    <string name="addItem_ar_name">الاسم العربى</string>
+    <string name="hintET_name">ادخل الرقم</string>
+    <string name="addItem_en_name">الاسم الانجليزى</string>
+    <string name="country">الدولة</string>
 </resources>

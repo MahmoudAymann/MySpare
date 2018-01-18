@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout, new Home()).commit();
 
         initBottomTabBar();
-
         initNavigationDrawer();
 
 
