@@ -45,8 +45,7 @@
     <string name="main_tires">الإطارات</string>
     <string name="main_accessories">الاكسسوارات</string>
     <string name="update">تحديث</string>
-    <string name="addItem_ar_name">الاسم العربى</string>
+    <string name="addItem_name">الاسم</string>
     <string name="hintET_name">ادخل الرقم</string>
-    <string name="addItem_en_name">الاسم الانجليزى</string>
     <string name="country">الدولة</string>
 </resources>

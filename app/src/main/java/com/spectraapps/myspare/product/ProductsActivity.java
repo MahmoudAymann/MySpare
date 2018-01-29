@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dd.processbutton.FlatButton;
@@ -48,6 +49,19 @@ public class ProductsActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
+
+        PullRefreshLayout pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProducts);
+        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // startRefresh
+                mProductsRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
+        // refresh complete
+        pullRefreshLayout.setRefreshing(false);
 
         fabButton = rootView.findViewById(R.id.fab);
         fabButton.setOnClickListener(new View.OnClickListener() {

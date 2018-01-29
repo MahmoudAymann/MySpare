@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.baoyz.widget.PullRefreshLayout;
+import com.baoyz.widget.RefreshDrawable;
 import com.spectraapps.myspare.R;
 
 import java.util.ArrayList;
@@ -34,6 +36,19 @@ public class Favourite extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_favourite, container, false);
+
+        PullRefreshLayout pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutFav);
+        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // startRefresh
+                recyclerFavouriteAdapter.notifyDataSetChanged();
+            }
+        });
+        // refresh complete
+        pullRefreshLayout.setRefreshing(false);
 
         recyclerView = rootView.findViewById(R.id.fav_recycler);
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){

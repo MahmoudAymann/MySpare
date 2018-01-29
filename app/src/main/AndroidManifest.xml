@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <!-- if you want to load images from a file OR from the internet -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -37,7 +39,18 @@
         <activity
             android:name=".login.RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".bottomtabscreens.additem.AddItemActivity"/>
+        <activity android:name=".bottomtabscreens.additem.AddItemActivity" />
+        <activity android:name=".navdrawer.UpdatePassword" />
+        <activity android:name=".login.UpdatePasswordApproval" />
+        <activity
+            android:name=".navdrawer.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.spectraapps.myspare.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -55,5 +55,10 @@ dependencies {
     compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     //Flat Button
     compile 'info.hoang8f:fbutton:1.0.5'
+    //retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    //pull-to-refresh
+    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
 
 }
