@@ -1,31 +1,24 @@
 package com.spectraapps.myspare.product;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.dd.processbutton.FlatButton;
 import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.listeners.OnSendDataToFragmentListener;
 import com.spectraapps.myspare.product.productdetail.ProductDetail;
 
 import java.util.ArrayList;
