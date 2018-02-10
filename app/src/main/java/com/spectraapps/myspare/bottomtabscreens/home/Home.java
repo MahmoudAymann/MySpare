@@ -1,7 +1,6 @@
 package com.spectraapps.myspare.bottomtabscreens.home;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -11,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.spectraapps.myspare.MainActivity;
-import com.spectraapps.myspare.product.ProductsActivity;
+import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.product.ProductsFragment;
 import com.spectraapps.myspare.R;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +28,13 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+
+            }
+        });
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -42,7 +49,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_inside));
             }
         });
@@ -51,7 +58,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_outside));
             }
         });
@@ -61,7 +68,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_electricity));
             }
         });
@@ -70,7 +77,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_mechanic));
             }
         });
@@ -79,7 +86,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_accessories));
             }
         });
@@ -88,7 +95,7 @@ public class Home extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsActivity()).commit();
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_tires));
             }
         });

@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -30,35 +30,38 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //BottomNavLiv
-    compile 'devlight.io:navigationtabbar:1.2.5'
-    compile 'com.android.support:cardview-v7:26.1.0'
+    implementation 'devlight.io:navigationtabbar:1.2.5'
+    implementation 'com.android.support:cardview-v7:26.1.0'
     //rounded imageview inside cardView
-    compile 'com.joooonho:selectableroundedimageview:1.0.1'
+    implementation 'com.joooonho:selectableroundedimageview:1.0.1'
     //any view animation
-    compile 'com.android.support:support-compat:26.1.0'
-    compile 'com.daimajia.easing:library:2.0@aar'
-    compile 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.android.support:support-compat:26.1.0'
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
     //required support lib modules image slider
-    implementation "com.android.support:support-annotations:26.1.0"
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.daimajia.slider:library:1.1.5@aar'
+    implementation 'com.android.support:support-annotations:26.1.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.slider:library:1.1.5@aar'
     //circle imageview
-    compile 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     //popup layout search
-    compile 'com.github.michaelye.easydialog:easydialog:1.4'
+    implementation 'com.github.michaelye.easydialog:easydialog:1.4'
     //spinner
-    compile 'com.github.ganfra:material-spinner:2.0.0'
+    implementation 'com.github.ganfra:material-spinner:2.0.0'
     //rounded corners layouts
-    compile 'com.jcminarro:RoundKornerLayouts:0.3.1'
+    implementation 'com.jcminarro:RoundKornerLayouts:0.3.1'
     //login progress button
-    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
+    implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     //Flat Button
-    compile 'info.hoang8f:fbutton:1.0.5'
+    implementation 'info.hoang8f:fbutton:1.0.5'
     //retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     //pull-to-refresh
-    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-
+    implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    //upload service
+    def uploadServiceVersion = "3.4.1"
+    compile "net.gotev:uploadservice:$uploadServiceVersion"
+    compile "net.gotev:uploadservice-okhttp:$uploadServiceVersion"
 }

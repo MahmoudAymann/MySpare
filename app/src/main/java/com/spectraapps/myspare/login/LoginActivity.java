@@ -20,18 +20,18 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.helper.Api;
-import com.spectraapps.myspare.model.Login;
+import com.spectraapps.myspare.http.Api;
+import com.spectraapps.myspare.http.MyRetrofitClient;
+import com.spectraapps.myspare.model.LoginModel;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.spectraapps.myspare.helper.Api.BASE_URL;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -39,9 +39,10 @@ public class LoginActivity extends AppCompatActivity
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
+    EditText mail,pass;
 
     Button mSignInButton, mRegisterButton, mSkipButton;
-
+    LoginModel loginModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,43 +53,37 @@ public class LoginActivity extends AppCompatActivity
 
 
 
-
     }//end onCreate()
 
-    private void getHeroes() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
-                .build();
+    private void serverLogin() {
 
-        Api api = retrofit.create(Api.class);
+        Api retrofit= MyRetrofitClient.getBase().create(Api.class);
 
-        Call<List<Login>> call = api.authenticate();
+        Call<LoginModel> loginCall = retrofit.login(
+                mEmailEditText.getText().toString(),
+                mPasswordEditText.getText().toString());
 
-        call.enqueue(new Callback<List<Login>>() {
+        loginCall.enqueue(new Callback<LoginModel>()
+        {
             @Override
-            public void onResponse(@NonNull Call<List<Login>> call, @NonNull Response<List<Login>> response) {
-                List<Login> heroList = response.body();
-
-                //Creating an String array for the ListView
-                String[] heroes = new String[heroList.size()];
-
-                //looping through all the heroes and inserting the names inside the string array
-                for (int i = 0; i < heroList.size(); i++) {
-                    heroes[i] = heroList.get(i).getName();
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response)
+            {
+                if (response.isSuccessful()){
+                    Toast.makeText(LoginActivity.this,""+response.body().getStatus().getTitle()+" ",Toast.LENGTH_LONG).show();
                 }
-
-                //displaying the string array into listview
-                listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, heroes));
+                else{
+                    Toast.makeText(LoginActivity.this,""+response.body().getStatus().getTitle()+" ",Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Login>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<LoginModel> call, Throwable t)
+            {
+                Toast.makeText(LoginActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();
+
             }
         });
     }
-
 
     private void initUI() {
         textInputLayoutEmail = findViewById(R.id.textinput_email);
@@ -107,9 +102,7 @@ public class LoginActivity extends AppCompatActivity
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ( isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
-                    attemptLogin();
-                }
+                attemptLogin();
             }
         });
 
@@ -117,7 +110,6 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-
             }
         });
 
@@ -125,12 +117,16 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
         });
     }//initButtonListener()
 
     private void attemptLogin() {
-        Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
+        if ( isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
+            serverLogin();
+        }
     }
 
     private boolean isEmailValid(String email) {

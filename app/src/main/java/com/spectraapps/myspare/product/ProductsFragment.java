@@ -13,19 +13,25 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.michael.easydialog.EasyDialog;
+import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
+import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.product.productdetail.ProductDetail;
 
 import java.util.ArrayList;
 
 import info.hoang8f.widget.FButton;
 
-public class ProductsActivity extends Fragment {
+public class ProductsFragment extends Fragment{
     FloatingActionButton fabButton;
     EditText editText;
     Spinner spinner1, spinner2, spinner3, spinner5;
@@ -34,12 +40,21 @@ public class ProductsActivity extends Fragment {
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
     ArrayList<ProductData> mProductDataArrayList;
 
-    public ProductsActivity() {
+    public ProductsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home())
+                        .commit();
+            }
+        });
 
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
@@ -107,7 +122,7 @@ public class ProductsActivity extends Fragment {
         new EasyDialog(getActivity())
                 //.setLayoutResourceId(R.layout.popup_filter_layout)//layout resource id
                 .setLayout(popupView)
-                .setBackgroundColor(ProductsActivity.this.getResources().getColor(R.color.white_gray))
+                .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.white_gray))
                 //.setLocation()//point in screen
                 .setLocationByAttachedView(fabButton)
                 .setGravity(EasyDialog.GRAVITY_TOP)

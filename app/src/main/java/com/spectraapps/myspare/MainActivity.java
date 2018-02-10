@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +20,7 @@ import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
+import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.UpdatePassword;
 
@@ -28,6 +30,8 @@ import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    protected IOnBackPressed onBackPressedListener;
 
     Toolbar mToolBar;
     @SuppressLint("StaticFieldLeak")
@@ -49,7 +53,6 @@ public class MainActivity extends AppCompatActivity
 
         initBottomTabBar();
         initNavigationDrawer();
-
 
 
     }
@@ -181,12 +184,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        /*
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }//end if
+        else {
             super.onBackPressed();
         }
+        */
+        if (onBackPressedListener != null)
+            onBackPressedListener.onBackPressed();
+        else
+            super.onBackPressed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -196,7 +207,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.updatePass_nav) {
-               startActivity(new Intent(MainActivity.this, UpdatePassword.class));
+            startActivity(new Intent(MainActivity.this, UpdatePassword.class));
         } else if (id == R.id.logout_nav) {
 
         } else if (id == R.id.nav_privacy) {
@@ -211,6 +222,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setOnBackPressedListener(IOnBackPressed onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
     }
 
 }//end class main
