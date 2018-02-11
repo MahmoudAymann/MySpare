@@ -31,7 +31,7 @@ public class Home extends Fragment {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
             @Override
             public void onBackPressed() {
-
+                super.onBackPressed();
             }
         });
 

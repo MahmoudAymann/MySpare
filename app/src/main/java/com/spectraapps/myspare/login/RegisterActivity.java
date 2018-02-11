@@ -3,7 +3,6 @@ package com.spectraapps.myspare.login;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.http.Api;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.http.MyRetrofitClient;
 import com.spectraapps.myspare.model.RegisterModel;
 
@@ -65,7 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
         Call<RegisterModel> registerCall = retrofit.register(name, mail, mobile, password, "token_empty");
-        //Call<RegisterModel> registerCall = retrofit.register("aahmedal778ccci@yahoo.com", "12345674589", "mzxczxcado", "012343345", "asdcccmaskd");
         registerCall.enqueue(new Callback<RegisterModel>() {
             @Override
             public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {

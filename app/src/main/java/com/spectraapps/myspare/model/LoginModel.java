@@ -1,10 +1,13 @@
 package com.spectraapps.myspare.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by MahmoudAyman on 31/01/2018.
  */
 
-public class LoginModel {
+public class LoginModel implements Parcelable{
 
     /**
      * status : {"type":"success","title":"Successfull request"}
@@ -13,6 +16,21 @@ public class LoginModel {
 
     private StatusBean status;
     private DataBean data;
+
+    protected LoginModel(Parcel in) {
+    }
+
+    public static final Creator<LoginModel> CREATOR = new Creator<LoginModel>() {
+        @Override
+        public LoginModel createFromParcel(Parcel in) {
+            return new LoginModel(in);
+        }
+
+        @Override
+        public LoginModel[] newArray(int size) {
+            return new LoginModel[size];
+        }
+    };
 
     public StatusBean getStatus() {
         return status;
@@ -28,6 +46,15 @@ public class LoginModel {
 
     public void setData(DataBean data) {
         this.data = data;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 
     public static class StatusBean {

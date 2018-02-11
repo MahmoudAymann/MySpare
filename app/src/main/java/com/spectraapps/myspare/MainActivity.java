@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity
 
         initBottomTabBar();
         initNavigationDrawer();
-
 
     }
 
@@ -184,16 +182,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        /*
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }//end if
-        else {
-            super.onBackPressed();
-        }
-        */
         if (onBackPressedListener != null)
             onBackPressedListener.onBackPressed();
         else

@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.http;
+package com.spectraapps.myspare.api;
 
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.RegisterModel;
@@ -29,4 +29,8 @@ public interface Api {
                                  @Field("password") String password,
                                  @Field("token") String token);
 
+
+    @FormUrlEncoded
+    @POST("categories")
+    Call<LoginModel> login(@Field("language") String language);
 }

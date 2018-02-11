@@ -24,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/main_image_view"
-                android:src="@drawable/car_thumb"
+                android:src="@drawable/car_outside"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
