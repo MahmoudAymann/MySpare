@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.spectraapps.myspare.product.ProductsFragment"
+    tools:context=".bottomtabscreens.home.products.ProductsFragment"
     android:id="@+id/products_fragment">
 
     <android.support.design.widget.FloatingActionButton

@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.product;
+package com.spectraapps.myspare.bottomtabscreens.home.products;
 
 /**
  * Created by MahmoudAyman on 13/01/2018.

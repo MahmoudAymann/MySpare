@@ -1,5 +1,6 @@
 package com.spectraapps.myspare.api;
 
+import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.RegisterModel;
 
@@ -32,5 +33,5 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("categories")
-    Call<LoginModel> login(@Field("language") String language);
+    Call<CategoriesModel> categories(@Field("language") String language);
 }

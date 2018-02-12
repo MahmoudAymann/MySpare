@@ -1,23 +1,37 @@
 package com.spectraapps.myspare.bottomtabscreens.home;
 
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spectraapps.myspare.MainActivity;
+import com.spectraapps.myspare.SplashScreen;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-import com.spectraapps.myspare.product.ProductsFragment;
+import com.spectraapps.myspare.http.MyRetrofitClient;
+import com.spectraapps.myspare.model.CategoriesModel;
+import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
 import com.spectraapps.myspare.R;
 import com.squareup.picasso.Picasso;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Home extends Fragment {
 
     ImageView image1, image2, image3, image4, image5, image6;
+    TextView textAccessories, textBattery, textInside, textMechanic, textOutside, textTires;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
 
     public Home() {
@@ -27,23 +41,71 @@ public class Home extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
-            @Override
-            public void onBackPressed() {
-                super.onBackPressed();
-            }
-        });
-
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        cardView1 = rootView.findViewById(R.id.card_1);
-        cardView2 = rootView.findViewById(R.id.card_2);
-        cardView3 = rootView.findViewById(R.id.card_3);
-        cardView4 = rootView.findViewById(R.id.card_4);
-        cardView5 = rootView.findViewById(R.id.card_5);
-        cardView6 = rootView.findViewById(R.id.card_6);
+        fireBackButtonEvent();
+        initUI(rootView);
+        initCardViewClickListener();
+
+        serverCategories();
+
+        Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_progress);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        return rootView;
+    }
+
+    private void serverCategories() {
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+        String lang_key = "";
+        switch (SplashScreen.LANG_NUM) {
+            case 1:
+                lang_key = "en";
+                break;
+            case 2:
+                lang_key = "ar";
+                break;
+        }
+
+        Call<CategoriesModel> categoriesCall = retrofit.categories(lang_key);
+
+        categoriesCall.enqueue(new Callback<CategoriesModel>() {
+            @Override
+            public void onResponse(Call<CategoriesModel> call, Response<CategoriesModel> response) {
+
+                if (response.isSuccessful()) {
+                    textInside.setText(response.body().getData().get(0).getName());
+                    textOutside.setText(response.body().getData().get(1).getName());
+                    textMechanic.setText(response.body().getData().get(2).getName());
+                    textTires.setText(response.body().getData().get(3).getName());
+                    textAccessories.setText(response.body().getData().get(4).getName());
+                    textBattery.setText(response.body().getData().get(5).getName());
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CategoriesModel> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }//end serverCategories
+
+    private void fireBackButtonEvent() {
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+                getActivity().finish();
+            }
+        });
+    }//end back pressed
+
+    private void initCardViewClickListener() {
 
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +162,16 @@ public class Home extends Fragment {
             }
         });
 
+    }//end initCardViewClickListener()
+
+    private void initUI(View rootView) {
+        cardView1 = rootView.findViewById(R.id.card_1);
+        cardView2 = rootView.findViewById(R.id.card_2);
+        cardView3 = rootView.findViewById(R.id.card_3);
+        cardView4 = rootView.findViewById(R.id.card_4);
+        cardView5 = rootView.findViewById(R.id.card_5);
+        cardView6 = rootView.findViewById(R.id.card_6);
+
         image1 = rootView.findViewById(R.id.image_1);
         Picasso.with(getContext()).load(R.drawable.car_inside).into(image1);
         image2 = rootView.findViewById(R.id.image_2);
@@ -113,7 +185,15 @@ public class Home extends Fragment {
         image6 = rootView.findViewById(R.id.image_6);
         Picasso.with(getContext()).load(R.drawable.car_tires).into(image6);
 
-        return rootView;
-    }
+        textAccessories = rootView.findViewById(R.id.text_accessories);
+        textBattery = rootView.findViewById(R.id.text_electrisity);
+        textInside = rootView.findViewById(R.id.text_insideBody);
+        textOutside = rootView.findViewById(R.id.text_outsideBody);
+        textMechanic = rootView.findViewById(R.id.text_mechanic);
+        textTires = rootView.findViewById(R.id.text_tires);
+
+
+    }//end initUI
+
 
 }//end Home

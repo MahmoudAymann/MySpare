@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.product.productdetail;
+package com.spectraapps.myspare.bottomtabscreens.home.products.productdetail;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,8 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 import java.util.HashMap;
 
@@ -45,6 +47,17 @@ public class ProductDetail extends Fragment
 
         return rootView;
     }
+
+    private void fireBackButtonEvent() {
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home())
+                        .commit();
+            }
+        });
+    }//end back pressed
 
     private void imageSliderInitilaize() {
         HashMap<String,Integer> file_maps = new HashMap<>();

@@ -60,8 +60,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     //pull-to-refresh
     implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    //upload service
-    def uploadServiceVersion = "3.4.1"
-    compile "net.gotev:uploadservice:$uploadServiceVersion"
-    compile "net.gotev:uploadservice-okhttp:$uploadServiceVersion"
+    //adding gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
+
 }

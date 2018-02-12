@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.product;
+package com.spectraapps.myspare.bottomtabscreens.home.products;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

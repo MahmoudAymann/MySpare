@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.product;
+package com.spectraapps.myspare.bottomtabscreens.home.products;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
@@ -22,10 +21,8 @@ import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
-import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-import com.spectraapps.myspare.helper.IOnBackPressed;
-import com.spectraapps.myspare.product.productdetail.ProductDetail;
+import com.spectraapps.myspare.bottomtabscreens.home.products.productdetail.ProductDetail;
 
 import java.util.ArrayList;
 
@@ -47,29 +44,42 @@ public class ProductsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
-            @Override
-            public void onBackPressed() {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Home())
-                        .commit();
-            }
-        });
-
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
-        PullRefreshLayout pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProducts);
-        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        fireBackButtonEvent();
 
-        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+        initUI(rootView);
+
+        initRecyclerView();
+
+        recyclerView.setAdapter(mProductsRecyclerAdapter);
+        mProductsRecyclerAdapter.notifyDataSetChanged();
+
+        return rootView;
+    }//end onCreateView()
+
+    private void initRecyclerView() {
+
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        }
+
+        mProductsRecyclerAdapter = new ProductsRecyclerAdapter(mProductDataArrayList,
+                new ProductsRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onRefresh() {
-                // startRefresh
-                mProductsRecyclerAdapter.notifyDataSetChanged();
+            public void onItemClick(ProductData productData) {
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductDetail()).commit();
             }
         });
-        // refresh complete
-        pullRefreshLayout.setRefreshing(false);
+    }//end initRecyclerView()
+
+    private void initUI(View rootView) {
+
+        initPullRefreshLayout(rootView);
 
         fabButton = rootView.findViewById(R.id.fab);
         fabButton.setOnClickListener(new View.OnClickListener() {
@@ -86,33 +96,21 @@ public class ProductsFragment extends Fragment{
 
         recyclerView = rootView.findViewById(R.id.products_recycler);
 
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        }
+    }//end initUI
 
-        mProductDataArrayList = new ArrayList<>();
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 7", "500 $"));
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 5", "700 $"));
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 1", "700 $"));
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 2", "609 $"));
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 3", "150 $"));
-        mProductDataArrayList.add(new ProductData(R.drawable.car_thumb, "product 9", "10 $"));
+    private void initPullRefreshLayout(View rootView) {
+        PullRefreshLayout pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProducts);
+        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
 
-        mProductsRecyclerAdapter = new ProductsRecyclerAdapter(mProductDataArrayList, new ProductsRecyclerAdapter.OnItemClickListener() {
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
-            public void onItemClick(ProductData productData) {
-
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductDetail()).commit();
+            public void onRefresh() {
+                // startRefresh
+                mProductsRecyclerAdapter.notifyDataSetChanged();
             }
         });
-
-        recyclerView.setAdapter(mProductsRecyclerAdapter);
-        mProductsRecyclerAdapter.notifyDataSetChanged();
-
-        return rootView;
+        // refresh complete
+        pullRefreshLayout.setRefreshing(false);
     }
 
     private void showPopUp() {
@@ -162,5 +160,16 @@ public class ProductsFragment extends Fragment{
         spinner5.setAdapter(adapter2);
         editText = popupView.findViewById(R.id.editText1_pop);
     }
+
+    private void fireBackButtonEvent() {
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home())
+                        .commit();
+            }
+        });
+    }//end back pressed
 
 }

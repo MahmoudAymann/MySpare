@@ -20,6 +20,7 @@ public class SplashScreen extends Activity {
 
     ImageButton button_ar;
     ImageButton button_en;
+    public static int LANG_NUM = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +30,31 @@ public class SplashScreen extends Activity {
         button_ar = findViewById(R.id.btn_ar);
         button_en = findViewById(R.id.btn_en);
 
-          insertAnimation();
-          initButtonClickListener();
+        insertAnimation();
+        initButtonClickListener();
     }//end oncreate
 
     private void initButtonClickListener() {
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                LANG_NUM = 1;
+                Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                i.putExtra("lang", "1");
+                startActivity(i);
+                finish();
             }
         });
 
         button_ar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LANG_NUM = 2;
 
+                Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                i.putExtra("lang", "2");
+                startActivity(i);
+                finish();
             }
         });
     }
@@ -67,8 +77,8 @@ public class SplashScreen extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                YoYo.with(Techniques.BounceInUp).repeat(5).playOn(button_ar);
-                YoYo.with(Techniques.BounceInUp).repeat(5).playOn(button_en);
+                YoYo.with(Techniques.SlideInUp).playOn(button_ar);
+                YoYo.with(Techniques.SlideInDown).playOn(button_en);
             }
 
             @Override
