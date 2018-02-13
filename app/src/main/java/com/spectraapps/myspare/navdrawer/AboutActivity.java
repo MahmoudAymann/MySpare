@@ -33,6 +33,5 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-
     }
 }

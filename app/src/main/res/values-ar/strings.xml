@@ -48,4 +48,14 @@
     <string name="addItem_name">الاسم</string>
     <string name="hintET_name">ادخل الرقم</string>
     <string name="country">الدولة</string>
+    <string name="change_language">تغيير اللغة</string>
+    <string name="manufacturer_year">سنة الصنع</string>
+    <string name="body_kind">نوع الهيكل</string>
+    <string name="cost">التكلفة</string>
+    <string name="currency">العملة</string>
+    <string name="send">ارسال</string>
+    <string name="update_pass_text">سيتم ارسال الباسوورد الى الايميل</string>
+    <string name="action_update">تحديث</string>
+    <string name="title_activity_about">من نحن</string>
+    <string name="forgot_password"><u>نسيت كلمة السر؟</u></string>
 </resources>

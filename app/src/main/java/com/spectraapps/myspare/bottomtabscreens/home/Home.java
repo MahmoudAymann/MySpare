@@ -18,7 +18,7 @@ import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-import com.spectraapps.myspare.http.MyRetrofitClient;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
 import com.spectraapps.myspare.R;
@@ -78,12 +78,19 @@ public class Home extends Fragment {
             public void onResponse(Call<CategoriesModel> call, Response<CategoriesModel> response) {
 
                 if (response.isSuccessful()) {
-                    textInside.setText(response.body().getData().get(0).getName());
-                    textOutside.setText(response.body().getData().get(1).getName());
-                    textMechanic.setText(response.body().getData().get(2).getName());
-                    textTires.setText(response.body().getData().get(3).getName());
-                    textAccessories.setText(response.body().getData().get(4).getName());
-                    textBattery.setText(response.body().getData().get(5).getName());
+                    textInside.setText(response.body().getData().get(0).getName());//internel
+                    Picasso.with(getContext()).load(response.body().getData().get(0).getImage()).into(image1);
+                    textOutside.setText(response.body().getData().get(1).getName());//externel
+                    Picasso.with(getContext()).load(response.body().getData().get(1).getImage()).into(image2);
+                    textMechanic.setText(response.body().getData().get(2).getName());//mechanic
+                    Picasso.with(getContext()).load(response.body().getData().get(2).getImage()).into(image4);
+                    textTires.setText(response.body().getData().get(3).getName());//tires
+                    Picasso.with(getContext()).load(response.body().getData().get(3).getImage()).into(image6);
+                    textAccessories.setText(response.body().getData().get(4).getName()); //accessories
+                    Picasso.with(getContext()).load(response.body().getData().get(4).getImage()).into(image5);
+                    textBattery.setText(response.body().getData().get(5).getName()); //electric
+                    Picasso.with(getContext()).load(response.body().getData().get(5).getImage()).into(image3);
+
                 } else {
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
@@ -173,17 +180,17 @@ public class Home extends Fragment {
         cardView6 = rootView.findViewById(R.id.card_6);
 
         image1 = rootView.findViewById(R.id.image_1);
-        Picasso.with(getContext()).load(R.drawable.car_inside).into(image1);
+       // Picasso.with(getContext()).load(R.drawable.car_inside).into(image1);
         image2 = rootView.findViewById(R.id.image_2);
-        Picasso.with(getContext()).load(R.drawable.car_outside).into(image2);
+       // Picasso.with(getContext()).load(R.drawable.car_outside).into(image2);
         image3 = rootView.findViewById(R.id.image_3);
-        Picasso.with(getContext()).load(R.drawable.car_battery).into(image3);
+       // Picasso.with(getContext()).load(R.drawable.car_electric).into(image3);
         image4 = rootView.findViewById(R.id.image_4);
-        Picasso.with(getContext()).load(R.drawable.car_mechanic).into(image4);
+       // Picasso.with(getContext()).load(R.drawable.car_mechanic).into(image4);
         image5 = rootView.findViewById(R.id.image_5);
-        Picasso.with(getContext()).load(R.drawable.car_accessories).into(image5);
+      //  Picasso.with(getContext()).load(R.drawable.car_accessories).into(image5);
         image6 = rootView.findViewById(R.id.image_6);
-        Picasso.with(getContext()).load(R.drawable.car_tires).into(image6);
+       // Picasso.with(getContext()).load(R.drawable.car_tires).into(image6);
 
         textAccessories = rootView.findViewById(R.id.text_accessories);
         textBattery = rootView.findViewById(R.id.text_electrisity);

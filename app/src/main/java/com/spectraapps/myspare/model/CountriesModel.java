@@ -6,31 +6,31 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
- * Created by MahmoudAyman on 11/02/2018.
+ * Created by MahmoudAyman on 13/02/2018.
  */
 
-public class CategoriesModel implements Parcelable{
+public class CountriesModel implements Parcelable{
 
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"id":"1","name":"Internals","image":"http://myspare.net/api/images/Internals.png"},{"id":"2","name":"Externals","image":"http://myspare.net/api/images/Externals.png"},{"id":"3","name":"Mechanics","image":"http://myspare.net/api/images/Mechanics.png"},{"id":"4","name":"Tires","image":"http://myspare.net/api/images/Tires.png"},{"id":"5","name":"Accessories","image":"http://myspare.net/api/images/Accessories.png"},{"id":"6","name":"Electricities","image":"http://myspare.net/api/images/Electricities.png"}]
+     * data : [{"id":"1","name":"Egypt"},{"id":"2","name":"Syria"},{"id":"3","name":"Qatar"},{"id":"4","name":"Emirates"},{"id":"5","name":"kuwait"},{"id":"6","name":"oman"},{"id":"7","name":"iraq"},{"id":"8","name":"Algeria"},{"id":"9","name":"iran"},{"id":"10","name":"tunisia"},{"id":"11","name":"turkey"},{"id":"12","name":"yemen"},{"id":"13","name":"australia"},{"id":"14","name":"canada"},{"id":"15","name":"argentina"},{"id":"16","name":"USA"},{"id":"17","name":"germany"},{"id":"18","name":"china"},{"id":"19","name":"korea"},{"id":"20","name":"malaysia"},{"id":"21","name":"italy"},{"id":"23","name":"france"},{"id":"24","name":"russia"},{"id":"25","name":"japan"},{"id":"29","name":"india"},{"id":"30","name":"mexico"},{"id":"31","name":"brazil"}]
      */
 
     private StatusBean status;
     private List<DataBean> data;
 
-    protected CategoriesModel(Parcel in) {
+    protected CountriesModel(Parcel in) {
     }
 
-    public static final Creator<CategoriesModel> CREATOR = new Creator<CategoriesModel>() {
+    public static final Creator<CountriesModel> CREATOR = new Creator<CountriesModel>() {
         @Override
-        public CategoriesModel createFromParcel(Parcel in) {
-            return new CategoriesModel(in);
+        public CountriesModel createFromParcel(Parcel in) {
+            return new CountriesModel(in);
         }
 
         @Override
-        public CategoriesModel[] newArray(int size) {
-            return new CategoriesModel[size];
+        public CountriesModel[] newArray(int size) {
+            return new CountriesModel[size];
         }
     };
 
@@ -88,13 +88,11 @@ public class CategoriesModel implements Parcelable{
     public static class DataBean {
         /**
          * id : 1
-         * name : Internals
-         * image : http://myspare.net/api/images/Internals.png
+         * name : Egypt
          */
 
         private String id;
         private String name;
-        private String image;
 
         public String getId() {
             return id;
@@ -110,14 +108,6 @@ public class CategoriesModel implements Parcelable{
 
         public void setName(String name) {
             this.name = name;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
         }
     }
 }

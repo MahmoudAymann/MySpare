@@ -6,31 +6,30 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
- * Created by MahmoudAyman on 11/02/2018.
+ * Created by MahmoudAyman on 13/02/2018.
  */
 
-public class CategoriesModel implements Parcelable{
-
+public class ManufacturerCountriesModel implements Parcelable{
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"id":"1","name":"Internals","image":"http://myspare.net/api/images/Internals.png"},{"id":"2","name":"Externals","image":"http://myspare.net/api/images/Externals.png"},{"id":"3","name":"Mechanics","image":"http://myspare.net/api/images/Mechanics.png"},{"id":"4","name":"Tires","image":"http://myspare.net/api/images/Tires.png"},{"id":"5","name":"Accessories","image":"http://myspare.net/api/images/Accessories.png"},{"id":"6","name":"Electricities","image":"http://myspare.net/api/images/Electricities.png"}]
+     * data : [{"id":"11","name":"تركيا"},{"id":"12","name":"اليمن"},{"id":"13","name":"استراليا"},{"id":"14","name":"كندا"},{"id":"15","name":"الأرجنتين"},{"id":"16","name":"الولايات المتحده الأمريكية"},{"id":"17","name":"المانيا"},{"id":"18","name":"الصين"},{"id":"19","name":"كوريا"},{"id":"20","name":"ماليزيا"},{"id":"21","name":"ايطاليا"},{"id":"23","name":"فرنسا"},{"id":"24","name":"روسيا"},{"id":"25","name":"اليابان"},{"id":"29","name":"الهند"}]
      */
 
     private StatusBean status;
     private List<DataBean> data;
 
-    protected CategoriesModel(Parcel in) {
+    protected ManufacturerCountriesModel(Parcel in) {
     }
 
-    public static final Creator<CategoriesModel> CREATOR = new Creator<CategoriesModel>() {
+    public static final Creator<ManufacturerCountriesModel> CREATOR = new Creator<ManufacturerCountriesModel>() {
         @Override
-        public CategoriesModel createFromParcel(Parcel in) {
-            return new CategoriesModel(in);
+        public ManufacturerCountriesModel createFromParcel(Parcel in) {
+            return new ManufacturerCountriesModel(in);
         }
 
         @Override
-        public CategoriesModel[] newArray(int size) {
-            return new CategoriesModel[size];
+        public ManufacturerCountriesModel[] newArray(int size) {
+            return new ManufacturerCountriesModel[size];
         }
     };
 
@@ -87,14 +86,12 @@ public class CategoriesModel implements Parcelable{
 
     public static class DataBean {
         /**
-         * id : 1
-         * name : Internals
-         * image : http://myspare.net/api/images/Internals.png
+         * id : 11
+         * name : تركيا
          */
 
         private String id;
         private String name;
-        private String image;
 
         public String getId() {
             return id;
@@ -110,14 +107,6 @@ public class CategoriesModel implements Parcelable{
 
         public void setName(String name) {
             this.name = name;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
         }
     }
 }

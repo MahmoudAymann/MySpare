@@ -23,7 +23,7 @@ import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
-import com.spectraapps.myspare.navdrawer.UpdatePassword;
+import com.spectraapps.myspare.navdrawer.ResetPassword;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -233,12 +233,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.updatePass_nav) {
-            startActivity(new Intent(MainActivity.this, UpdatePassword.class));
-        } else if (id == R.id.logout_nav) {
+            startActivity(new Intent(MainActivity.this, ResetPassword.class));
+        }else if (id == R.id.language_nav) {
+
+        }  else if (id == R.id.logout_nav) {
 
         } else if (id == R.id.nav_privacy) {
 
-        } else if (id == R.id.nav_callus) {
+        } else if (id == R.id.nav_contactus) {
 
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(MainActivity.this, AboutActivity.class));

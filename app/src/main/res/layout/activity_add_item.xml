@@ -133,7 +133,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/country"
+                        android:text="@string/manufacturer_company"
                         android:textColor="@android:color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -149,7 +149,7 @@
                     app:corner_radius="10dp">
 
                     <Spinner
-                        android:id="@+id/country_spinner"
+                        android:id="@+id/madeIn_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
@@ -176,7 +176,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/manufactur_year"
+                        android:text="@string/manufacturer_year"
                         android:textColor="@android:color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />

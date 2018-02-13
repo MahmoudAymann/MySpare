@@ -62,9 +62,8 @@ public class ProductDetail extends Fragment
     private void imageSliderInitilaize() {
         HashMap<String,Integer> file_maps = new HashMap<>();
         file_maps.put("car 1",R.drawable.car_tires);
-        file_maps.put("car 2",R.drawable.car_battery);
+        file_maps.put("car 2",R.drawable.car_electric);
         file_maps.put("car 3",R.drawable.car_accessories);
-        file_maps.put("car 4", R.drawable.car_inside);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());

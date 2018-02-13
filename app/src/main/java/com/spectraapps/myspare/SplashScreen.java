@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.login.LoginActivity;
+import com.spectraapps.myspare.model.LoginModel;
 
 public class SplashScreen extends Activity {
 
@@ -39,8 +40,7 @@ public class SplashScreen extends Activity {
             @Override
             public void onClick(View view) {
                 LANG_NUM = 1;
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                i.putExtra("lang", "1");
+                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -51,8 +51,7 @@ public class SplashScreen extends Activity {
             public void onClick(View view) {
                 LANG_NUM = 2;
 
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                i.putExtra("lang", "2");
+                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
                 startActivity(i);
                 finish();
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">MySpare</string>
+    <string name="app_name">MySpare</string>
     <string name="title_notifications">Notifications</string>
     <string name="logoscreen">logoScreen</string>
 
@@ -51,8 +51,8 @@
     <string name="update">Update</string>
     <string name="addItem_name">Name</string>
     <string name="hintET_name">enter the name</string>
-    <string name="country">Country</string>
-    <string name="manufactur_year">Year</string>
+    <string name="manufacturer_company">Made In</string>
+    <string name="manufacturer_year">Year</string>
     <string name="enter_year">enter year</string>
     <string name="body_kind">Body</string>
     <string name="cost">Cost</string>
@@ -65,5 +65,7 @@
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
     <string name="about_text">My Sapre, has been satisfying customers\' needs by providing them with the parts they need at the lowest prices. We house the most comprehensive collection of parts and accessories in the world. If your parts-shopping experience is a hit-or-miss or simply unsatisfactory, switch over to us. You won\'t regret it!</string>
+    <string name="change_language">Change Language</string>
+    <string name="forgot_password"><u>forgot password?</u></string>
 
 </resources>

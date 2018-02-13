@@ -6,19 +6,26 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.http.MyRetrofitClient;
+import com.spectraapps.myspare.navdrawer.ResetPassword;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
 
 import retrofit2.Call;
@@ -31,19 +38,19 @@ public class LoginActivity extends AppCompatActivity
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
-    EditText mail,pass;
 
     Button mSignInButton, mRegisterButton, mSkipButton;
-    LoginModel loginModel;
+    boolean isPasswordShown;
+    ImageButton mImagePasswrdVisible;
+    TextView textViewForgetPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         initUI();
-        initButtonListener();
-
-
+        initClickListener();
 
     }//end onCreate()
 
@@ -88,9 +95,15 @@ public class LoginActivity extends AppCompatActivity
         mRegisterButton = findViewById(R.id.button_Register);
         mSkipButton = findViewById(R.id.button_later);
 
+        mImagePasswrdVisible = findViewById(R.id.image_visible);
+
+        textViewForgetPassword = findViewById(R.id.forgot_password_text);
+
+
     }//end initUI()
 
-    private void initButtonListener() {
+
+    private void initClickListener() {
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,10 +125,34 @@ public class LoginActivity extends AppCompatActivity
                 finish();
             }
         });
-    }//initButtonListener()
+
+        mImagePasswrdVisible.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPasswordShown) {
+                    mImagePasswrdVisible.setImageResource(R.drawable.ic_visibility_white_24dp);
+                    mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    isPasswordShown = false;
+                } else {
+                    mImagePasswrdVisible.setImageResource(R.drawable.ic_visibility_off_white_24dp);
+                    mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    isPasswordShown = true;
+                }
+            }
+        });
+
+        textViewForgetPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ResetPassword.class);
+                startActivity(intent);
+            }
+        });
+
+    }//initClickListener()
 
     private void attemptLogin() {
-        //Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
         if ( isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
             serverLogin();
         }

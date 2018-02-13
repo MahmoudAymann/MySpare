@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.http.MyRetrofitClient;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.RegisterModel;
 
 import retrofit2.Call;
