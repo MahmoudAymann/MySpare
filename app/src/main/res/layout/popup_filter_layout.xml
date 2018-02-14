@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fbutton="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
@@ -46,7 +45,7 @@
             app:corner_radius="10dp">
 
             <Spinner
-                android:id="@+id/spinner5"
+                android:id="@+id/spinner_country_popup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -93,7 +92,7 @@
             app:corner_radius="10dp">
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/spinner_brand_popup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -145,7 +144,7 @@
             app:corner_radius="10dp">
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spinner_model_popup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -197,7 +196,7 @@
             app:corner_radius="10dp">
 
             <Spinner
-                android:id="@+id/spinner3"
+                android:id="@+id/spinner_kind_popup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

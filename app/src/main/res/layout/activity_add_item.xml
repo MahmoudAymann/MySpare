@@ -466,6 +466,49 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@color/colorPrimary"
+                    android:visibility="visible"
+                    app:corner_radius="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/country"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:visibility="visible"
+                    app:corner_radius="10dp">
+
+                    <Spinner
+                        android:id="@+id/displayCountry_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:paddingBottom="10dp">

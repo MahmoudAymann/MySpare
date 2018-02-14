@@ -38,18 +38,15 @@ public class ProductsFragment extends Fragment{
     ArrayList<ProductData> mProductDataArrayList;
 
     public ProductsFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
         fireBackButtonEvent();
-
         initUI(rootView);
-
         initRecyclerView();
 
         recyclerView.setAdapter(mProductsRecyclerAdapter);
@@ -59,7 +56,6 @@ public class ProductsFragment extends Fragment{
     }//end onCreateView()
 
     private void initRecyclerView() {
-
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
@@ -70,7 +66,6 @@ public class ProductsFragment extends Fragment{
                 new ProductsRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ProductData productData) {
-
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductDetail()).commit();
             }
@@ -78,7 +73,6 @@ public class ProductsFragment extends Fragment{
     }//end initRecyclerView()
 
     private void initUI(View rootView) {
-
         initPullRefreshLayout(rootView);
 
         fabButton = rootView.findViewById(R.id.fab);
@@ -92,8 +86,6 @@ public class ProductsFragment extends Fragment{
                 .duration(700)
                 .repeat(1)
                 .playOn(fabButton);
-
-
         recyclerView = rootView.findViewById(R.id.products_recycler);
 
     }//end initUI
@@ -106,11 +98,10 @@ public class ProductsFragment extends Fragment{
             @Override
             public void onRefresh() {
                 // startRefresh
-                mProductsRecyclerAdapter.notifyDataSetChanged();
             }
         });
         // refresh complete
-        pullRefreshLayout.setRefreshing(false);
+        //pullRefreshLayout.setRefreshing(false);
     }
 
     private void showPopUp() {
@@ -124,8 +115,8 @@ public class ProductsFragment extends Fragment{
                 //.setLocation()//point in screen
                 .setLocationByAttachedView(fabButton)
                 .setGravity(EasyDialog.GRAVITY_TOP)
-                .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 1000, -600, 100, -50, 50, 0)
-                .setAnimationAlphaShow(500, 0.3f, 1.0f)
+                .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 800, -600, 100, -50, 50, 0)
+                .setAnimationAlphaShow(300, 0.3f, 1.0f)
                 .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 500, -50, 800)
                 .setAnimationAlphaDismiss(300, 1.0f, 0.0f)
                 .setTouchOutsideDismiss(true)
@@ -133,10 +124,11 @@ public class ProductsFragment extends Fragment{
                 .setMarginLeftAndRight(30, 30)
                 .show();
 
-        spinner1 = popupView.findViewById(R.id.spinner1);
-        spinner2 = popupView.findViewById(R.id.spinner2);
-        spinner3 = popupView.findViewById(R.id.spinner3);
-        spinner5 = popupView.findViewById(R.id.spinner5);
+        spinner1 = popupView.findViewById(R.id.spinner_brand_popup);
+        spinner2 = popupView.findViewById(R.id.spinner_country_popup);
+        spinner3 = popupView.findViewById(R.id.spinner_kind_popup);
+        spinner5 = popupView.findViewById(R.id.spinner_model_popup);
+
         FButton fButton = popupView.findViewById(R.id.flatButton);
         fButton.setButtonColor(getResources().getColor(R.color.dark_yellow));
         fButton.setShadowColor(getResources().getColor(R.color.white_gray));
@@ -144,20 +136,6 @@ public class ProductsFragment extends Fragment{
         fButton.setShadowEnabled(true);
         fButton.setShadowHeight(7);
 
-        String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.my_custom_dropdown_hint_item_layout, ITEMS);
-        adapter.setDropDownViewResource(R.layout.my_custom_hint_item_layout);
-
-
-        String[] ITEMS2 = {"Egypt", "Qatar", "Seria", "US", "KSA", "GCM"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), R.layout.my_custom_dropdown_hint_item_layout, ITEMS2);
-        adapter.setDropDownViewResource(R.layout.my_custom_hint_item_layout);
-
-
-        spinner1.setAdapter(adapter);
-        spinner2.setAdapter(adapter);
-        spinner3.setAdapter(adapter);
-        spinner5.setAdapter(adapter2);
         editText = popupView.findViewById(R.id.editText1_pop);
     }
 

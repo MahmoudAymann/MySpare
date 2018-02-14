@@ -17,6 +17,7 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class ProductDetail extends Fragment
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
 
         imageSliderInitilaize();
-
+        fireBackButtonEvent();
         return rootView;
     }
 
@@ -53,7 +54,7 @@ public class ProductDetail extends Fragment
             @Override
             public void onBackPressed() {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Home())
+                        .replace(R.id.main_frameLayout, new ProductsFragment())
                         .commit();
             }
         });

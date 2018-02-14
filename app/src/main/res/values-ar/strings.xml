@@ -58,4 +58,7 @@
     <string name="action_update">تحديث</string>
     <string name="title_activity_about">من نحن</string>
     <string name="forgot_password"><u>نسيت كلمة السر؟</u></string>
+    <string name="manufacturer_company">صنع فى</string>
+    <string name="enter_year">السنة</string>
+    <string name="hintET_cost">التكلفة</string>
 </resources>

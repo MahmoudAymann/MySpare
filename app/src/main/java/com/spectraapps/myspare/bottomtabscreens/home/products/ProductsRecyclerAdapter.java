@@ -45,7 +45,10 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
     @Override
     public int getItemCount() {
+        if ( mProductDataArrayList != null)
         return mProductDataArrayList.size();
+        else
+            return 0;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

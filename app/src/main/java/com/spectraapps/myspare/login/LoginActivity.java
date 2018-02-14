@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +22,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
+import com.spectraapps.myspare.model.Data;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
@@ -32,8 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity
-{
+public class LoginActivity extends AppCompatActivity {
     //UI references.
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
@@ -43,6 +41,7 @@ public class LoginActivity extends AppCompatActivity
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
+    login loginModel = new login();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,32 +55,64 @@ public class LoginActivity extends AppCompatActivity
 
     private void serverLogin() {
 
-        Api retrofit= MyRetrofitClient.getBase().create(Api.class);
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+        Call<login> call = retrofit.login(mEmailEditText.getText().toString(),
+                mPasswordEditText.getText().toString(), "123");
 
-        Call<LoginModel> loginCall = retrofit.login(
-                mEmailEditText.getText().toString(),
-                mPasswordEditText.getText().toString());
-
-        loginCall.enqueue(new Callback<LoginModel>()
-        {
+        call.enqueue(new Callback<login>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response)
-            {
-                if (response.isSuccessful()){
-                    Toast.makeText(LoginActivity.this,""+response.body().getStatus().getTitle()+" ",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(LoginActivity.this,""+response.body().getStatus().getTitle()+" ",Toast.LENGTH_LONG).show();
+            public void onResponse(Call<login> call, Response<login> response) {
+                if (response.body().getStatus().getTitle().equals("success")) {
+                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    loginModel.setData(response.body().getData());
+                    loginModel.setStatus(response.body().getStatus());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("LoginModel",loginModel);
+                    startActivity(intent);
+
+                }else {
+                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t)
-            {
-                Toast.makeText(LoginActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();
-
+            public void onFailure(Call<login> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+//        call.enqueue(new Callback<Data>() {
+//            @Override
+//            public void onResponse(Call<Data> call, Response<Data> response) {
+//            }
+//        });
+//
+////
+////        Call<LoginModel> loginCall = retrofit.login(
+////                mEmailEditText.getText().toString(),
+////                mPasswordEditText.getText().toString(),"123");
+//
+//        loginCall.enqueue(new Callback<LoginModel>() {
+//            @Override
+//            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+//                if (response.isSuccessful()) {
+//                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+//                    loginModel.setData(response.body().getData());
+//                    loginModel.setStatus(response.body().getStatus());
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LoginModel> call, Throwable t) {
+//                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
     }
 
     private void initUI() {
@@ -153,13 +184,13 @@ public class LoginActivity extends AppCompatActivity
     }//initClickListener()
 
     private void attemptLogin() {
-        if ( isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
+        if (isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
             serverLogin();
         }
     }
 
     private boolean isEmailValid(String email) {
-        if ( email.contains("@") )
+        if (email.contains("@"))
             return true;
         else {
             mEmailEditText.setError(getString(R.string.error_invalid_email));
@@ -172,16 +203,16 @@ public class LoginActivity extends AppCompatActivity
     }//end isEmailValid()
 
     private boolean isPasswordValid(String password) {
-       if (password.length() > 4 || password.length() == 0)
-           return true;
-       else {
-           mPasswordEditText.setError(getString(R.string.error_invalid_password));
-           YoYo.with(Techniques.Shake)
-                   .duration(700)
-                   .repeat(1)
-                   .playOn(textInputLayoutPassword);
-           return false;
-       }
+        if (password.length() > 2 || password.length() == 0)
+            return true;
+        else {
+            mPasswordEditText.setError(getString(R.string.error_invalid_password));
+            YoYo.with(Techniques.Shake)
+                    .duration(700)
+                    .repeat(1)
+                    .playOn(textInputLayoutPassword);
+            return false;
+        }
     }//end isPasswordValid()
 
 }//end class LoginActivity()

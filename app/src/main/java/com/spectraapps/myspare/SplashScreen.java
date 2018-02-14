@@ -76,8 +76,8 @@ public class SplashScreen extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                YoYo.with(Techniques.SlideInUp).playOn(button_ar);
-                YoYo.with(Techniques.SlideInDown).playOn(button_en);
+                YoYo.with(Techniques.BounceInUp).playOn(button_ar);
+                YoYo.with(Techniques.BounceInUp).playOn(button_en);
             }
 
             @Override

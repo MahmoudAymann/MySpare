@@ -21,16 +21,15 @@
         android:visibility="visible" />
 
     <TextView
+        android:id="@+id/nav_header_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Mahmoud Ayman"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_header_email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="mahmoud_aymann@outlook.com" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

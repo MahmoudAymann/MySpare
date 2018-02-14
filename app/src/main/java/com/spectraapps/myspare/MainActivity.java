@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
@@ -22,12 +23,16 @@ import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.IOnBackPressed;
+import com.spectraapps.myspare.login.login;
+import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends AppCompatActivity
@@ -36,16 +41,28 @@ public class MainActivity extends AppCompatActivity
     protected IOnBackPressed onBackPressedListener;
     Locale locale;
     Toolbar mToolBar;
+
+    CircleImageView mNavCircleImageView;
+    TextView mNavNameTextView,mNavEmailTextView;
+
     @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
+    login loginModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loginModel=(login)getIntent().getSerializableExtra("LoginModel");
         setupLanguageUI();
+
+        /////////////////////
+//        Intent intent=new Intent(MainActivity.this,AddItemActivity.class);
+//        intent.putExtra("LoginModel",getIntent().getSerializableExtra("LoginModel"));
+//        startActivity(intent);
+        /////////////////
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
@@ -57,8 +74,14 @@ public class MainActivity extends AppCompatActivity
         initBottomTabBar();
         initNavigationDrawer();
 
+        if (loginModel.getData() != null){
+        mNavNameTextView.setText(loginModel.getData().getName());
+        mNavEmailTextView.setText(loginModel.getData().getMail());
+        //Picasso.with(MainActivity.this).load(model).with(image);
+        }
+        else
+            Toast.makeText(this, "no user found", Toast.LENGTH_SHORT).show();
     }
-
     private void setupLanguageUI() {
         if (SplashScreen.LANG_NUM == 1) { //english
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -75,7 +98,6 @@ public class MainActivity extends AppCompatActivity
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
         }
-
     }
 
     private void initNavigationDrawer() {
@@ -87,6 +109,12 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        mNavCircleImageView = header.findViewById(R.id.nav_header_imageView);
+        mNavNameTextView = header.findViewById(R.id.nav_header_name);
+        mNavEmailTextView = header.findViewById(R.id.nav_header_email);
+
     }
 
     @Override

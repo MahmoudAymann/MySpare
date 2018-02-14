@@ -20,11 +20,15 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.login.LoginActivity;
+import com.spectraapps.myspare.login.login;
+import com.spectraapps.myspare.model.CategoriesModel;
+import com.spectraapps.myspare.model.CountriesModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,8 +40,9 @@ public class AddItemActivity extends AppCompatActivity {
     TextView mToolbarTilte;
     Button mToolbarButton;
 
-    Spinner madeIn_spinner, brand_spinner;
-    ArrayList<String> madein_array;
+    Spinner madeIn_spinner, brand_spinner,countries_spinner;
+    ArrayList<String> madein_array, countries_array;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +52,25 @@ public class AddItemActivity extends AppCompatActivity {
         YoYo.with(Techniques.Bounce).duration(500).repeat(0).playOn(view);
 
         initToolbar();
-       // initEmptyArray();
         initUI();
 
-        serverLogin();
+        serverManufacturerCountries();
+        serverCountries();
 
     }//end onCreate()
 
-    private void initEmptyArray() {
-
-        madein_array = new ArrayList<>();
-        madein_array.add("loading");
-    }
+  private String getLangkey(){
+        String lang_key="";
+      switch (SplashScreen.LANG_NUM) {
+          case 1:
+              lang_key = "en";
+              break;
+          case 2:
+              lang_key = "ar";
+              break;
+      }
+      return lang_key;
+  }//end getLangKey()
 
     private void initToolbar() {
         mToolbar = findViewById(R.id.additem_toolbar);
@@ -71,48 +83,83 @@ public class AddItemActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
 
-    private void serverLogin() {
+    }//end initToolbar
 
-        Api retrofit= MyRetrofitClient.getBase().create(Api.class);
+    private void serverManufacturerCountries() {
 
-        String lang_key = "";
-        switch (SplashScreen.LANG_NUM) {
-            case 1:
-                lang_key = "en";
-                break;
-            case 2:
-                lang_key = "ar";
-                break;
-        }
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<ManufacturerCountriesModel> manufacturerCountriesCall = retrofit.manufacturerCountries(lang_key);
+        Call<ManufacturerCountriesModel> manufacturerCountriesCall = retrofit.manufacturerCountries(getLangkey());
 
-        manufacturerCountriesCall.enqueue(new Callback<ManufacturerCountriesModel>()
-        {
+        manufacturerCountriesCall.enqueue(new Callback<ManufacturerCountriesModel>() {
             @Override
-            public void onResponse(Call<ManufacturerCountriesModel> call, Response<ManufacturerCountriesModel> response)
-            {
+            public void onResponse(Call<ManufacturerCountriesModel> call, Response<ManufacturerCountriesModel> response) {
                 if (response.isSuccessful()) {
-                    madein_array = new ArrayList<>();
-                    for (int i = 0; i < response.body().getData().size();i++){
-                        madein_array.add(response.body().getData().get(i).getName());
-                    }
-                }
+                    getManufacturerCountries(response.body().getData());
+                } else
+                    Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onFailure(Call<ManufacturerCountriesModel> call, Throwable t)
-            {
-                Toast.makeText(AddItemActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();
+            public void onFailure(Call<ManufacturerCountriesModel> call, Throwable t) {
+                Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }//end serverManufacturerCountries()
+    private void serverCountries(){
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
+        Call<CountriesModel> countriesCall = retrofit.countries(getLangkey());
+
+        countriesCall.enqueue(new Callback<CountriesModel>() {
+            @Override
+            public void onResponse(Call<CountriesModel> call, Response<CountriesModel> response) {
+                if (response.isSuccessful()) {
+
+                    getCountries(response.body().getData());
+                }
+                else
+                    Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
+                            Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<CountriesModel> call, Throwable t) {
+                Toast.makeText(AddItemActivity.this, t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }//end serverCountries()
+
+    private void getCountries(List<CountriesModel.DataBean> data) {
+        countries_array = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            countries_array.add(data.get(i).getName());
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_item,
+                        madein_array); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        countries_spinner.setAdapter(spinnerArrayAdapter);
+    }
+    private void getManufacturerCountries(List<ManufacturerCountriesModel.DataBean> data) {
+        madein_array = new ArrayList<>();
+        for (int i = 0; i < data.size() ; i++) {
+            madein_array.add(data.get(i).getName());
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_item,
+                        madein_array); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        madeIn_spinner.setAdapter(spinnerArrayAdapter);
+    }
 
     private void initUI() {
         madeIn_spinner = findViewById(R.id.madeIn_spinner);
     }
-
 }
