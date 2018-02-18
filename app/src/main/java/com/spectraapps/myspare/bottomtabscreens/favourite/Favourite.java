@@ -25,11 +25,9 @@ public class Favourite extends Fragment {
     RecyclerFavouriteAdapter recyclerFavouriteAdapter;
     ArrayList<FavouriteData> mFavouriteDataList;
 
-
     public Favourite() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,5 +80,4 @@ public class Favourite extends Fragment {
 
         return rootView;
     }
-
 }

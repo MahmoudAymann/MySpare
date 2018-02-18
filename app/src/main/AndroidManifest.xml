@@ -28,13 +28,11 @@
         <activity
             android:name=".SplashScreen"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".login.LoginActivity"
@@ -57,10 +55,7 @@
         </activity>
         <activity
             android:name=".navdrawer.ProfileActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".VideoActivity">
-
-    </activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

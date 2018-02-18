@@ -1,9 +1,8 @@
 package com.spectraapps.myspare.api;
 
-import com.spectraapps.myspare.login.login;
 import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.model.CountriesModel;
-import com.spectraapps.myspare.model.Data;
+import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.RegisterModel;
 import com.spectraapps.myspare.model.ResetPasswordModel;
@@ -21,9 +20,9 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("login")
-    Call<login> login(@Field("mail") String email,
-                      @Field("password") String password,
-                      @Field("token") String token);
+    Call<LoginModel> login(@Field("mail") String email,
+                           @Field("password") String password,
+                           @Field("token") String token);
 
     @FormUrlEncoded
     @POST("register")

@@ -22,7 +22,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.model.Data;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
@@ -41,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
-    login loginModel = new login();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +54,17 @@ public class LoginActivity extends AppCompatActivity {
     private void serverLogin() {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-        Call<login> call = retrofit.login(mEmailEditText.getText().toString(),
+        Call<LoginModel> call = retrofit.login(mEmailEditText.getText().toString(),
                 mPasswordEditText.getText().toString(), "123");
 
-        call.enqueue(new Callback<login>() {
+        call.enqueue(new Callback<LoginModel>() {
             @Override
-            public void onResponse(Call<login> call, Response<login> response) {
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.body().getStatus().getTitle().equals("success")) {
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                    loginModel.setData(response.body().getData());
-                    loginModel.setStatus(response.body().getStatus());
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("LoginModel",loginModel);
+                    intent.putExtra("LoginModel","");
                     startActivity(intent);
 
                 }else {
@@ -76,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<login> call, Throwable t) {
+            public void onFailure(Call<LoginModel> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
