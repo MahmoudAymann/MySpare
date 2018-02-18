@@ -50,12 +50,11 @@ public class MainActivity extends AppCompatActivity
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
-    login loginModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loginModel=(login)getIntent().getSerializableExtra("LoginModel");
         setupLanguageUI();
 
         /////////////////////
@@ -74,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         initBottomTabBar();
         initNavigationDrawer();
 
+        /*
         if (loginModel.getData() != null){
         mNavNameTextView.setText(loginModel.getData().getName());
         mNavEmailTextView.setText(loginModel.getData().getMail());
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
             Toast.makeText(this, "no user found", Toast.LENGTH_SHORT).show();
+            */
     }
     private void setupLanguageUI() {
         if (SplashScreen.LANG_NUM == 1) { //english

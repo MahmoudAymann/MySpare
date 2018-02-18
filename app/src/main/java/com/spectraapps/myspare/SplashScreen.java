@@ -40,7 +40,7 @@ public class SplashScreen extends Activity {
             @Override
             public void onClick(View view) {
                 LANG_NUM = 1;
-                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+                Intent i = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -51,7 +51,7 @@ public class SplashScreen extends Activity {
             public void onClick(View view) {
                 LANG_NUM = 2;
 
-                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+                Intent i = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(i);
                 finish();
             }
