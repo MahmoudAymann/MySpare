@@ -20,7 +20,6 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.login.LoginActivity;
-import com.spectraapps.myspare.login.login;
 import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.model.CountriesModel;
 import com.spectraapps.myspare.model.LoginModel;

@@ -1,7 +1,10 @@
 package com.spectraapps.myspare.login;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,14 +65,21 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response.body().getStatus().getTitle().equals("success")) {
+                if (response.isSuccessful()) {
+
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    String id = response.body().getData().getId();
+                    String name = response.body().getData().getName();
+                    String email = response.body().getData().getMail();
+                    String token = response.body().getData().getToken();
+                    String mobile = response.body().getData().getMobile();
+
+                    saveUserInfo(id, email, name, mobile, token);
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("LoginModel","");
                     startActivity(intent);
-
-                }else {
+                    progressDialog.dismiss();
+                } else {
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
@@ -77,39 +89,17 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-//        call.enqueue(new Callback<Data>() {
-//            @Override
-//            public void onResponse(Call<Data> call, Response<Data> response) {
-//            }
-//        });
-//
-////
-////        Call<LoginModel> loginCall = retrofit.login(
-////                mEmailEditText.getText().toString(),
-////                mPasswordEditText.getText().toString(),"123");
-//
-//        loginCall.enqueue(new Callback<LoginModel>() {
-//            @Override
-//            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-//                if (response.isSuccessful()) {
-//                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-//                    loginModel.setData(response.body().getData());
-//                    loginModel.setStatus(response.body().getStatus());
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoginModel> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
+    private void saveUserInfo(String id, String name, String email, String token, String mobile) {
+        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        prefEditor.putString("id", id);
+        prefEditor.putString("name", name);
+        prefEditor.putString("email", email);
+        prefEditor.putString("token", token);
+        prefEditor.putString("mobile", mobile);
+        prefEditor.putBoolean("isLoggedIn", true);
+        prefEditor.apply();
     }
 
     private void initUI() {
@@ -127,7 +117,10 @@ public class LoginActivity extends AppCompatActivity {
 
         textViewForgetPassword = findViewById(R.id.forgot_password_text);
 
-
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setTitle(getString(R.string.loading));
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCanceledOnTouchOutside(false);
     }//end initUI()
 
 
@@ -135,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 attemptLogin();
             }
         });
@@ -142,14 +136,18 @@ public class LoginActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                progressDialog.dismiss();
             }
         });
 
         mSkipButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                progressDialog.dismiss();
                 finish();
             }
         });

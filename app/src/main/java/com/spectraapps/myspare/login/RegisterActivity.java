@@ -1,6 +1,9 @@
 package com.spectraapps.myspare.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText mNameET, mMobileET, mPasswordET;
     AutoCompleteTextView mEmailET;
     Button mSignUpButton;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +35,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         initUI();
         initButtonClickListeners();
-
     }
 
     private void initButtonClickListeners() {
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 attemmptSignUp();
             }
         });
@@ -54,6 +57,11 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordET = findViewById(R.id.reg_passwordET);
         mEmailET = findViewById(R.id.reg_emailET);
         mSignUpButton = findViewById(R.id.button_register);
+
+        progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog.setTitle(getString(R.string.loading));
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void serverRegister() {
@@ -70,11 +78,15 @@ public class RegisterActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    intent.putExtra("reg_name", response.body().getData().getName());
-                    intent.putExtra("reg_mail", response.body().getData().getMobile());
-                    intent.putExtra("reg_mobile", response.body().getData().getMobile());
-                    intent.putExtra("reg_token", response.body().getData().getToken());
+                    String id = response.body().getData().getId();
+                    String name = response.body().getData().getName();
+                    String email = response.body().getData().getMail();
+                    String token = response.body().getData().getToken();
+                    String mobile = response.body().getData().getMobile();
+
+                    saveUserInfo(id, email, name, mobile, token);
                     startActivity(intent);
+                    progressDialog.dismiss();
                 } else {
                     Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                 }
@@ -86,7 +98,18 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }//end serverRegister()
 
+
+    private void saveUserInfo(String id, String name, String email, String token, String mobile) {
+        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        prefEditor.putString("id", id);
+        prefEditor.putString("name", name);
+        prefEditor.putString("email", email);
+        prefEditor.putString("token", token);
+        prefEditor.putString("mobile", mobile);
+        prefEditor.putBoolean("isLoggedIn",true);
+        prefEditor.apply();
+    }
 
 }

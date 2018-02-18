@@ -17,7 +17,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/pp"
+        android:src="@drawable/profile_placeholder"
         android:visibility="visible" />
 
     <TextView

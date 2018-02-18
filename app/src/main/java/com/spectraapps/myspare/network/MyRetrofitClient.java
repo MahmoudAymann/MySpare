@@ -11,7 +11,7 @@ public class MyRetrofitClient {
 
     public static Retrofit getBase()
     {
-        return new Retrofit.Builder().baseUrl("http://localhost:8080/api/")
+        return new Retrofit.Builder().baseUrl("http://myspare.net/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

@@ -2,9 +2,12 @@ package com.spectraapps.myspare;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
@@ -23,7 +25,7 @@ import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.IOnBackPressed;
-import com.spectraapps.myspare.login.login;
+import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
@@ -43,13 +45,15 @@ public class MainActivity extends AppCompatActivity
     Toolbar mToolBar;
 
     CircleImageView mNavCircleImageView;
-    TextView mNavNameTextView,mNavEmailTextView;
+    TextView mNavNameTextView, mNavEmailTextView;
 
-    @SuppressLint("StaticFieldLeak")
+
     public static TextView mToolbarText;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
+    String mId, mName, mEmail, mToken, mMobile;
+    boolean mIsLogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +61,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setupLanguageUI();
 
-        /////////////////////
-//        Intent intent=new Intent(MainActivity.this,AddItemActivity.class);
-//        intent.putExtra("LoginModel",getIntent().getSerializableExtra("LoginModel"));
-//        startActivity(intent);
-        /////////////////
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
@@ -73,16 +72,15 @@ public class MainActivity extends AppCompatActivity
         initBottomTabBar();
         initNavigationDrawer();
 
-        /*
-        if (loginModel.getData() != null){
-        mNavNameTextView.setText(loginModel.getData().getName());
-        mNavEmailTextView.setText(loginModel.getData().getMail());
-        //Picasso.with(MainActivity.this).load(model).with(image);
+        getUserInfo();
+
+        if (mIsLogged) {
+            mNavNameTextView.setText(mName);
+            mNavEmailTextView.setText(mEmail);
+            //Picasso.with(MainActivity.this).load(model).with(image);
         }
-        else
-            Toast.makeText(this, "no user found", Toast.LENGTH_SHORT).show();
-            */
     }
+
     private void setupLanguageUI() {
         if (SplashScreen.LANG_NUM == 1) { //english
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -263,17 +261,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.updatePass_nav) {
             startActivity(new Intent(MainActivity.this, ResetPassword.class));
-        }else if (id == R.id.language_nav) {
+        } else if (id == R.id.language_nav) {
 
-        }  else if (id == R.id.logout_nav) {
-
+        } else if (id == R.id.logout_nav) {
+            setLogout();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else if (id == R.id.nav_privacy) {
 
         } else if (id == R.id.nav_contactus) {
-
+            Uri uriUrl = Uri.parse("http://myspare.net/contact-us");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(MainActivity.this, AboutActivity.class));
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -284,5 +284,22 @@ public class MainActivity extends AppCompatActivity
     public void setOnBackPressedListener(IOnBackPressed onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
     }
+
+    private void setLogout() {
+        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        prefEditor.putBoolean("isLoggedIn", false);
+        prefEditor.apply();
+    }
+
+    private void getUserInfo() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mId = prefs.getString("id", "0");
+        mName = prefs.getString("name", "User Name");
+        mEmail = prefs.getString("email", "example@domain.com");
+        mToken = prefs.getString("token", "123");
+        mMobile = prefs.getString("mobile", "0123456789");
+        mIsLogged = prefs.getBoolean("isLoggedIn", false);
+    }
+
 
 }//end class main

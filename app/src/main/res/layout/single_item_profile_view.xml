@@ -22,7 +22,6 @@
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:src="@drawable/car_outside"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="fitXY" />
 
@@ -36,7 +35,6 @@
                 android:paddingTop="10dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
-                android:text="text1"
                 android:gravity="center"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp" />

@@ -7,17 +7,26 @@ import android.os.Parcelable;
  * Created by MahmoudAyman on 10/02/2018.
  */
 
-public class RegisterModel implements Parcelable{
+public class RegisterModel implements Parcelable {
 
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : {"name":"aaaa","mail":"ahmedal778@yahoo.com","mobile":"012225555","password":"123456789","token":"tfyfytfytfytfytfyfytfytfy"}
+     * data : {"id":"26","name":"mahmoud ayman","mail":"madopop007@yahoo.com","mobile":"01118031092","password":"123","token":"123"}
      */
 
     private StatusBean status;
     private DataBean data;
 
     protected RegisterModel(Parcel in) {
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<RegisterModel> CREATOR = new Creator<RegisterModel>() {
@@ -48,15 +57,6 @@ public class RegisterModel implements Parcelable{
         this.data = data;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-    }
-
     public static class StatusBean {
         /**
          * type : success
@@ -85,18 +85,28 @@ public class RegisterModel implements Parcelable{
 
     public static class DataBean {
         /**
-         * name : aaaa
-         * mail : ahmedal778@yahoo.com
-         * mobile : 012225555
-         * password : 123456789
-         * token : tfyfytfytfytfytfyfytfytfy
+         * id : 26
+         * name : mahmoud ayman
+         * mail : madopop007@yahoo.com
+         * mobile : 01118031092
+         * password : 123
+         * token : 123
          */
 
+        private String id;
         private String name;
         private String mail;
         private String mobile;
         private String password;
         private String token;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
 
         public String getName() {
             return name;
