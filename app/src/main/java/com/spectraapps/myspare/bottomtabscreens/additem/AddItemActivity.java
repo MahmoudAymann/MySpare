@@ -71,7 +71,8 @@ public class AddItemActivity extends AppCompatActivity {
       return lang_key;
   }//end getLangKey()
 
-    private void initToolbar() {
+    private void initToolbar()
+    {
         mToolbar = findViewById(R.id.additem_toolbar);
         mToolbarTilte = findViewById(R.id.toolbar_title);
         mToolbarButton = findViewById(R.id.toolbar_button);

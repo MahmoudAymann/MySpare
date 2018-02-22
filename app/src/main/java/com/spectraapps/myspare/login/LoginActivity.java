@@ -128,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
                 attemptLogin();
             }
         });
@@ -178,8 +177,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }//initClickListener()
 
-    private void attemptLogin() {
+    private void attemptLogin()
+    {
         if (isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
+            progressDialog.show();
             serverLogin();
         }
     }

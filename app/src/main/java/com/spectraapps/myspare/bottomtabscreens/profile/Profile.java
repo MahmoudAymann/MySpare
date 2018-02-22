@@ -1,6 +1,5 @@
 package com.spectraapps.myspare.bottomtabscreens.profile;
 
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,10 +14,8 @@ import com.spectraapps.myspare.R;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Profile extends Fragment {
+public class Profile extends Fragment
+{
 
     RecyclerView recyclerView;
     RecyclerProfileAdapter mRecyclerProfileAdapter;
@@ -31,6 +28,7 @@ public class Profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -39,17 +37,11 @@ public class Profile extends Fragment {
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         }
-
-        else
-        {
+        else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
 
         mProfileDataList = new ArrayList<>();
-        mProfileDataList.add(new ProfileData("اسم المنتج"));
-        mProfileDataList.add(new ProfileData("اسم المنتج"));
-        mProfileDataList.add(new ProfileData("اسم المنتج"));
-        mProfileDataList.add(new ProfileData("اسم المنتج"));
 
         mRecyclerProfileAdapter = new RecyclerProfileAdapter(getActivity(),mProfileDataList, new RecyclerProfileAdapter.OnItemClickListener() {
             @Override

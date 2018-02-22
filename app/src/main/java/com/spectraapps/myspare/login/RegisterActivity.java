@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
@@ -71,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = mPasswordET.getText().toString();
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-        Call<RegisterModel> registerCall = retrofit.register(name, mail, mobile, password, "token_empty");
+        Call<RegisterModel> registerCall = retrofit.register(name, mail, mobile, password, "123");
         registerCall.enqueue(new Callback<RegisterModel>() {
             @Override
             public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
@@ -87,19 +89,20 @@ public class RegisterActivity extends AppCompatActivity {
                     saveUserInfo(id, email, name, mobile, token);
                     startActivity(intent);
                     progressDialog.dismiss();
-                } else {
+                }
+                else {
+                    progressDialog.dismiss();
                     Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterModel> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, "FailResponse", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
                 Toast.makeText(RegisterActivity.this, "" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }//end serverRegister()
-
 
     private void saveUserInfo(String id, String name, String email, String token, String mobile) {
         SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
@@ -109,7 +112,34 @@ public class RegisterActivity extends AppCompatActivity {
         prefEditor.putString("token", token);
         prefEditor.putString("mobile", mobile);
         prefEditor.putBoolean("isLoggedIn",true);
+
         prefEditor.apply();
     }
 
-}
+//    private boolean isEmailValid(String email) {
+//        if (email.contains("@"))
+//            return true;
+//        else {
+//            mEmailEditText.setError(getString(R.string.error_invalid_email));
+//            YoYo.with(Techniques.Shake)
+//                    .duration(700)
+//                    .repeat(1)
+//                    .playOn(textInputLayoutEmail);
+//            return false;
+//        }
+//    }//end isEmailValid()
+//
+//    private boolean isPasswordValid(String password) {
+//        if (password.length() > 2 || password.length() == 0)
+//            return true;
+//        else {
+//            mPasswordEditText.setError(getString(R.string.error_invalid_password));
+//            YoYo.with(Techniques.Shake)
+//                    .duration(700)
+//                    .repeat(1)
+//                    .playOn(textInputLayoutPassword);
+//            return false;
+//        }
+//    }//end isPasswordValid()
+
+}//end RegisterActivity()
