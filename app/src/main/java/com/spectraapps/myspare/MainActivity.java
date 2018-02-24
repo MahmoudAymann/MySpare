@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
-    String mId, mName, mEmail, mToken, mMobile;
+    String mId, mName, mEmail, mToken, mMobile, mLanguage;
     boolean mIsLogged;
 
     @Override

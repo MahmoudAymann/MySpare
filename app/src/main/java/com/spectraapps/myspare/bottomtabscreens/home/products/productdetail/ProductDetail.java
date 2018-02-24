@@ -93,7 +93,6 @@ public class ProductDetail extends Fragment
     }
 
 
-
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(getActivity(),slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();

@@ -2,8 +2,10 @@ package com.spectraapps.myspare;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -50,7 +52,6 @@ public class SplashScreen extends Activity {
             @Override
             public void onClick(View view) {
                 LANG_NUM = 2;
-
                 Intent i = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(i);
                 finish();
@@ -86,4 +87,5 @@ public class SplashScreen extends Activity {
             }
         });
     }//end insert anim
+
 }

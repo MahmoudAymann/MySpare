@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.model.ProductsModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,15 +20,15 @@ import java.util.ArrayList;
 
 public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder>{
 
-    private ArrayList<ProductData> mProductDataArrayList;
+    private ArrayList<ProductsModel.DataBean> mProductsModelArrayList;
     private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(ProductData productData);
+        void onItemClick(ProductsModel.DataBean productsModel);
     }
 
-    ProductsRecyclerAdapter(ArrayList<ProductData> productDataArrayList, OnItemClickListener listener) {
-        this.mProductDataArrayList = productDataArrayList;
+    ProductsRecyclerAdapter(ArrayList<ProductsModel.DataBean> productsModelArrayList, OnItemClickListener listener) {
+        this.mProductsModelArrayList = productsModelArrayList;
         this.listener = listener;
     }
 
@@ -40,13 +41,13 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bind(mProductDataArrayList.get(position), listener);
+        holder.bind(mProductsModelArrayList.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        if ( mProductDataArrayList != null)
-        return mProductDataArrayList.size();
+        if ( mProductsModelArrayList != null)
+        return mProductsModelArrayList.size();
         else
             return 0;
     }
@@ -64,14 +65,21 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             imageView.setCornerRadiiDP(4,4,0,0);
         }
 
-        private void bind(final ProductData productData, final OnItemClickListener listener) {
-            nameTV.setText(productData.getName());
-            priceTV.setText(productData.getPrice());
-            Picasso.with(itemView.getContext()).load(productData.getImage()).into(imageView);
+        private void bind(final ProductsModel.DataBean productsModel, final OnItemClickListener listener) {
+
+            nameTV.setText(productsModel.getName());
+            priceTV.setText(productsModel.getProductPrice());
+
+            Picasso.with(itemView.getContext())
+                    .load(productsModel.getImage1())
+                    .placeholder(R.drawable.place_holder)
+                    .error(R.drawable.place_holder)
+                    .into(imageView);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(productData);
+                    listener.onItemClick(productsModel);
                 }
             });
         }

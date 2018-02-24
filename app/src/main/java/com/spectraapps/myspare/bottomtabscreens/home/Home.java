@@ -37,6 +37,7 @@ public class Home extends Fragment {
     public Home() {
         // Required empty public constructor
     }
+    public static Integer CATEGK_KEY;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,7 +99,7 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<CategoriesModel> call, Throwable t) {
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }//end serverCategories
@@ -117,9 +118,13 @@ public class Home extends Fragment {
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
-                MainActivity.mToolbarText.setText(getString(R.string.main_inside));
+                        .replace(R.id.main_frameLayout, new ProductsFragment())
+                        .commit();
+                MainActivity.mToolbarText.setText(textInside.getText());
+                CATEGK_KEY = 1;
+
             }
         });
 
@@ -128,7 +133,9 @@ public class Home extends Fragment {
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
-                MainActivity.mToolbarText.setText(getString(R.string.main_outside));
+                MainActivity.mToolbarText.setText(textOutside.getText());
+                CATEGK_KEY = 2;
+
             }
         });
 
@@ -139,6 +146,8 @@ public class Home extends Fragment {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_electricity));
+                CATEGK_KEY = 6;
+
             }
         });
 
@@ -157,6 +166,8 @@ public class Home extends Fragment {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
                 MainActivity.mToolbarText.setText(getString(R.string.main_accessories));
+                CATEGK_KEY = 5;
+
             }
         });
 

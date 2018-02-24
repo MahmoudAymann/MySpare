@@ -25,6 +25,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
+import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
@@ -147,6 +148,8 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.show();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 progressDialog.dismiss();
+                SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                prefEditor.putString("email", "nashwa@gmail.com").apply();
                 finish();
             }
         });
@@ -179,7 +182,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin()
     {
-        if (isEmailValid(mEmailEditText.getText().toString()) && isPasswordValid(mPasswordEditText.getText().toString())) {
+        if (isEmailValid(mEmailEditText.getText().toString()) &&
+                isPasswordValid(mPasswordEditText.getText().toString())) {
             progressDialog.show();
             serverLogin();
         }

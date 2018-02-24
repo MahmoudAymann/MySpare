@@ -179,7 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/kind_model"
+                android:text="@string/manufacturer_year"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -196,7 +196,7 @@
             app:corner_radius="10dp">
 
             <Spinner
-                android:id="@+id/spinner_kind_popup"
+                android:id="@+id/spinner_year_popup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

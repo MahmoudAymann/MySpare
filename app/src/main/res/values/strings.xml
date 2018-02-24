@@ -54,7 +54,7 @@
     <string name="manufacturer_company">Made In</string>
     <string name="manufacturer_year">Year</string>
     <string name="enter_year">enter year</string>
-    <string name="body_kind">Body</string>
+    <string name="category">Category</string>
     <string name="cost">Cost</string>
     <string name="hintET_cost">enter cost</string>
     <string name="currency">Currency</string>
@@ -68,7 +68,8 @@
     <string name="change_language">Change Language</string>
     <string name="forgot_password"><u>forgot password?</u></string>
     <string name="country">Country</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="please_wait">Please Wait</string>
+    <string name="serial_number">Serial Num</string>
 
 </resources>

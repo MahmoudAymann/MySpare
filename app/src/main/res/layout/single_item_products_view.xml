@@ -22,7 +22,7 @@
             <com.joooonho.SelectableRoundedImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="200dp"/>
 
             <TextView
                 android:id="@+id/textName"
@@ -34,7 +34,7 @@
                 android:layout_marginStart="5dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_below="@id/image"/>
+                android:layout_below="@id/image" />
 
             <TextView
                 android:id="@+id/textPrice"
@@ -46,7 +46,7 @@
                 android:layout_marginStart="5dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/holo_green_dark"
-                android:layout_below="@id/textName"/>
+                android:layout_below="@id/textName" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
