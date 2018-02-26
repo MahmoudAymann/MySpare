@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,9 @@ public class RegisterActivity extends AppCompatActivity {
     AutoCompleteTextView mEmailET;
     Button mSignUpButton;
     ProgressDialog progressDialog;
+
+    TextInputLayout emailTextInputLayout,passTextInputLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemmptSignUp() {
-        serverRegister();
+        if (isEmailValid(mEmailET.getText().toString()) && isPasswordValid(mPasswordET.getText().toString())) {
+            serverRegister();
+        }
     }
 
     private void initUI() {
@@ -59,6 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordET = findViewById(R.id.reg_passwordET);
         mEmailET = findViewById(R.id.reg_emailET);
         mSignUpButton = findViewById(R.id.button_register);
+
+        emailTextInputLayout = findViewById(R.id.reg_emailTextInput);
+        passTextInputLayout = findViewById(R.id.reg_passTextInput);
 
         progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.setTitle(getString(R.string.loading));
@@ -116,30 +125,30 @@ public class RegisterActivity extends AppCompatActivity {
         prefEditor.apply();
     }
 
-//    private boolean isEmailValid(String email) {
-//        if (email.contains("@"))
-//            return true;
-//        else {
-//            mEmailEditText.setError(getString(R.string.error_invalid_email));
-//            YoYo.with(Techniques.Shake)
-//                    .duration(700)
-//                    .repeat(1)
-//                    .playOn(textInputLayoutEmail);
-//            return false;
-//        }
-//    }//end isEmailValid()
-//
-//    private boolean isPasswordValid(String password) {
-//        if (password.length() > 2 || password.length() == 0)
-//            return true;
-//        else {
-//            mPasswordEditText.setError(getString(R.string.error_invalid_password));
-//            YoYo.with(Techniques.Shake)
-//                    .duration(700)
-//                    .repeat(1)
-//                    .playOn(textInputLayoutPassword);
-//            return false;
-//        }
-//    }//end isPasswordValid()
+    private boolean isEmailValid(String email) {
+        if (email.contains("@"))
+            return true;
+        else {
+            mEmailET.setError(getString(R.string.error_invalid_email));
+            YoYo.with(Techniques.Shake)
+                    .duration(700)
+                    .repeat(1)
+                    .playOn(emailTextInputLayout);
+            return false;
+        }
+    }//end isEmailValid()
+
+    private boolean isPasswordValid(String password) {
+        if (password.length() > 2 || password.length() == 0)
+            return true;
+        else {
+            mPasswordET.setError(getString(R.string.error_invalid_password));
+            YoYo.with(Techniques.Shake)
+                    .duration(700)
+                    .repeat(1)
+                    .playOn(passTextInputLayout);
+            return false;
+        }
+    }//end isPasswordValid()
 
 }//end RegisterActivity()

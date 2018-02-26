@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         mNavCircleImageView = header.findViewById(R.id.nav_header_imageView);
         mNavNameTextView = header.findViewById(R.id.nav_header_name);
         mNavEmailTextView = header.findViewById(R.id.nav_header_email);
-
     }
 
     @Override

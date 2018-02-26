@@ -1,9 +1,11 @@
 package com.spectraapps.myspare.bottomtabscreens.additem;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
+import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
@@ -42,11 +45,15 @@ import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +77,7 @@ public class AddItemActivity extends AppCompatActivity {
     ImageView imageView;
     Bitmap bitmap;
 
+    public static String image_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +195,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void serverAddItem() {
+
         mItemName = nameET.getText().toString();
         mSerialNumber = serialNumberET.getText().toString();
         mDate = year_spinner.getSelectedItem().toString();
@@ -655,14 +664,42 @@ public class AddItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMG_CODE && resultCode == RESULT_OK && data != null) {
             Uri path = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+//                imageView.setImageBitmap(bitmap);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+             image_path = getRealPathFromURIPath(path, AddItemActivity.this);
+             work();
         }
     }
+
+   private void work(){
+       File file = new File(image_path);
+       RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+       MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("image1", file.getName(), mFile);
+       MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("image2", file.getName(), mFile);
+       MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("image3", file.getName(), mFile);
+
+       RequestBody name = RequestBody.create(MediaType.parse("text/plain"), );
+
+   }
+
+        private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+            Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+            if (cursor == null) {
+                return contentURI.getPath();
+            } else {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                return cursor.getString(idx);
+            }
+        }
+
 
     private void getUserInfo() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

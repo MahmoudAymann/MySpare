@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = response.body().getData().getMail();
                     String token = response.body().getData().getToken();
                     String mobile = response.body().getData().getMobile();
+                    //String image = response.body().getData().getImage();
 
                     saveUserInfo(id, email, name, mobile, token);
 
