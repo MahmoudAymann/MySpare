@@ -25,7 +25,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
@@ -35,16 +34,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    //UI references.
-    private AutoCompleteTextView mEmailEditText;
-    private EditText mPasswordEditText;
     TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
-
     Button mSignInButton, mRegisterButton, mSkipButton;
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
-
+    //UI references.
+    private AutoCompleteTextView mEmailEditText;
+    private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
 
     @Override
@@ -78,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     saveUserInfo(id, email, name, mobile, token);
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("login", 1);
                     startActivity(intent);
                     progressDialog.dismiss();
                 } else {
@@ -137,7 +135,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("login", 2);
+                startActivity(intent);
                 progressDialog.dismiss();
             }
         });
@@ -146,7 +146,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("login", 3);
+                startActivity(intent);
                 progressDialog.dismiss();
                 SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                 prefEditor.putString("email", "nashwa@gmail.com").apply();

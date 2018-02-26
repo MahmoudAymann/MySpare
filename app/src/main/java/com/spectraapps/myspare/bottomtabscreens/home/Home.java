@@ -1,6 +1,7 @@
 package com.spectraapps.myspare.bottomtabscreens.home;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.CategoriesModel;
-import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
+import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.R;
 import com.squareup.picasso.Picasso;
 
@@ -30,14 +31,13 @@ import retrofit2.Response;
 
 public class Home extends Fragment {
 
+    public static Integer CATEGK_KEY;
     ImageView image1, image2, image3, image4, image5, image6;
     TextView textAccessories, textBattery, textInside, textMechanic, textOutside, textTires;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
-
     public Home() {
         // Required empty public constructor
     }
-    public static Integer CATEGK_KEY;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,16 +45,12 @@ public class Home extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+
         fireBackButtonEvent();
         initUI(rootView);
         initCardViewClickListener();
 
         serverCategories();
-
-        Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_progress);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         return rootView;
     }

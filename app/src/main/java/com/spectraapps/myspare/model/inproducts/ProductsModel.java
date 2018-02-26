@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.model;
+package com.spectraapps.myspare.model.inproducts;
 
 import java.util.List;
 

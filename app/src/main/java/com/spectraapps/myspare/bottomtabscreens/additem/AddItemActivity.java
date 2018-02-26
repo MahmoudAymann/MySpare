@@ -2,17 +2,24 @@ package com.spectraapps.myspare.bottomtabscreens.additem;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +41,8 @@ import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -44,28 +53,23 @@ import retrofit2.Response;
 
 public class AddItemActivity extends AppCompatActivity {
 
+    private static final int IMG_CODE = 777;
     Toolbar mToolbar;
     TextView mToolbarTilte;
-
     Button mToolbarButton, mAddButton;
-
     Spinner manufactureCountry_spinner, brand_spinner, countries_spinner, category_spinner, currency_spinner, year_spinner, models_spinner;
-
     ArrayList<String> category_array, categoryId_array, manufactureCountry_array, manufactureCountryId_array,
             brand_array, brandId_array, countries_array, countriesId_array, models_array, modelsId_array, currency_array, currencyId_array;
-
     ArrayList<Integer> year_array;
-
     Calendar mCalendar;
-
     EditText nameET, serialNumberET, priceET;
-
     RoundKornerLinearLayout roundKornerTV, roundKornerSpinner;
-
     String mUserID, mItemName, mSerialNumber, mManfactureCountry_Id, mDate,
             mBrand_Id, mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mCurrencyId, mPrice, mImage1, mImage2, mImage3;
-
     ProgressDialog progressDialog;
+    ImageView imageView;
+    Bitmap bitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +160,18 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
+        countries_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getCountryId(countries_spinner.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +182,8 @@ public class AddItemActivity extends AppCompatActivity {
 
 
     private void submitAddItem() {
-        //serverAddItem();
+        progressDialog.show();
+        serverAddItem();
     }
 
     private void serverAddItem() {
@@ -175,19 +192,21 @@ public class AddItemActivity extends AppCompatActivity {
         mDate = year_spinner.getSelectedItem().toString();
         mCurrency = currency_spinner.getSelectedItem().toString();
         mPrice = priceET.getText().toString();
+        mImage1 = getStringImage();
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
         Call<AddModel> call = retrofit.add(mUserID, mItemName, mSerialNumber, mManfactureCountry_Id, mDate, mBrand_Id,
-                mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mPrice, "", "", "");
+                mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mPrice, mImage1, "", "");
 
         call.enqueue(new Callback<AddModel>() {
             @Override
             public void onResponse(Call<AddModel> call, Response<AddModel> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-
+                    progressDialog.dismiss();
                 } else {
                     Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             }
 
@@ -197,6 +216,13 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }//end serverAddItem
+
+    private String getStringImage() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imgByte = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgByte, Base64.DEFAULT);
+    }
 
     ///////////////#get IDS//////////////////////
     private void getBrandId(Integer pos) {
@@ -211,6 +237,14 @@ public class AddItemActivity extends AppCompatActivity {
         for (int i = 0; i < categoryId_array.size(); i++) {
             if (pos == i) {
                 mCategory_Id = categoryId_array.get(i);
+            }
+        }
+    }
+
+    private void getCountryId(Integer pos) {
+        for (int i = 0; i < countriesId_array.size(); i++) {
+            if (pos == i) {
+                mCountry_Id = countriesId_array.get(i);
             }
         }
     }
@@ -313,7 +347,7 @@ public class AddItemActivity extends AppCompatActivity {
     private void serverCountries() {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<CountriesModel> countriesCall = retrofit.countries(getLangkey());
+        Call<CountriesModel> countriesCall = retrofit.countries("ar");
 
         countriesCall.enqueue(new Callback<CountriesModel>() {
             @Override
@@ -322,9 +356,11 @@ public class AddItemActivity extends AppCompatActivity {
 
                     getCountries(response.body().getData());
                     getCountriesId(response.body().getData());
+                    Log.v("res", response.body().getData() + "");
                 } else
-                    Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
-                            Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
+                    // Toast.LENGTH_SHORT).show();
+                    Log.v("res", response.body().getData() + "");
             }
 
             @Override
@@ -595,6 +631,37 @@ public class AddItemActivity extends AppCompatActivity {
         progressDialog.setTitle(getString(R.string.loading));
         progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCanceledOnTouchOutside(false);
+
+        imageView = findViewById(R.id.addImg1);
+        imageView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pickImage();
+                    }
+                }
+        );
+    }
+
+    private void pickImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, IMG_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMG_CODE && resultCode == RESULT_OK && data != null) {
+            Uri path = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void getUserInfo() {

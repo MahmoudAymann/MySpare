@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.bottomtabscreens.home.products.productdetail;
+package com.spectraapps.myspare.products.productdetail;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,8 +16,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.bottomtabscreens.home.Home;
-import com.spectraapps.myspare.bottomtabscreens.home.products.ProductsFragment;
+import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 import java.util.HashMap;

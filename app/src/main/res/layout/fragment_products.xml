@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/products_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".bottomtabscreens.home.products.ProductsFragment"
-    android:id="@+id/products_fragment">
+    tools:context=".products.ProductsFragment">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -15,9 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_filter_30dp"
-        app:backgroundTint="@color/colorAccent"
-        android:scaleType="fitXY"/>
+        app:backgroundTint="@color/colorAccent" />
 
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/swipeRefreshLayoutProducts"

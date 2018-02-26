@@ -1,14 +1,17 @@
-package com.spectraapps.myspare.bottomtabscreens.home.products;
+package com.spectraapps.myspare.products;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.MediaActionSound;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +27,13 @@ import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
+import com.spectraapps.myspare.adapters.AllProductsAdapter;
+import com.spectraapps.myspare.adapters.ProductsRecyclerAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-import com.spectraapps.myspare.model.ProductsModel;
+import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
+import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 
 import java.util.ArrayList;
@@ -38,14 +44,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductsFragment extends Fragment{
+public class ProductsFragment extends Fragment {
     FloatingActionButton fabButton;
     EditText editText;
     Spinner spinner1, spinner2, spinner3, spinner5;
 
     RecyclerView recyclerView;
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
-    ArrayList<ProductsModel.DataBean> mProductDataArrayList = new ArrayList<>();
+    AllProductsAdapter allProductsAdapter;
+
+    ArrayList<ProductsModel.DataBean> mProductDataList = new ArrayList<>();
+
+    ArrayList<ProductsAllModel> mProductAllDataList = new ArrayList<>();
 
     PullRefreshLayout pullRefreshLayout;
 
@@ -55,24 +65,39 @@ public class ProductsFragment extends Fragment{
 
     String mUserID;
 
+    String lang_key;
+
     public ProductsFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
         getUserInfo();
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
-        recyclerView.setAdapter(mProductsRecyclerAdapter);
-        serverProductsAll();
 
+        //serverProductsAll();
 
         return rootView;
     }//end onCreateView()
+
+    private String getLangKey() {
+
+        switch (SplashScreen.LANG_NUM) {
+            case 1:
+                return lang_key = "en";
+
+            case 2:
+                return lang_key = "ar";
+            default:
+                return "en";
+        }
+    }
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -80,15 +105,6 @@ public class ProductsFragment extends Fragment{
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
-
-        mProductsRecyclerAdapter = new ProductsRecyclerAdapter(mProductDataArrayList,
-                new ProductsRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(ProductsModel.DataBean productsModel) {
-               //Toast.makeText(getActivity(), ""+productsModel.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }//end initRecyclerView()
 
     private void initUI(View rootView) {
@@ -174,43 +190,132 @@ public class ProductsFragment extends Fragment{
 
     }//end addYears();
 
-    private void serverProductsAll(){
+    private void serverProductsAll() {
 
-       Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-       String lang_key = "";
-       switch (SplashScreen.LANG_NUM) {
-           case 1:
-               lang_key = "en";
-               break;
-           case 2:
-               lang_key = "ar";
-               break;
-       }
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-       final Call<ProductsModel> productsCall = retrofit.productsAll(lang_key,Home.CATEGK_KEY.toString());
+        final Call<ProductsModel> productsCall = retrofit.productsAll(getLangKey(), Home.CATEGK_KEY.toString());
 
-       productsCall.enqueue(new Callback<ProductsModel>() {
-           @Override
-           public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+        productsCall.enqueue(new Callback<ProductsModel>() {
+            @Override
+            public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
 
-               if (response.isSuccessful()) {
-                   Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
 
-                   mProductDataArrayList.addAll(response.body().getData());
-                   mProductsRecyclerAdapter.notifyDataSetChanged();
-                   pullRefreshLayout.setRefreshing(false);
-               } else {
-                   Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-               }
-           }
+                    mProductDataList.addAll(response.body().getData());
+                    mProductsRecyclerAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
+                    pullRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
 
-           @Override
-           public void onFailure(Call<ProductsModel> call, Throwable t) {
-               Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-           }
-       });
+            @Override
+            public void onFailure(Call<ProductsModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
 
-   }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Toast.makeText(getContext(), ""+ MainActivity.login_key, Toast.LENGTH_SHORT).show();
+        turnOnServers(MainActivity.login_key);
+    }
+
+    private void serverproductsWithMail() {
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLangKey(), Home.CATEGK_KEY.toString(), mUserID);
+
+        productsCall.enqueue(new Callback<ProductsModel>() {
+            @Override
+            public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+
+                if (response.isSuccessful()) {
+                    Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
+
+                    mProductDataList.addAll(response.body().getData());
+                    mProductsRecyclerAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
+                    pullRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductsModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    private void turnOnServers(Integer key) {
+        switch (key) {
+            case 1:
+                initAdapterAllWith();
+                recyclerView.setAdapter(mProductsRecyclerAdapter);
+                mProductsRecyclerAdapter.notifyDataSetChanged();
+                serverproductsWithMail();
+                break;
+            case 2:
+                initAdapterAllWith();
+                recyclerView.setAdapter(mProductsRecyclerAdapter);
+                mProductsRecyclerAdapter.notifyDataSetChanged();
+                serverproductsWithMail();
+                break;
+            case 3:
+                initAdapterAllProducts();
+                recyclerView.setAdapter(allProductsAdapter);
+                allProductsAdapter.notifyDataSetChanged();
+                serverProductsAll();
+                break;
+            default:
+                Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+    }
+
+    private void initAdapterAllProducts() {
+        allProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList, new AllProductsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ProductsAllModel productsModel) {
+                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+
+            }
+        }, new AllProductsAdapter.OnFavClickListener() {
+            @Override
+            public void onFavClick(ProductsAllModel productsModel) {
+                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void initAdapterAllWith() {
+        mProductsRecyclerAdapter = new ProductsRecyclerAdapter(getContext(), mProductDataList,
+                new ProductsRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(ProductsModel.DataBean productsModel) {
+                        Toast.makeText(getActivity(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+                    }
+                }, new ProductsRecyclerAdapter.OnFavClickListener() {
+            @Override
+            public void onFavClick(ProductsModel.DataBean productsModel) {
+                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }//end
 
     private void fireBackButtonEvent() {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {

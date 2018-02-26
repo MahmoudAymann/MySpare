@@ -8,7 +8,7 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
-import com.spectraapps.myspare.model.ProductsModel;
+import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.model.RegisterModel;
 import com.spectraapps.myspare.model.ResetPasswordModel;
 
@@ -65,6 +65,7 @@ public interface Api {
     @POST("models")
     Call<ModelsModel> models(@Field("bid") String bid);
 
+
     @FormUrlEncoded
     @POST("add.php")
     Call<AddModel> add(@Field("id") String id,
@@ -85,24 +86,31 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsAll(@Field("language") String language,@Field("category") String category);
+    Call<ProductsModel> productsAll(@Field("language") String language,
+                                    @Field("category") String category);
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsWithAll(@Field("id") String id,
-                                 @Field("category") String category,
-                                 @Field("language") String language,
-                                 @Field("brand") String brand,
-                                 @Field("model") String model,
-                                 @Field("number") String number,
-                                 @Field("date") String date,
-                                 @Field("country") String country);
+    Call<ProductsModel> productsWithMail(@Field("language") String language,
+                                         @Field("category") String category,
+                                         @Field("id") String email);
 
     @FormUrlEncoded
     @POST("products")
     Call<ProductsModel> productsWithCountry(@Field("id") String id,
+                                            @Field("category") String category,
+                                            @Field("language") String language,
+                                            @Field("country") String country);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithAll(@Field("id") String id,
                                         @Field("category") String category,
                                         @Field("language") String language,
+                                        @Field("brand") String brand,
+                                        @Field("model") String model,
+                                        @Field("number") String number,
+                                        @Field("date") String date,
                                         @Field("country") String country);
 
 

@@ -15,9 +15,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
@@ -29,6 +31,7 @@ import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
+import com.spectraapps.myspare.products.ProductsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,27 +43,26 @@ import devlight.io.library.ntb.NavigationTabBar;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    protected IOnBackPressed onBackPressedListener;
-    Locale locale;
-    Toolbar mToolBar;
-
-    CircleImageView mNavCircleImageView;
-    TextView mNavNameTextView, mNavEmailTextView;
-
-
     public static TextView mToolbarText;
+    public static Integer login_key;
+    protected IOnBackPressed onBackPressedListener;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
-
-    String mId, mName, mEmail, mToken, mMobile, mLanguage;
+    Locale locale;
+    Toolbar mToolBar;
+    CircleImageView mNavCircleImageView;
+    TextView mNavNameTextView, mNavEmailTextView;
+    String mId, mName, mEmail, mToken, mMobile, mImage;
     boolean mIsLogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setupLanguageUI();
 
+        login_key = getIntent().getIntExtra("login", 3);
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
@@ -79,6 +81,12 @@ public class MainActivity extends AppCompatActivity
             mNavEmailTextView.setText(mEmail);
             //Picasso.with(MainActivity.this).load(model).with(image);
         }
+
+    }//end onCreate()
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void setupLanguageUI() {
@@ -298,6 +306,7 @@ public class MainActivity extends AppCompatActivity
         mEmail = prefs.getString("email", "example@domain.com");
         mToken = prefs.getString("token", "123");
         mMobile = prefs.getString("mobile", "0123456789");
+        //mImage = prefs.getString("image", "");
         mIsLogged = prefs.getBoolean("isLoggedIn", false);
     }
 
