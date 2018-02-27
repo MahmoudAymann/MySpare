@@ -3,9 +3,7 @@ package com.spectraapps.myspare.products;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.MediaActionSound;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -51,11 +49,11 @@ public class ProductsFragment extends Fragment {
 
     RecyclerView recyclerView;
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
-    AllProductsAdapter allProductsAdapter;
+    AllProductsAdapter mAllProductsAdapter;
 
     ArrayList<ProductsModel.DataBean> mProductDataList = new ArrayList<>();
 
-    ArrayList<ProductsAllModel> mProductAllDataList = new ArrayList<>();
+    ArrayList<ProductsAllModel.DataBean> mProductAllDataList = new ArrayList<>();
 
     PullRefreshLayout pullRefreshLayout;
 
@@ -133,8 +131,7 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                serverProductsAll();
-                mProductsRecyclerAdapter.notifyDataSetChanged();
+                turnOnServers(MainActivity.login_key);
             }
         });
     }
@@ -191,33 +188,41 @@ public class ProductsFragment extends Fragment {
     }//end addYears();
 
     private void serverProductsAll() {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLangKey(), Home.CATEGK_KEY.toString());
 
-        final Call<ProductsModel> productsCall = retrofit.productsAll(getLangKey(), Home.CATEGK_KEY.toString());
+            productsCall.enqueue(new Callback<ProductsAllModel>() {
+                @Override
+                public void onResponse(Call<ProductsAllModel> call, Response<ProductsAllModel> response) {
 
-        productsCall.enqueue(new Callback<ProductsModel>() {
-            @Override
-            public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
 
-                if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
-
-                    mProductDataList.addAll(response.body().getData());
-                    mProductsRecyclerAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
-                    pullRefreshLayout.setRefreshing(false);
-                } else {
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        mProductAllDataList.addAll(response.body().getData());
+                        mAllProductsAdapter.notifyDataSetChanged();
+                        //Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
+                        Log.v("jkjk", response.body().getData().size() + "");
+                        pullRefreshLayout.setRefreshing(false);
+                    } else {
+                        pullRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ProductsModel> call, Throwable t) {
-                Log.v("tagy", t.getMessage());
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ProductsAllModel> call, Throwable t) {
+                    //if (call != null){
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Erorr::" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -275,8 +280,8 @@ public class ProductsFragment extends Fragment {
                 break;
             case 3:
                 initAdapterAllProducts();
-                recyclerView.setAdapter(allProductsAdapter);
-                allProductsAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(mAllProductsAdapter);
+                mAllProductsAdapter.notifyDataSetChanged();
                 serverProductsAll();
                 break;
             default:
@@ -287,15 +292,15 @@ public class ProductsFragment extends Fragment {
     }
 
     private void initAdapterAllProducts() {
-        allProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList, new AllProductsAdapter.OnItemClickListener() {
+        mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList, new AllProductsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(ProductsAllModel productsModel) {
+            public void onItemClick(ProductsAllModel.DataBean productsModel) {
                 Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
 
             }
         }, new AllProductsAdapter.OnFavClickListener() {
             @Override
-            public void onFavClick(ProductsAllModel productsModel) {
+            public void onFavClick(ProductsAllModel.DataBean productsModel) {
                 Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
 
             }

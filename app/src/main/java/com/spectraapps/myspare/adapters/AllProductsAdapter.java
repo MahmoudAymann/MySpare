@@ -28,10 +28,10 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
     private final OnItemClickListener listener;
     private final OnFavClickListener favListener;
-    private ArrayList<ProductsAllModel> mProductsModelList;
+    private ArrayList<ProductsAllModel.DataBean> mProductsModelList;
     private Context mContext;
 
-    public AllProductsAdapter(Context mContext, ArrayList<ProductsAllModel> productsModelArrayList, OnItemClickListener listener, OnFavClickListener favListener) {
+    public AllProductsAdapter(Context mContext, ArrayList<ProductsAllModel.DataBean> productsModelArrayList, OnItemClickListener listener, OnFavClickListener favListener) {
         this.mProductsModelList = productsModelArrayList;
         this.listener = listener;
         this.mContext = mContext;
@@ -60,11 +60,11 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
     //Onitemclickli
     public interface OnItemClickListener {
-        void onItemClick(ProductsAllModel productsModel);
+        void onItemClick(ProductsAllModel.DataBean productsModel);
     }
 
     public interface OnFavClickListener {
-        void onFavClick(ProductsAllModel productsModel);
+        void onFavClick(ProductsAllModel.DataBean productsModel);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +82,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
             imageView.setCornerRadiiDP(4, 4, 0, 0);
         }
 
-        private void bind(final ProductsAllModel productsModel, final OnItemClickListener listener, final OnFavClickListener onFavClickListener) {
+        private void bind(final ProductsAllModel.DataBean productsModel, final OnItemClickListener listener, final OnFavClickListener onFavClickListener) {
 
             nameTV.setText(productsModel.getName());
             priceTV.setText(productsModel.getProductPrice());

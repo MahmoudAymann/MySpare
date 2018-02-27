@@ -1,5 +1,7 @@
 package com.spectraapps.myspare.model.inproducts;
 
+import java.util.List;
+
 /**
  * Created by MahmoudAyman on 26/02/2018.
  */
@@ -7,156 +9,208 @@ package com.spectraapps.myspare.model.inproducts;
 public class ProductsAllModel {
 
     /**
-     * pid : 1
-     * productName : a
-     * productPrice : 23
-     * productNumber : 123
-     * currency : Euro
-     * mobile : 111111111
-     * image1 : one.jpg
-     * image2 : two.jpeg
-     * image3 : three.jpg
-     * id : 39
-     * name : q
-     * date : 1990
-     * country : USA
-     * brand : bmw
-     * model : x5
+     * status : {"type":"success","title":"Successfull request"}
+     * data : [{"pid":"11","productName":"ت ت ت","productPrice":"55555","productNumber":"5555","currency":"Qatar Riyal","mobile":"123456789","image1":"http://myspare.net/public/upload/image1.png","image2":"http://myspare.net/public/upload/image2.png","image3":"http://myspare.net/public/upload/image3.png","id":"19","name":"amr","date":"2018","country":"Qatar","brand":"aston martin","model":"Acura MDX"}]
      */
 
-    private String pid;
-    private String productName;
-    private String productPrice;
-    private String productNumber;
-    private String currency;
-    private String mobile;
-    private String image1;
-    private String image2;
-    private String image3;
-    private String id;
-    private String name;
-    private String date;
-    private String country;
-    private String brand;
-    private String model;
+    private StatusBean status;
+    private List<DataBean> data;
 
-    public String getPid() {
-        return pid;
+    public StatusBean getStatus() {
+        return status;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setStatus(StatusBean status) {
+        this.status = status;
     }
 
-    public String getProductName() {
-        return productName;
+    public List<DataBean> getData() {
+        return data;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
-    public String getProductPrice() {
-        return productPrice;
+    public static class StatusBean {
+        /**
+         * type : success
+         * title : Successfull request
+         */
+
+        private String type;
+        private String title;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
-    }
+    public static class DataBean {
+        /**
+         * pid : 11
+         * productName : ت ت ت
+         * productPrice : 55555
+         * productNumber : 5555
+         * currency : Qatar Riyal
+         * mobile : 123456789
+         * image1 : http://myspare.net/public/upload/image1.png
+         * image2 : http://myspare.net/public/upload/image2.png
+         * image3 : http://myspare.net/public/upload/image3.png
+         * id : 19
+         * name : amr
+         * date : 2018
+         * country : Qatar
+         * brand : aston martin
+         * model : Acura MDX
+         */
 
-    public String getProductNumber() {
-        return productNumber;
-    }
+        private String pid;
+        private String productName;
+        private String productPrice;
+        private String productNumber;
+        private String currency;
+        private String mobile;
+        private String image1;
+        private String image2;
+        private String image3;
+        private String id;
+        private String name;
+        private String date;
+        private String country;
+        private String brand;
+        private String model;
 
-    public void setProductNumber(String productNumber) {
-        this.productNumber = productNumber;
-    }
+        public String getPid() {
+            return pid;
+        }
 
-    public String getCurrency() {
-        return currency;
-    }
+        public void setPid(String pid) {
+            this.pid = pid;
+        }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+        public String getProductName() {
+            return productName;
+        }
 
-    public String getMobile() {
-        return mobile;
-    }
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+        public String getProductPrice() {
+            return productPrice;
+        }
 
-    public String getImage1() {
-        return image1;
-    }
+        public void setProductPrice(String productPrice) {
+            this.productPrice = productPrice;
+        }
 
-    public void setImage1(String image1) {
-        this.image1 = image1;
-    }
+        public String getProductNumber() {
+            return productNumber;
+        }
 
-    public String getImage2() {
-        return image2;
-    }
+        public void setProductNumber(String productNumber) {
+            this.productNumber = productNumber;
+        }
 
-    public void setImage2(String image2) {
-        this.image2 = image2;
-    }
+        public String getCurrency() {
+            return currency;
+        }
 
-    public String getImage3() {
-        return image3;
-    }
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
 
-    public void setImage3(String image3) {
-        this.image3 = image3;
-    }
+        public String getMobile() {
+            return mobile;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public String getImage1() {
+            return image1;
+        }
 
-    public String getName() {
-        return name;
-    }
+        public void setImage1(String image1) {
+            this.image1 = image1;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public String getImage2() {
+            return image2;
+        }
 
-    public String getDate() {
-        return date;
-    }
+        public void setImage2(String image2) {
+            this.image2 = image2;
+        }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+        public String getImage3() {
+            return image3;
+        }
 
-    public String getCountry() {
-        return country;
-    }
+        public void setImage3(String image3) {
+            this.image3 = image3;
+        }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public String getBrand() {
-        return brand;
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public String getModel() {
-        return model;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public void setModel(String model) {
-        this.model = model;
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String getBrand() {
+            return brand;
+        }
+
+        public void setBrand(String brand) {
+            this.brand = brand;
+        }
+
+        public String getModel() {
+            return model;
+        }
+
+        public void setModel(String model) {
+            this.model = model;
+        }
     }
 }

@@ -8,7 +8,7 @@ public class AddModel {
 
     /**
      * status : {"type":"success","title":" insertion with uploading has been completed "}
-     * data : {"id":"3","name":"external","number":"213654","manufacturingCountry":"2","brand":"1","model":"2","category":"3","price":"2589","currency":"LE","image":"http://myspare.net/api/uploadedimage/qwe.jpg","country":"6","date":"2019"}
+     * data : {"id":"12","name":"amnayaasd","number":"213654","manufacturingCountry":"2","brand":"1","model":"2","category":"6","price":"2589","currency":"LE","image1":"http://myspare.net/public/upload/contact_center.jpg","image2":"http://myspare.net/public/upload/contact_center.jpg","image3":"http://myspare.net/public/upload/contact_center.jpg","country":"6","date":"2019"}
      */
 
     private StatusBean status;
@@ -57,17 +57,19 @@ public class AddModel {
     }
 
     public static class DataBean {
-        /**
-         * id : 3
-         * name : external
+        /*
+         * id : 12
+         * name : amnayaasd
          * number : 213654
          * manufacturingCountry : 2
          * brand : 1
          * model : 2
-         * category : 3
+         * category : 6
          * price : 2589
          * currency : LE
-         * image : http://myspare.net/api/uploadedimage/qwe.jpg
+         * image1 : http://myspare.net/public/upload/contact_center.jpg
+         * image2 : http://myspare.net/public/upload/contact_center.jpg
+         * image3 : http://myspare.net/public/upload/contact_center.jpg
          * country : 6
          * date : 2019
          */
@@ -81,7 +83,9 @@ public class AddModel {
         private String category;
         private String price;
         private String currency;
-        private String image;
+        private String image1;
+        private String image2;
+        private String image3;
         private String country;
         private String date;
 
@@ -157,12 +161,28 @@ public class AddModel {
             this.currency = currency;
         }
 
-        public String getImage() {
-            return image;
+        public String getImage1() {
+            return image1;
         }
 
-        public void setImage(String image) {
-            this.image = image;
+        public void setImage1(String image1) {
+            this.image1 = image1;
+        }
+
+        public String getImage2() {
+            return image2;
+        }
+
+        public void setImage2(String image2) {
+            this.image2 = image2;
+        }
+
+        public String getImage3() {
+            return image3;
+        }
+
+        public void setImage3(String image3) {
+            this.image3 = image3;
         }
 
         public String getCountry() {

@@ -8,11 +8,13 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
+import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.model.RegisterModel;
 import com.spectraapps.myspare.model.ResetPasswordModel;
 
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -69,30 +71,9 @@ public interface Api {
     @POST("models")
     Call<ModelsModel> models(@Field("bid") String bid);
 
-
-//    @FormUrlEncoded
-//    @POST("add.php")
-//    Call<AddModel> add(@Field("id") String id,
-//                       @Field("name") String name,
-//                       @Field("number") String number,
-//                       @Field("manufacturingCountry") String manufacturingCountry,
-//                       @Field("date") String date,
-//                       @Field("brand") String brand,
-//                       @Field("model") String model,
-//                       @Field("category") String category,
-//                       @Field("country") String country,
-//                       @Field("currency") String currency,
-//                       @Field("price") String price,
-//                       @Field("image1") String image1,
-//                       @Field("image2") String image2,
-//                       @Field("image3") String image3);
-
     @Multipart
-    @POST("/imagefolder/index.php")
-    Call<AddModel> uploadFile(@Part MultipartBody.Part file1,
-                              @Part MultipartBody.Part file2,
-                              @Part MultipartBody.Part file3,
-                              @Part("id") RequestBody id,
+    @POST("add.php")
+    Call<AddModel> uploadFile(@Part("id") RequestBody id,
                               @Part("name") RequestBody name,
                               @Part("number") RequestBody number,
                               @Part("manufacturingCountry") RequestBody manufacturingCountry,
@@ -102,13 +83,15 @@ public interface Api {
                               @Part("category") RequestBody category,
                               @Part("country") RequestBody country,
                               @Part("currency") RequestBody currency,
-                              @Part("price") RequestBody price);
-
+                              @Part("price") RequestBody price,
+                              @Part MultipartBody.Part file1,
+                              @Part MultipartBody.Part file2,
+                              @Part("image3") RequestBody image3);
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsAll(@Field("language") String language,
-                                    @Field("category") String category);
+    Call<ProductsAllModel> productsAll(@Field("language") String language,
+                                       @Field("category") String category);
 
     @FormUrlEncoded
     @POST("products")

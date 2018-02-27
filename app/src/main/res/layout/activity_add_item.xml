@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_wholeView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/add_wholeView"
     tools:context="com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -463,9 +463,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:baselineAligned="false">
+                android:paddingBottom="10dp">
 
                 <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
                     android:layout_width="match_parent"
@@ -518,8 +518,8 @@
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/ic_menu_camera" />
 
 
                 <ImageView
@@ -529,19 +529,8 @@
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:scaleType="fitXY"/>
-
-
-                <ImageView
-                    android:id="@+id/addImg3"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/ic_menu_camera" />
 
             </LinearLayout>
 

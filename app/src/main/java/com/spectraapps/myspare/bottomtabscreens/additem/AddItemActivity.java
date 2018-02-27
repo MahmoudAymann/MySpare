@@ -1,16 +1,22 @@
 package com.spectraapps.myspare.bottomtabscreens.additem;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +36,7 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
+import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
@@ -46,7 +53,9 @@ import com.spectraapps.myspare.network.MyRetrofitClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -60,7 +69,15 @@ import retrofit2.Response;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private static final int IMG_CODE = 777;
+    private static final int IMG_CODE1 = 111;
+    private static final int IMG_CODE2 = 222;
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static String image_path1, image_path2;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
     Toolbar mToolbar;
     TextView mToolbarTilte;
     Button mToolbarButton, mAddButton;
@@ -72,12 +89,30 @@ public class AddItemActivity extends AppCompatActivity {
     EditText nameET, serialNumberET, priceET;
     RoundKornerLinearLayout roundKornerTV, roundKornerSpinner;
     String mUserID, mItemName, mSerialNumber, mManfactureCountry_Id, mDate,
-            mBrand_Id, mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mCurrencyId, mPrice, mImage1, mImage2, mImage3;
+            mBrand_Id, mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mCurrencyId, mPrice;
     ProgressDialog progressDialog;
-    ImageView imageView;
-    Bitmap bitmap;
+    ImageView imageView1, imageView2;
 
-    public static String image_path;
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permissionWrite = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionRead = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        } else if (permissionRead != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +135,19 @@ public class AddItemActivity extends AppCompatActivity {
 
         getUserInfo();
         addYears();
+
+
     }//end onCreate()
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ContextCompat.checkSelfPermission(AddItemActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "error perm", Toast.LENGTH_SHORT).show();
+            // Permission is not granted
+        }
+    }
 
     private void initClickListener() {
 
@@ -188,8 +235,8 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
-
     private void submitAddItem() {
+        verifyStoragePermissions(AddItemActivity.this);
         progressDialog.show();
         serverAddItem();
     }
@@ -201,11 +248,33 @@ public class AddItemActivity extends AppCompatActivity {
         mDate = year_spinner.getSelectedItem().toString();
         mCurrency = currency_spinner.getSelectedItem().toString();
         mPrice = priceET.getText().toString();
-        mImage1 = getStringImage();
+
+        File file1 = new File(image_path1);
+        RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
+
+        File file2 = new File(image_path2);
+        RequestBody mFile2 = RequestBody.create(MediaType.parse("image/*"), file2);
+
+        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mUserID);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), mItemName);
+        RequestBody number = RequestBody.create(MediaType.parse("text/plain"), mSerialNumber);
+        RequestBody manufacturingCountry = RequestBody.create(MediaType.parse("text/plain"), mManfactureCountry_Id);
+        RequestBody date = RequestBody.create(MediaType.parse("text/plain"), mDate);
+        RequestBody brand = RequestBody.create(MediaType.parse("text/plain"), mBrand_Id);
+        RequestBody model = RequestBody.create(MediaType.parse("text/plain"), mModel_Id);
+        RequestBody category = RequestBody.create(MediaType.parse("text/plain"), mCategory_Id);
+        RequestBody country = RequestBody.create(MediaType.parse("text/plain"), mCountry_Id);
+        RequestBody currency = RequestBody.create(MediaType.parse("text/plain"), mCurrency);
+        RequestBody price = RequestBody.create(MediaType.parse("text/plain"), mPrice);
+        RequestBody image3 = RequestBody.create(MediaType.parse("text/plain"), "NULL");
+
+
+        MultipartBody.Part image1 = MultipartBody.Part.createFormData("image1", file1.getName(), mFile1);
+        MultipartBody.Part image2 = MultipartBody.Part.createFormData("image2", file2.getName(), mFile2);
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-        Call<AddModel> call = retrofit.add(mUserID, mItemName, mSerialNumber, mManfactureCountry_Id, mDate, mBrand_Id,
-                mModel_Id, mCategory_Id, mCountry_Id, mCurrency, mPrice, mImage1, "", "");
+        Call<AddModel> call = retrofit.uploadFile(id, name, number, manufacturingCountry, date, brand,
+                model, category, country, currency, price, image1, image2, image3);
 
         call.enqueue(new Callback<AddModel>() {
             @Override
@@ -221,17 +290,14 @@ public class AddItemActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Log.v("esddd", t.getMessage());
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                serverAddItem();
             }
         });
-    }//end serverAddItem
 
-    private String getStringImage() {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] imgByte = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgByte, Base64.DEFAULT);
-    }
+    }//end serverAddItem
 
     ///////////////#get IDS//////////////////////
     private void getBrandId(Integer pos) {
@@ -481,7 +547,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }//end serverModels()
-
+/////////////////////////////////////////
 
     private void getCategory(List<CategoriesModel.DataBean> data) {
         category_array = new ArrayList<>();
@@ -641,65 +707,79 @@ public class AddItemActivity extends AppCompatActivity {
         progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCanceledOnTouchOutside(false);
 
-        imageView = findViewById(R.id.addImg1);
-        imageView.setOnClickListener(
+        imageView1 = findViewById(R.id.addImg1);
+        imageView1.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pickImage();
+                        pickImage(IMG_CODE1);
                     }
                 }
         );
+
+        imageView2 = findViewById(R.id.addImg2);
+        imageView2.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pickImage(IMG_CODE2);
+                    }
+                }
+        );
+
     }
 
-    private void pickImage() {
+    private void pickImage(int keyImg) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMG_CODE);
+        startActivityForResult(intent, keyImg);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMG_CODE && resultCode == RESULT_OK && data != null) {
-            Uri path = data.getData();
 
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-//                imageView.setImageBitmap(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+        if (requestCode == IMG_CODE1 && resultCode == RESULT_OK && data != null) {
+            try {
+                Uri path = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(path);
+                image_path1 = getRealPathFromURIPath(path, AddItemActivity.this);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView1.setImageBitmap(selectedImage);
 
-             image_path = getRealPathFromURIPath(path, AddItemActivity.this);
-             work();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(AddItemActivity.this, "Something went wrong while picking image", Toast.LENGTH_LONG).show();
+            }
+
+        } else if (requestCode == IMG_CODE2 && resultCode == RESULT_OK && data != null) {
+            try {
+                Uri path = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(path);
+                image_path2 = getRealPathFromURIPath(path, AddItemActivity.this);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView2.setImageBitmap(selectedImage);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(AddItemActivity.this, "Something went wrong while picking image", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }//end onActivityResult
+
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(
+                contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
         }
     }
-
-   private void work(){
-       File file = new File(image_path);
-       RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-       MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("image1", file.getName(), mFile);
-       MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("image2", file.getName(), mFile);
-       MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("image3", file.getName(), mFile);
-
-       RequestBody name = RequestBody.create(MediaType.parse("text/plain"), );
-
-   }
-
-        private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
-            Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
-            if (cursor == null) {
-                return contentURI.getPath();
-            } else {
-                cursor.moveToFirst();
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                return cursor.getString(idx);
-            }
-        }
-
 
     private void getUserInfo() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
