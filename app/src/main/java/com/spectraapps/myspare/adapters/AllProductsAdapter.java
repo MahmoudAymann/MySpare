@@ -25,10 +25,10 @@ import java.util.ArrayList;
 
 public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.MyViewHolder> {
 
-
     private final OnItemClickListener listener;
     private final OnFavClickListener favListener;
     private ArrayList<ProductsAllModel.DataBean> mProductsModelList;
+
     private Context mContext;
 
     public AllProductsAdapter(Context mContext, ArrayList<ProductsAllModel.DataBean> productsModelArrayList, OnItemClickListener listener, OnFavClickListener favListener) {
@@ -64,14 +64,14 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     }
 
     public interface OnFavClickListener {
-        void onFavClick(ProductsAllModel.DataBean productsModel);
+        void onFavClick(View view);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nameTV, priceTV;
         SelectableRoundedImageView imageView;
         ImageButton btnFav;
-
+        boolean isFav;
         MyViewHolder(View itemView) {
             super(itemView);
             nameTV = itemView.findViewById(R.id.textName);
@@ -103,7 +103,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
             btnFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onFavClickListener.onFavClick(productsModel);
+                    onFavClickListener.onFavClick(view);
                 }
             });
 

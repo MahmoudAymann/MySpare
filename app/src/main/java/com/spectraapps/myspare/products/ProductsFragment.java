@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductsFragment extends Fragment {
+
     FloatingActionButton fabButton;
     EditText editText;
     Spinner spinner1, spinner2, spinner3, spinner5;
@@ -58,12 +60,15 @@ public class ProductsFragment extends Fragment {
     PullRefreshLayout pullRefreshLayout;
 
     Calendar mCalendar;
+    boolean isFav = false;
 
     FButton fButton;
 
     String mUserID;
 
     String lang_key;
+
+    ImageButton btnFav;
 
     public ProductsFragment() {
 
@@ -77,9 +82,6 @@ public class ProductsFragment extends Fragment {
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
-
-
-        //serverProductsAll();
 
         return rootView;
     }//end onCreateView()
@@ -121,6 +123,8 @@ public class ProductsFragment extends Fragment {
                 .playOn(fabButton);
 
         recyclerView = rootView.findViewById(R.id.products_recycler);
+
+        //btnFav = rootView.findViewById(R.id.imageButtonFav);
 
     }//end initUI
 
@@ -229,7 +233,6 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //Toast.makeText(getContext(), ""+ MainActivity.login_key, Toast.LENGTH_SHORT).show();
         turnOnServers(MainActivity.login_key);
     }
 
@@ -269,20 +272,21 @@ public class ProductsFragment extends Fragment {
             case 1:
                 initAdapterAllWith();
                 recyclerView.setAdapter(mProductsRecyclerAdapter);
-                mProductsRecyclerAdapter.notifyDataSetChanged();
                 serverproductsWithMail();
+                mProductsRecyclerAdapter.notifyDataSetChanged();
                 break;
             case 2:
                 initAdapterAllWith();
                 recyclerView.setAdapter(mProductsRecyclerAdapter);
-                mProductsRecyclerAdapter.notifyDataSetChanged();
                 serverproductsWithMail();
+                mProductsRecyclerAdapter.notifyDataSetChanged();
+
                 break;
             case 3:
                 initAdapterAllProducts();
                 recyclerView.setAdapter(mAllProductsAdapter);
-                mAllProductsAdapter.notifyDataSetChanged();
                 serverProductsAll();
+                mAllProductsAdapter.notifyDataSetChanged();
                 break;
             default:
                 Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
@@ -290,7 +294,6 @@ public class ProductsFragment extends Fragment {
 
         }
     }
-
     private void initAdapterAllProducts() {
         mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList, new AllProductsAdapter.OnItemClickListener() {
             @Override
@@ -300,9 +303,16 @@ public class ProductsFragment extends Fragment {
             }
         }, new AllProductsAdapter.OnFavClickListener() {
             @Override
-            public void onFavClick(ProductsAllModel.DataBean productsModel) {
-                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
-
+            public void onFavClick(View view) {
+                if (isFav) {
+                    btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    Toast.makeText(getContext(), "marked as fav" + view, Toast.LENGTH_SHORT).show();
+                    isFav = true;
+                } else {
+                    btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    Toast.makeText(getContext(), "removed" + view, Toast.LENGTH_SHORT).show();
+                    isFav = false;
+                }
             }
         });
     }
@@ -317,7 +327,15 @@ public class ProductsFragment extends Fragment {
                 }, new ProductsRecyclerAdapter.OnFavClickListener() {
             @Override
             public void onFavClick(ProductsModel.DataBean productsModel) {
-                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+                if (isFav) {
+                    // btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    Toast.makeText(getContext(), "marked as fav" + productsModel.getName(), Toast.LENGTH_SHORT).show();
+                    //isFav = true;
+                } else {
+                    // btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    Toast.makeText(getContext(), "removed" + productsModel.getName(), Toast.LENGTH_SHORT).show();
+                    //isFav = false;
+                }
             }
         });
     }//end
