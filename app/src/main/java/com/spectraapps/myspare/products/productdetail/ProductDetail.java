@@ -14,12 +14,17 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ProductDetail extends Fragment
         implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
@@ -27,6 +32,9 @@ public class ProductDetail extends Fragment
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
 
+    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
+
+    List<ProductsAllModel.DataBean> allDataList;
     public ProductDetail() {
 
     }
@@ -37,15 +45,35 @@ public class ProductDetail extends Fragment
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
 
-
-        MainActivity.mToolbarText.setText("Product 1");
+        MainActivity.mToolbarText.setText(pName);
 
         mDemoSlider =  rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
 
+        getProductData();
+
         imageSliderInitilaize();
         fireBackButtonEvent();
         return rootView;
+    }
+
+    private void getProductData() {
+        pName = CachePot.getInstance().pop("pName");
+        pId = CachePot.getInstance().pop("pId");
+        pPrice = CachePot.getInstance().pop("pPrice");
+        pNumber = CachePot.getInstance().pop("pNumber");
+        pCurrency = CachePot.getInstance().pop("pCurrency");
+        pImage1 = CachePot.getInstance().pop("pImage1");
+        pImage2 = CachePot.getInstance().pop("pImage2");
+        pDate = CachePot.getInstance().pop("pDate");
+        pCountry = CachePot.getInstance().pop("pCountry");
+        pBrand = CachePot.getInstance().pop("pBrand");
+        pModel = CachePot.getInstance().pop("pModel");
+
+        uId = CachePot.getInstance().pop("uId");
+        uMobile = CachePot.getInstance().pop("uMobile");
+        uName = CachePot.getInstance().pop("uName");
+
     }
 
     private void fireBackButtonEvent() {
@@ -59,11 +87,23 @@ public class ProductDetail extends Fragment
         });
     }//end back pressed
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
     private void imageSliderInitilaize() {
+
         HashMap<String,Integer> file_maps = new HashMap<>();
         file_maps.put("car 1",R.drawable.car_tires);
         file_maps.put("car 2",R.drawable.car_electric);
-        file_maps.put("car 3",R.drawable.car_accessories);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -85,7 +125,6 @@ public class ProductDetail extends Fragment
 
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Stack);
         mDemoSlider.setCustomIndicator(pagerIndicator);
-        //mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
         mDemoSlider.addOnPageChangeListener(this);
@@ -94,7 +133,7 @@ public class ProductDetail extends Fragment
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(getActivity(),slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

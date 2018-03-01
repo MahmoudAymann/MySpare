@@ -1,12 +1,13 @@
 package com.spectraapps.myspare.model.inproducts;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by MahmoudAyman on 26/02/2018.
  */
 
-public class ProductsAllModel {
+public class ProductsAllModel implements Serializable {
 
     /**
      * status : {"type":"success","title":"Successfull request"}

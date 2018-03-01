@@ -1,6 +1,7 @@
 package com.spectraapps.myspare.products;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.github.kimkevin.cachepot.CachePot;
 import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
@@ -29,14 +31,18 @@ import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.adapters.AllProductsAdapter;
 import com.spectraapps.myspare.adapters.ProductsRecyclerAdapter;
 import com.spectraapps.myspare.api.Api;
+import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
+import com.spectraapps.myspare.products.productdetail.ProductDetail;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import info.hoang8f.widget.FButton;
 import retrofit2.Call;
@@ -67,8 +73,6 @@ public class ProductsFragment extends Fragment {
     String mUserID;
 
     String lang_key;
-
-    ImageButton btnFav;
 
     public ProductsFragment() {
 
@@ -295,49 +299,43 @@ public class ProductsFragment extends Fragment {
         }
     }
     private void initAdapterAllProducts() {
-        mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList, new AllProductsAdapter.OnItemClickListener() {
+        mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList,
+                new AllProductsAdapter.ListAllListeners() {
             @Override
-            public void onItemClick(ProductsAllModel.DataBean productsModel) {
-                Toast.makeText(getContext(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
+            public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+                Log.e("plz", produtsAllModel.getProductName());
+
+                CachePot.getInstance().push("pName", produtsAllModel.getProductName());
+                CachePot.getInstance().push("pId", produtsAllModel.getProductNumber());
+                CachePot.getInstance().push("pPrice", produtsAllModel.getProductPrice());
+                CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
+                CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
+                CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
+                CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+                CachePot.getInstance().push("pDate", produtsAllModel.getDate());
+                CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
+                CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
+                CachePot.getInstance().push("pModel", produtsAllModel.getModel());
+
+                CachePot.getInstance().push("uId", produtsAllModel.getId());
+                CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
+                CachePot.getInstance().push("uName", produtsAllModel.getName());
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductDetail()).commit();
 
             }
-        }, new AllProductsAdapter.OnFavClickListener() {
+
             @Override
-            public void onFavClick(View view) {
-                if (isFav) {
-                    btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    Toast.makeText(getContext(), "marked as fav" + view, Toast.LENGTH_SHORT).show();
-                    isFav = true;
-                } else {
-                    btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    Toast.makeText(getContext(), "removed" + view, Toast.LENGTH_SHORT).show();
-                    isFav = false;
-                }
+            public void onFavButtonClick(View v, int position, boolean isFav) {
+                Log.e("plz", "" + isFav + " pos " + position);
             }
         });
     }
 
+
     private void initAdapterAllWith() {
-        mProductsRecyclerAdapter = new ProductsRecyclerAdapter(getContext(), mProductDataList,
-                new ProductsRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(ProductsModel.DataBean productsModel) {
-                        Toast.makeText(getActivity(), "" + productsModel.getDate(), Toast.LENGTH_SHORT).show();
-                    }
-                }, new ProductsRecyclerAdapter.OnFavClickListener() {
-            @Override
-            public void onFavClick(ProductsModel.DataBean productsModel) {
-                if (isFav) {
-                    // btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    Toast.makeText(getContext(), "marked as fav" + productsModel.getName(), Toast.LENGTH_SHORT).show();
-                    //isFav = true;
-                } else {
-                    // btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    Toast.makeText(getContext(), "removed" + productsModel.getName(), Toast.LENGTH_SHORT).show();
-                    //isFav = false;
-                }
-            }
-        });
+        /////////
     }//end
 
     private void fireBackButtonEvent() {

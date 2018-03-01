@@ -27,6 +27,7 @@ import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.R;
 import com.squareup.picasso.Picasso;
 
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,6 +44,12 @@ public class Home extends Fragment {
     View rootView;
     public Home() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //EventBus.getDefault().register(this);
     }
 
     @Override
@@ -63,7 +70,6 @@ public class Home extends Fragment {
     }
 
     private void serverCategories() {
-
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
         String lang_key = "";

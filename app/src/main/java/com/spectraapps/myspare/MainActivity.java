@@ -26,9 +26,11 @@ import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.bottomtabscreens.notification.Notification;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
+
 import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.model.LoginModel;
+import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.products.ProductsFragment;
@@ -43,6 +45,7 @@ import devlight.io.library.ntb.NavigationTabBar;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
     public static Integer login_key;
     protected IOnBackPressed onBackPressedListener;
@@ -88,6 +91,13 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
 
     private void setupLanguageUI() {
         if (SplashScreen.LANG_NUM == 1) { //english
@@ -252,6 +262,7 @@ public class MainActivity extends AppCompatActivity
         }//end switch
     }
 
+
     @Override
     public void onBackPressed() {
         if (onBackPressedListener != null)
@@ -308,6 +319,5 @@ public class MainActivity extends AppCompatActivity
         //mImage = prefs.getString("image", "");
         mIsLogged = prefs.getBoolean("isLoggedIn", false);
     }
-
 
 }//end class main
