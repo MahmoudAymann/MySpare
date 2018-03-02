@@ -1,6 +1,7 @@
 package com.spectraapps.myspare;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -43,11 +44,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ProductsFragment.myCall_Back {
 
     @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
-    public static Integer login_key;
     protected IOnBackPressed onBackPressedListener;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity
     CircleImageView mNavCircleImageView;
     TextView mNavNameTextView, mNavEmailTextView;
     String mId, mName, mEmail, mToken, mMobile, mImage;
+
+    ListSharedPreference listSharedPreference = new ListSharedPreference();
     boolean mIsLogged;
 
     @Override
@@ -63,9 +65,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupLanguageUI();
-
-        login_key = getIntent().getIntExtra("login", 3);
+        setLAyoutLanguage();
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
@@ -79,17 +79,18 @@ public class MainActivity extends AppCompatActivity
 
         getUserInfo();
 
-        if (mIsLogged) {
-            mNavNameTextView.setText(mName);
-            mNavEmailTextView.setText(mEmail);
-            //Picasso.with(MainActivity.this).load(model).with(image);
-        }
 
     }//end onCreate()
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("plzlog", "" + mIsLogged);
+        if (mIsLogged) {
+            mNavNameTextView.setText(mName);
+            mNavEmailTextView.setText(mEmail);
+            //Picasso.with(MainActivity.this).load(model).with(image);
+        }
     }
 
     @Override
@@ -98,16 +99,16 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-    private void setupLanguageUI() {
-        if (SplashScreen.LANG_NUM == 1) { //english
+    private void setLAyoutLanguage() {
+        String langStr = listSharedPreference.getLanguage(getApplicationContext());
+        if (langStr.equals("en")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
-        } else if (SplashScreen.LANG_NUM == 2) { //arabic
+        } else {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             locale = new Locale("ar");
             Locale.setDefault(locale);
@@ -271,7 +272,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -310,14 +310,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getUserInfo() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mId = prefs.getString("id", "0");
-        mName = prefs.getString("name", "User Name");
-        mEmail = prefs.getString("email", "example@domain.com");
-        mToken = prefs.getString("token", "123");
-        mMobile = prefs.getString("mobile", "0123456789");
+        Context context = getApplicationContext();
+        mId = listSharedPreference.getUId(context);
+        mName = listSharedPreference.getUName(context);
+        mEmail = listSharedPreference.getEmail(context);
+        mToken = listSharedPreference.getToken(context);
+        mMobile = listSharedPreference.getToken(context);
         //mImage = prefs.getString("image", "");
-        mIsLogged = prefs.getBoolean("isLoggedIn", false);
+        mIsLogged = listSharedPreference.getLoginStatus(context);
     }
 
+    @Override
+    public void ProudctSFrag(String year)
+    {
+        Bundle bundle=new Bundle();
+        bundle.putString("dex",year);
+        ProductsFragment fragment =new ProductsFragment();
+        fragment.setArguments(bundle);
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_frameLayout, fragment).commit();
+    }
 }//end class main

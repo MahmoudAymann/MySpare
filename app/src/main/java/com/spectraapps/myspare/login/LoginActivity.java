@@ -4,6 +4,7 @@ package com.spectraapps.myspare.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,12 +23,15 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.LoginModel;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,15 +48,41 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
 
+    ListSharedPreference listSharedPreference = new ListSharedPreference();
+    Locale locale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setLAyoutLanguage();
 
         initUI();
         initClickListener();
 
+        Toast.makeText(this, "" + listSharedPreference.getLanguage(getApplicationContext()), Toast.LENGTH_SHORT).show();
+
     }//end onCreate()
+
+    private void setLAyoutLanguage() {
+        String langStr = listSharedPreference.getLanguage(getApplicationContext());
+        if (langStr.equals("en")){
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            this.getApplicationContext().getResources().updateConfiguration(config, null);
+        }
+        else {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            locale = new Locale("ar");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            this.getApplicationContext().getResources().updateConfiguration(config, null);
+        }
+    }
 
     private void serverLogin() {
 
@@ -92,14 +122,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveUserInfo(String id, String name, String email, String token, String mobile) {
-        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-        prefEditor.putString("id", id);
-        prefEditor.putString("name", name);
-        prefEditor.putString("email", email);
-        prefEditor.putString("token", token);
-        prefEditor.putString("mobile", mobile);
-        prefEditor.putBoolean("isLoggedIn", true);
-        prefEditor.apply();
+        listSharedPreference.setUId(getApplicationContext(),id);
+        listSharedPreference.setUName(getApplicationContext(),name);
+        listSharedPreference.setEmail(getApplicationContext(),email);
+        listSharedPreference.setToken(getApplicationContext(),token);
+        listSharedPreference.setMobile(getApplicationContext(),mobile);
+        listSharedPreference.setLoginStatus(getApplicationContext(),true);
     }
 
     private void initUI() {
@@ -151,8 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("login", 3);
                 startActivity(intent);
                 progressDialog.dismiss();
-                SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                prefEditor.putString("email", "nashwa@gmail.com").apply();
                 finish();
             }
         });
@@ -183,8 +209,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }//initClickListener()
 
-    private void attemptLogin()
-    {
+    private void attemptLogin() {
         if (isEmailValid(mEmailEditText.getText().toString()) &&
                 isPasswordValid(mPasswordEditText.getText().toString())) {
             progressDialog.show();

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
@@ -42,6 +43,7 @@ public class Home extends Fragment {
 
     PullRefreshLayout pullRefreshLayout;
     View rootView;
+    ListSharedPreference listSharedPreference= new ListSharedPreference();
     public Home() {
         // Required empty public constructor
     }
@@ -69,15 +71,17 @@ public class Home extends Fragment {
         return rootView;
     }
 
-    private void serverCategories() {
+    private void serverCategories()
+    {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
         String lang_key = "";
-        switch (SplashScreen.LANG_NUM) {
-            case 1:
+        switch (listSharedPreference.getLanguage(Home.this.getActivity().getApplicationContext()))
+        {
+            case "en":
                 lang_key = "en";
                 break;
-            case 2:
+            case "ar":
                 lang_key = "ar";
                 break;
         }
@@ -242,5 +246,8 @@ public class Home extends Fragment {
 
     }//end initUI
 
+private void getSharedPref(){
+
+}
 
 }//end Home

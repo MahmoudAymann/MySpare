@@ -23,7 +23,7 @@ public class SplashScreen extends Activity {
 
     ImageButton button_ar;
     ImageButton button_en;
-    public static int LANG_NUM = 0;
+    ListSharedPreference listSharedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,9 @@ public class SplashScreen extends Activity {
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LANG_NUM = 1;
+listSharedPreference = new ListSharedPreference();
+                listSharedPreference.setLanguage(getApplicationContext(),"en");
+
                 Intent i = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(i);
                 finish();
@@ -51,7 +53,9 @@ public class SplashScreen extends Activity {
         button_ar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LANG_NUM = 2;
+listSharedPreference = new ListSharedPreference();
+                listSharedPreference.setLanguage(getApplicationContext(),"ar");
+
                 Intent i = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(i);
                 finish();

@@ -46,7 +46,8 @@ public class VideoActivity extends Activity {
     }
 
     private void jump() {
-        if (isFinishing()) {
+        if (isFinishing())
+        {
             checkForLogging();
             return;
         }

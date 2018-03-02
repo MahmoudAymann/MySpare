@@ -1,6 +1,7 @@
 package com.spectraapps.myspare.products;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -25,12 +26,14 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.michael.easydialog.EasyDialog;
+import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.adapters.AllProductsAdapter;
 import com.spectraapps.myspare.adapters.ProductsRecyclerAdapter;
 import com.spectraapps.myspare.api.Api;
+import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
@@ -51,10 +54,11 @@ import retrofit2.Response;
 
 public class ProductsFragment extends Fragment {
 
+    myCall_Back myCall_back;
     FloatingActionButton fabButton;
     EditText editText;
     Spinner spinner1, spinner2, spinner3, spinner5;
-
+    ArrayList<Integer> year_array = new ArrayList<>();
     RecyclerView recyclerView;
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
     AllProductsAdapter mAllProductsAdapter;
@@ -72,9 +76,10 @@ public class ProductsFragment extends Fragment {
 
     String mUserID;
 
-    String lang_key;
+    String spin;
 
-    public ProductsFragment() {
+    public ProductsFragment()
+    {
 
     }
 
@@ -86,22 +91,44 @@ public class ProductsFragment extends Fragment {
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
+        try {
+            if (getArguments().containsKey("dex"))
+            {
+                Log.v("plzx", getArguments().getString("dex"));
+                Toast.makeText(getActivity(), getArguments().getString("dex"), Toast.LENGTH_SHORT).show();
+
+            }
+        }catch ( Exception e)
+        {
+
+        }
+
+        //Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
 
         return rootView;
     }//end onCreateView()
 
-    private String getLangKey() {
-
-        switch (SplashScreen.LANG_NUM) {
-            case 1:
-                return lang_key = "en";
-
-            case 2:
-                return lang_key = "ar";
-            default:
-                return "en";
-        }
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        myCall_back= (myCall_Back) context;
     }
+
+    private String getLangkey() {
+        String lang_key = "";
+        switch  (new ListSharedPreference().getLanguage(ProductsFragment.this.getActivity().getApplication()))
+        {
+            case "en":
+                lang_key = "en";
+                break;
+            case "ar":
+                lang_key = "ar";
+                break;
+        }
+        return lang_key;
+    }//end getLangKey()
+
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -139,15 +166,14 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                turnOnServers(MainActivity.login_key);
+             //   turnOnServers(MainActivity.login_key);
             }
         });
     }
 
     private void showPopUp() {
 
-        @SuppressLint("InflateParams")
-        View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
+        final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
         new EasyDialog(getActivity())
                 //.setLayoutResourceId(R.layout.popup_filter_layout)//layout resource id
                 .setLayout(popupView)
@@ -175,6 +201,17 @@ public class ProductsFragment extends Fragment {
         fButton.setShadowEnabled(true);
         fButton.setShadowHeight(7);
 
+
+        fButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                spin = spinner3.getSelectedItem().toString();
+                Log.v("DeX",spinner3.getSelectedItem().toString());
+                myCall_back.ProudctSFrag(spinner3.getSelectedItem().toString());
+            }
+        });
+
         editText = popupView.findViewById(R.id.editText1_pop);
         mCalendar = Calendar.getInstance();
         addYears(popupView);
@@ -183,7 +220,7 @@ public class ProductsFragment extends Fragment {
     private void addYears(View view) {
         int current_year = mCalendar.get(Calendar.YEAR);
 
-        ArrayList<Integer> year_array = new ArrayList<>();
+
         for (int i = current_year; i >= 1990; i--) {
             year_array.add(i);
         }
@@ -199,7 +236,7 @@ public class ProductsFragment extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLangKey(), Home.CATEGK_KEY.toString());
+            final Call<ProductsAllModel> productsCall = retrofit.productsAll("en", Home.CATEGK_KEY.toString());
 
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
@@ -237,14 +274,14 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        turnOnServers(MainActivity.login_key);
+        turnOnServers(3);
     }
 
     private void serverproductsWithMail() {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLangKey(), Home.CATEGK_KEY.toString(), mUserID);
+        final Call<ProductsModel> productsCall = retrofit.productsWithMail("en", Home.CATEGK_KEY.toString(), mUserID);
 
         productsCall.enqueue(new Callback<ProductsModel>() {
             @Override
@@ -349,9 +386,13 @@ public class ProductsFragment extends Fragment {
         });
     }//end back pressed
 
-    private void getUserInfo() {
+    private void getUserInfo()
+    {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         mUserID = prefs.getString("email", "nashwa@gmail.com");
     }
-
+public interface  myCall_Back
+{
+    void   ProudctSFrag(String year);
+}
 }

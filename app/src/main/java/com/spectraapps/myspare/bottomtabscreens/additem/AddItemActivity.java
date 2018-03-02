@@ -37,6 +37,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
+import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.SplashScreen;
@@ -369,11 +370,12 @@ public class AddItemActivity extends AppCompatActivity {
     ///////////////////////////////////////////
     private String getLangkey() {
         String lang_key = "";
-        switch (SplashScreen.LANG_NUM) {
-            case 1:
+        switch  (new ListSharedPreference().getLanguage(AddItemActivity.this.getApplication()))
+        {
+            case "en":
                 lang_key = "en";
                 break;
-            case 2:
+            case "ar":
                 lang_key = "ar";
                 break;
         }
@@ -665,7 +667,7 @@ public class AddItemActivity extends AppCompatActivity {
             models_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         models_array); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout

@@ -99,11 +99,12 @@ public class ProductDetail extends Fragment
         super.onStop();
     }
 
-    private void imageSliderInitilaize() {
+    private void imageSliderInitilaize()
+    {
 
-        HashMap<String,Integer> file_maps = new HashMap<>();
-        file_maps.put("car 1",R.drawable.car_tires);
-        file_maps.put("car 2",R.drawable.car_electric);
+        HashMap<String,String> file_maps = new HashMap<>();
+        file_maps.put("car 1","http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        file_maps.put("car 2","http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());
