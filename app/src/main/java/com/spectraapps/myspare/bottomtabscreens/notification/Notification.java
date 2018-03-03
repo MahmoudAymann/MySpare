@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 import java.util.ArrayList;
 
@@ -34,6 +37,8 @@ public class Notification extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
 
+        fireBackButtonEvent();
+
         recyclerView = rootView.findViewById(R.id.notification_recycler);
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
@@ -44,14 +49,10 @@ public class Notification extends Fragment {
         }
 
         notificationDataList = new ArrayList<>();
+        notificationDataList.add(new NotificationData("6/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
         notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
+        notificationDataList.add(new NotificationData("10/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
+        notificationDataList.add(new NotificationData("19/2/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
 
 
         recyclerNotificationAdapter = new RecyclerNotificationAdapter(notificationDataList, new RecyclerNotificationAdapter.OnItemClickListener() {
@@ -67,4 +68,14 @@ public class Notification extends Fragment {
         return rootView;
     }
 
+    private void fireBackButtonEvent() {
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home())
+                        .commit();
+            }
+        });
+    }//end back pressed
 }

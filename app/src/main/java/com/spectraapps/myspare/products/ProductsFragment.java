@@ -78,8 +78,7 @@ public class ProductsFragment extends Fragment {
 
     String spin;
 
-    public ProductsFragment()
-    {
+    public ProductsFragment() {
 
     }
 
@@ -92,14 +91,12 @@ public class ProductsFragment extends Fragment {
         initUI(rootView);
         initRecyclerView();
         try {
-            if (getArguments().containsKey("dex"))
-            {
+            if (getArguments().containsKey("dex")) {
                 Log.v("plzx", getArguments().getString("dex"));
                 Toast.makeText(getActivity(), getArguments().getString("dex"), Toast.LENGTH_SHORT).show();
 
             }
-        }catch ( Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
@@ -109,16 +106,14 @@ public class ProductsFragment extends Fragment {
     }//end onCreateView()
 
     @Override
-    public void onAttach(Context context)
-    {
+    public void onAttach(Context context) {
         super.onAttach(context);
-        myCall_back= (myCall_Back) context;
+        myCall_back = (myCall_Back) context;
     }
 
     private String getLangkey() {
         String lang_key = "";
-        switch  (new ListSharedPreference().getLanguage(ProductsFragment.this.getActivity().getApplication()))
-        {
+        switch (new ListSharedPreference().getLanguage(ProductsFragment.this.getActivity().getApplication())) {
             case "en":
                 lang_key = "en";
                 break;
@@ -166,7 +161,7 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-             //   turnOnServers(MainActivity.login_key);
+                //   turnOnServers(MainActivity.login_key);
             }
         });
     }
@@ -204,10 +199,9 @@ public class ProductsFragment extends Fragment {
 
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 spin = spinner3.getSelectedItem().toString();
-                Log.v("DeX",spinner3.getSelectedItem().toString());
+                Log.v("DeX", spinner3.getSelectedItem().toString());
                 myCall_back.ProudctSFrag(spinner3.getSelectedItem().toString());
             }
         });
@@ -335,39 +329,40 @@ public class ProductsFragment extends Fragment {
 
         }
     }
+
     private void initAdapterAllProducts() {
         mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList,
                 new AllProductsAdapter.ListAllListeners() {
-            @Override
-            public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
-                Log.e("plz", produtsAllModel.getProductName());
+                    @Override
+                    public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+                        Log.e("plz", produtsAllModel.getProductName());
 
-                CachePot.getInstance().push("pName", produtsAllModel.getProductName());
-                CachePot.getInstance().push("pId", produtsAllModel.getProductNumber());
-                CachePot.getInstance().push("pPrice", produtsAllModel.getProductPrice());
-                CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
-                CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
-                CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
-                CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
-                CachePot.getInstance().push("pDate", produtsAllModel.getDate());
-                CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
-                CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
-                CachePot.getInstance().push("pModel", produtsAllModel.getModel());
+                        CachePot.getInstance().push("pName", produtsAllModel.getProductName());
+                        CachePot.getInstance().push("pId", produtsAllModel.getProductNumber());
+                        CachePot.getInstance().push("pPrice", produtsAllModel.getProductPrice());
+                        CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
+                        CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
+                        CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
+                        CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+                        CachePot.getInstance().push("pDate", produtsAllModel.getDate());
+                        CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
+                        CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
+                        CachePot.getInstance().push("pModel", produtsAllModel.getModel());
 
-                CachePot.getInstance().push("uId", produtsAllModel.getId());
-                CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
-                CachePot.getInstance().push("uName", produtsAllModel.getName());
+                        CachePot.getInstance().push("uId", produtsAllModel.getId());
+                        CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
+                        CachePot.getInstance().push("uName", produtsAllModel.getName());
 
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductDetail()).commit();
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.main_frameLayout, new ProductDetail()).commit();
 
-            }
+                    }
 
-            @Override
-            public void onFavButtonClick(View v, int position, boolean isFav) {
-                Log.e("plz", "" + isFav + " pos " + position);
-            }
-        });
+                    @Override
+                    public void onFavButtonClick(View v, int position, boolean isFav) {
+                        Log.e("plz", "" + isFav + " pos " + position);
+                    }
+                });
     }
 
 
@@ -386,13 +381,12 @@ public class ProductsFragment extends Fragment {
         });
     }//end back pressed
 
-    private void getUserInfo()
-    {
+    private void getUserInfo() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         mUserID = prefs.getString("email", "nashwa@gmail.com");
     }
-public interface  myCall_Back
-{
-    void   ProudctSFrag(String year);
-}
+
+    public interface myCall_Back {
+        void ProudctSFrag(String year);
+    }
 }

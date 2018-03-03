@@ -22,7 +22,6 @@ import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class ProductDetail extends Fragment
 
     String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
 
-    List<ProductsAllModel.DataBean> allDataList;
     public ProductDetail() {
 
     }
@@ -47,7 +45,7 @@ public class ProductDetail extends Fragment
 
         MainActivity.mToolbarText.setText(pName);
 
-        mDemoSlider =  rootView.findViewById(R.id.slider);
+        mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
 
         getProductData();
@@ -58,22 +56,25 @@ public class ProductDetail extends Fragment
     }
 
     private void getProductData() {
-        pName = CachePot.getInstance().pop("pName");
-        pId = CachePot.getInstance().pop("pId");
-        pPrice = CachePot.getInstance().pop("pPrice");
-        pNumber = CachePot.getInstance().pop("pNumber");
-        pCurrency = CachePot.getInstance().pop("pCurrency");
-        pImage1 = CachePot.getInstance().pop("pImage1");
-        pImage2 = CachePot.getInstance().pop("pImage2");
-        pDate = CachePot.getInstance().pop("pDate");
-        pCountry = CachePot.getInstance().pop("pCountry");
-        pBrand = CachePot.getInstance().pop("pBrand");
-        pModel = CachePot.getInstance().pop("pModel");
+        try {
+            pName = CachePot.getInstance().pop("pName");
+            pId = CachePot.getInstance().pop("pId");
+            pPrice = CachePot.getInstance().pop("pPrice");
+            pNumber = CachePot.getInstance().pop("pNumber");
+            pCurrency = CachePot.getInstance().pop("pCurrency");
+            pImage1 = CachePot.getInstance().pop("pImage1");
+            pImage2 = CachePot.getInstance().pop("pImage2");
+            pDate = CachePot.getInstance().pop("pDate");
+            pCountry = CachePot.getInstance().pop("pCountry");
+            pBrand = CachePot.getInstance().pop("pBrand");
+            pModel = CachePot.getInstance().pop("pModel");
 
-        uId = CachePot.getInstance().pop("uId");
-        uMobile = CachePot.getInstance().pop("uMobile");
-        uName = CachePot.getInstance().pop("uName");
-
+            uId = CachePot.getInstance().pop("uId");
+            uMobile = CachePot.getInstance().pop("uMobile");
+            uName = CachePot.getInstance().pop("uName");
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fireBackButtonEvent() {
@@ -99,20 +100,19 @@ public class ProductDetail extends Fragment
         super.onStop();
     }
 
-    private void imageSliderInitilaize()
-    {
+    private void imageSliderInitilaize() {
 
-        HashMap<String,String> file_maps = new HashMap<>();
-        file_maps.put("car 1","http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        file_maps.put("car 2","http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        HashMap<String, String> file_maps = new HashMap<>();
+        file_maps.put(pName, pImage1);
+        file_maps.put(pName, pImage2);
 
-        for(String name : file_maps.keySet()){
+        for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
 
             //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
-                    .putString("extra",name);
+                    .putString("extra", name);
 
             // initialize a SliderLayout
             textSliderView
@@ -138,11 +138,12 @@ public class ProductDetail extends Fragment
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
     @Override
     public void onPageSelected(int position) {
-        Log.d("Slider Demo", "Page Changed: " + position);
+        //Log.d("Slider Demo", "Page Changed: " + position);
     }
 
     @Override

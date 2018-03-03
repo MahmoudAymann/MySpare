@@ -71,5 +71,10 @@
     <string name="loading">Loading…</string>
     <string name="please_wait">Please Wait</string>
     <string name="serial_number">Serial Num</string>
+    <string name="product_name_PD">Name:</string>
+    <string name="serialNumber_PD">Serial Num.:</string>
+    <string name="price_PD">Price:</string>
+    <string name="currency_PD">Currency:</string>
+    <string name="pdate_PD">Manufacture Year:</string>
 
 </resources>

@@ -304,9 +304,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setLogout() {
-        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-        prefEditor.putBoolean("isLoggedIn", false);
-        prefEditor.apply();
+        listSharedPreference.setLoginStatus(getApplicationContext(),false);
     }
 
     private void getUserInfo() {

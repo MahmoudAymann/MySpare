@@ -3,6 +3,7 @@ package com.spectraapps.myspare.bottomtabscreens.home;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,7 @@ import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.products.ProductsFragment;
@@ -43,7 +45,9 @@ public class Home extends Fragment {
 
     PullRefreshLayout pullRefreshLayout;
     View rootView;
-    ListSharedPreference listSharedPreference= new ListSharedPreference();
+    ListSharedPreference listSharedPreference = new ListSharedPreference();
+    private ProgressDialog progressDialog;
+
     public Home() {
         // Required empty public constructor
     }
@@ -51,7 +55,6 @@ public class Home extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //EventBus.getDefault().register(this);
     }
 
     @Override
@@ -71,13 +74,12 @@ public class Home extends Fragment {
         return rootView;
     }
 
-    private void serverCategories()
-    {
+    private void serverCategories() {
+        progressDialog.show();
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
         String lang_key = "";
-        switch (listSharedPreference.getLanguage(Home.this.getActivity().getApplicationContext()))
-        {
+        switch (listSharedPreference.getLanguage(Home.this.getActivity().getApplicationContext())) {
             case "en":
                 lang_key = "en";
                 break;
@@ -104,21 +106,19 @@ public class Home extends Fragment {
                     Picasso.with(getContext()).load(response.body().getData().get(4).getImage()).into(image5);
                     textBattery.setText(response.body().getData().get(5).getName()); //electric
                     Picasso.with(getContext()).load(response.body().getData().get(5).getImage()).into(image3);
-                    // pullRefreshLayout.setRefreshing(false);
-
+                    progressDialog.dismiss();
                 } else {
-                    //pullRefreshLayout.setRefreshing(false);
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+
                 }
             }
 
             @Override
             public void onFailure(Call<CategoriesModel> call, Throwable t) {
-                //pullRefreshLayout.setRefreshing(false);
+                progressDialog.dismiss();
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 serverCategories();
-                Snackbar.make(rootView, "Check Internet", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
@@ -242,12 +242,14 @@ public class Home extends Fragment {
         textOutside = rootView.findViewById(R.id.text_outsideBody);
         textMechanic = rootView.findViewById(R.id.text_mechanic);
         textTires = rootView.findViewById(R.id.text_tires);
-
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(getString(R.string.loading));
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCanceledOnTouchOutside(false);
     }//end initUI
 
-private void getSharedPref(){
+    private void getSharedPref() {
 
-}
+    }
 
 }//end Home
