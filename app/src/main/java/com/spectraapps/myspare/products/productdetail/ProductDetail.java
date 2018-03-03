@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -33,6 +34,9 @@ public class ProductDetail extends Fragment
 
     String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
 
+    TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
+            uName_tv, uMobile_tv;
+
     public ProductDetail() {
 
     }
@@ -45,14 +49,48 @@ public class ProductDetail extends Fragment
 
         MainActivity.mToolbarText.setText(pName);
 
-        mDemoSlider = rootView.findViewById(R.id.slider);
-        pagerIndicator = rootView.findViewById(R.id.custom_indicator);
+
+        initUI(rootView);
 
         getProductData();
 
         imageSliderInitilaize();
         fireBackButtonEvent();
         return rootView;
+    }
+
+    private void initUI(View rootView) {
+        mDemoSlider = rootView.findViewById(R.id.slider);
+        pagerIndicator = rootView.findViewById(R.id.custom_indicator);
+
+        pName_tv = rootView.findViewById(R.id.get_PName_PD);
+        pPrice_tv = rootView.findViewById(R.id.get_PPrice_PD);
+        pNumber_tv = rootView.findViewById(R.id.get_PSerialNum_PD);
+        pCurrency_tv = rootView.findViewById(R.id.get_curency_PD);
+        pDate_tv = rootView.findViewById(R.id.get_Pdate_PD);
+        pCountry_tv = rootView.findViewById(R.id.get_PCountry_PD);
+        pBrand_tv = rootView.findViewById(R.id.get_PBrand_PD);
+        pModel_tv = rootView.findViewById(R.id.get_PModel_PD);
+
+        uName_tv = rootView.findViewById(R.id.user_name_PD);
+        uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
+    }
+
+    private void setData() {
+
+        uName_tv.setText(uName);
+        uMobile_tv.setText(uMobile);
+
+        pName_tv.setText(pName);
+        pPrice_tv.setText(pPrice);
+        pNumber_tv.setText(pNumber);
+        pCurrency_tv.setText(pCurrency);
+        pDate_tv.setText(pDate);
+        pCountry_tv.setText(pCountry);
+        pBrand_tv.setText(pBrand);
+        pModel_tv.setText(pModel);
+
+
     }
 
     private void getProductData() {
@@ -91,8 +129,7 @@ public class ProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-
-
+        setData();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.spectraapps.myspare.login.LoginActivity;
@@ -37,6 +38,21 @@ public class VideoActivity extends Activity {
         } catch (Exception ex) {
             jump();
         }
+
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+            //show start activity
+            startActivity(new Intent(VideoActivity.this, SplashScreen.class));
+            Toast.makeText(VideoActivity.this, "First Run", Toast.LENGTH_LONG)
+                    .show();
+        }
+
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).apply();
+
     }//end VideoActivity
 
     @Override

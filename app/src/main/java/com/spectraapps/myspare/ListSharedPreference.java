@@ -10,6 +10,16 @@ import android.preference.PreferenceManager;
 
 public class ListSharedPreference {
 
+    public void setFirstLaunch(Context context, boolean isFirstRun) {
+        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefEditor.putBoolean("isFirstRun", isFirstRun).apply();
+    }
+
+    public boolean getFirstLaunch(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("isFirstRun", false);
+    }
+
     public void setLanguage(Context context, String lang) {
         SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         prefEditor.putString("lang", lang).apply();

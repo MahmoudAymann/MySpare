@@ -1,16 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/app_background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.spectraapps.myspare.login.LoginActivity"
-    android:background="@drawable/app_background">
+    tools:context="com.spectraapps.myspare.login.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,8 +25,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/app_logo"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/app_logo" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textinput_email"
@@ -38,11 +38,12 @@
                     android:id="@+id/emailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_email_24dp"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:drawableStart="@drawable/ic_email_24dp"/>
+                    tools:ignore="LabelFor" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -55,39 +56,40 @@
                 android:id="@+id/textinput_pass"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:textColorHint="@android:color/white"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:textColorHint="@android:color/white">
 
                 <EditText
                     android:id="@+id/passwordET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_lock_white_nav_24dp"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:drawableStart="@drawable/ic_lock_white_nav_24dp"/>
+                    android:textColorHint="@android:color/white" />
 
             </android.support.design.widget.TextInputLayout>
                 <ImageButton
                     android:id="@+id/image_visible"
+                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    app:srcCompat="@drawable/ic_visibility_white_24dp"
-                    android:layout_gravity="bottom"/>
+                    android:layout_gravity="bottom"
+                    app:srcCompat="@drawable/ic_visibility_white_24dp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/forgot_password_text"
-                android:text="@string/forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:text="@string/forgot_password"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -95,31 +97,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold"
-                android:background="@color/colorAccent"/>
+                android:background="@color/colorAccent"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button_Register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/Register"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:layout_gravity="bottom"
-                android:background="@android:color/darker_gray"/>
+                android:layout_marginTop="16dp"
+                android:background="@android:color/darker_gray"
+                android:text="@string/Register"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button_later"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/skip_now_butoon"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:layout_gravity="bottom"
-                android:background="@drawable/button_border_only"/>
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_border_only"
+                android:text="@string/skip_now_butoon"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

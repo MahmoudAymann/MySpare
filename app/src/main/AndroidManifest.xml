@@ -58,10 +58,7 @@
             android:name=".navdrawer.ProfileActivity"
             android:theme="@style/AppTheme"/>
 
-        <activity
-            android:name=".VideoActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        </activity>
+        <activity android:name=".VideoActivity" />
     </application>
 
 </manifest>

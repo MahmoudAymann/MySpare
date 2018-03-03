@@ -97,7 +97,7 @@ public class ProductsFragment extends Fragment {
 
             }
         } catch (Exception e) {
-
+            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         //Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();

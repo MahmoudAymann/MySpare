@@ -43,13 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
+    ListSharedPreference listSharedPreference = new ListSharedPreference();
+    Locale locale;
     //UI references.
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
-
-    ListSharedPreference listSharedPreference = new ListSharedPreference();
-    Locale locale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,6 @@ public class LoginActivity extends AppCompatActivity {
 
         initUI();
         initClickListener();
-
-        Toast.makeText(this, "" + listSharedPreference.getLanguage(getApplicationContext()), Toast.LENGTH_SHORT).show();
 
     }//end onCreate()
 
@@ -73,8 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             Configuration config = new Configuration();
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
-        }
-        else {
+        } else if (langStr.equals("ar")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             locale = new Locale("ar");
             Locale.setDefault(locale);
@@ -131,13 +127,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+
         textInputLayoutEmail = findViewById(R.id.textinput_email);
         textInputLayoutPassword = findViewById(R.id.textinput_pass);
+        textInputLayoutEmail.setHint(getString(R.string.prompt_email));
 
         mEmailEditText = findViewById(R.id.emailET);
         mPasswordEditText = findViewById(R.id.passwordET);
+        mEmailEditText.setHint(R.string.prompt_email);
 
         mSignInButton = findViewById(R.id.email_sign_in_button);
+        mSignInButton.setText(R.string.action_sign_in);
+
         mRegisterButton = findViewById(R.id.button_Register);
         mSkipButton = findViewById(R.id.button_later);
 
@@ -164,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 intent.putExtra("login", 2);
                 startActivity(intent);
                 progressDialog.dismiss();

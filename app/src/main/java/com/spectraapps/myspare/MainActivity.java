@@ -1,12 +1,15 @@
 package com.spectraapps.myspare;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -14,6 +17,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -59,6 +63,11 @@ public class MainActivity extends AppCompatActivity
 
     ListSharedPreference listSharedPreference = new ListSharedPreference();
     boolean mIsLogged;
+    AlertDialog.Builder alertDialogBuilder;
+
+    public static void restartActivity(Activity activity) {
+        activity.recreate();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +106,6 @@ public class MainActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
     }
-
 
     private void setLAyoutLanguage() {
         String langStr = listSharedPreference.getLanguage(getApplicationContext());
@@ -263,7 +271,6 @@ public class MainActivity extends AppCompatActivity
         }//end switch
     }
 
-
     @Override
     public void onBackPressed() {
         if (onBackPressedListener != null)
@@ -280,12 +287,15 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.updatePass_nav) {
             startActivity(new Intent(MainActivity.this, ResetPassword.class));
         } else if (id == R.id.language_nav) {
-
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         } else if (id == R.id.logout_nav) {
             setLogout();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else if (id == R.id.nav_privacy) {
-
+            Uri uriUrl = Uri.parse("http://myspare.net");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
         } else if (id == R.id.nav_contactus) {
             Uri uriUrl = Uri.parse("http://myspare.net/contact-us");
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -299,12 +309,38 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void setAlertDialog() {
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure, you will change the language Now!");
+
+        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+                if (listSharedPreference.getLanguage(getApplicationContext()).equals("en")) {
+                    listSharedPreference.setLanguage(getApplicationContext(), "ar");
+                    restartActivity(MainActivity.this);
+                } else {
+                    listSharedPreference.setLanguage(getApplicationContext(), "en");
+                    restartActivity(MainActivity.this);
+                }
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+    }//end setAlertDialog
+
     public void setOnBackPressedListener(IOnBackPressed onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
     }
 
     private void setLogout() {
-        listSharedPreference.setLoginStatus(getApplicationContext(),false);
+        listSharedPreference.setLoginStatus(getApplicationContext(), false);
     }
 
     private void getUserInfo() {
@@ -319,11 +355,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void ProudctSFrag(String year)
-    {
-        Bundle bundle=new Bundle();
-        bundle.putString("dex",year);
-        ProductsFragment fragment =new ProductsFragment();
+    public void ProudctSFrag(String year) {
+        Bundle bundle = new Bundle();
+        bundle.putString("dex", year);
+        ProductsFragment fragment = new ProductsFragment();
         fragment.setArguments(bundle);
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();

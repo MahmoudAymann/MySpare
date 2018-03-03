@@ -2,10 +2,8 @@ package com.spectraapps.myspare;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,21 +11,21 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.spectraapps.myspare.login.LoginActivity;
-import com.spectraapps.myspare.model.LoginModel;
 
 public class SplashScreen extends Activity {
 
-    ImageButton button_ar;
-    ImageButton button_en;
-    ListSharedPreference listSharedPreference;
+    Button button_ar, button_en;
+    ListSharedPreference listSharedPreference = new ListSharedPreference();
 
+    boolean isFirstRun;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splash_screen);
 
         button_ar = findViewById(R.id.btn_ar);
@@ -35,17 +33,26 @@ public class SplashScreen extends Activity {
 
         insertAnimation();
         initButtonClickListener();
+
+        isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
+
+        if (isFirstRun) {
+            Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
+
     }//end oncreate
 
     private void initButtonClickListener() {
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-listSharedPreference = new ListSharedPreference();
-                listSharedPreference.setLanguage(getApplicationContext(),"en");
 
-                Intent i = new Intent(SplashScreen.this, VideoActivity.class);
-                startActivity(i);
+                listSharedPreference.setLanguage(getApplicationContext(), "en");
+                listSharedPreference.setFirstLaunch(getApplicationContext(), false);
+                Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
+                startActivity(intent);
+
                 finish();
             }
         });
@@ -53,14 +60,20 @@ listSharedPreference = new ListSharedPreference();
         button_ar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-listSharedPreference = new ListSharedPreference();
-                listSharedPreference.setLanguage(getApplicationContext(),"ar");
 
-                Intent i = new Intent(SplashScreen.this, VideoActivity.class);
-                startActivity(i);
+                listSharedPreference.setLanguage(getApplicationContext(), "ar");
+                listSharedPreference.setFirstLaunch(getApplicationContext(), false);
+                Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
+                startActivity(intent);
+
                 finish();
             }
         });
+    }
+
+
+    private void hideButtons() {
+
     }
 
     private void insertAnimation() {
@@ -81,8 +94,8 @@ listSharedPreference = new ListSharedPreference();
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                YoYo.with(Techniques.BounceInUp).playOn(button_ar);
-                YoYo.with(Techniques.BounceInUp).playOn(button_en);
+                YoYo.with(Techniques.BounceIn).playOn(button_ar);
+                YoYo.with(Techniques.BounceIn).playOn(button_en);
             }
 
             @Override

@@ -10,7 +10,7 @@
     <string name="prompt_email">الإيميل</string>
     <string name="prompt_password">الباسوورد</string>
     <string name="action_sign_in_short">تسجيل الدخول</string>
-    <string name="error_invalid_email">ايمل غير صالح</string>
+    <string name="error_invalid_email">ايميل غير صالح</string>
     <string name="error_invalid_password">يجب ان يكون اكبر من 4</string>
     <string name="error_incorrect_password">الباسوورد غير صحيح</string>
     <string name="button_more_text">المزيد</string>
@@ -61,4 +61,5 @@
     <string name="enter_year">السنة</string>
     <string name="hintET_cost">التكلفة</string>
     <string name="category">الفئة</string>
+
 </resources>

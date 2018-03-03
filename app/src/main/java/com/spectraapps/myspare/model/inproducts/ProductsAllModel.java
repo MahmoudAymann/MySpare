@@ -11,7 +11,11 @@ public class ProductsAllModel implements Serializable {
 
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"pid":"11","productName":"ت ت ت","productPrice":"55555","productNumber":"5555","currency":"Qatar Riyal","mobile":"123456789","image1":"http://myspare.net/public/upload/image1.png","image2":"http://myspare.net/public/upload/image2.png","image3":"http://myspare.net/public/upload/image3.png","id":"19","name":"amr","date":"2018","country":"Qatar","brand":"aston martin","model":"Acura MDX"}]
+     * data : [{"pid":"11","productName":"ت ت ت","productPrice":"55555",
+     * "productNumber":"5555","currency":"Qatar Riyal","mobile":"123456789",
+     * "image1":"http://myspare.net/public/upload/image1.png","image2":"http://myspare.net/public/upload/image2.png",
+     * "image3":"http://myspare.net/public/upload/image3.png","id":"19","name":"amr","date":"2018",
+     * "country":"Qatar","brand":"aston martin","model":"Acura MDX"}]
      */
 
     private StatusBean status;
@@ -62,14 +66,14 @@ public class ProductsAllModel implements Serializable {
     public static class DataBean {
         /**
          * pid : 11
-         * productName : ت ت ت
+         * productName : mahmoudProduct
          * productPrice : 55555
          * productNumber : 5555
          * currency : Qatar Riyal
          * mobile : 123456789
          * image1 : http://myspare.net/public/upload/image1.png
          * image2 : http://myspare.net/public/upload/image2.png
-         * image3 : http://myspare.net/public/upload/image3.png
+         * image3 : null
          * id : 19
          * name : amr
          * date : 2018
