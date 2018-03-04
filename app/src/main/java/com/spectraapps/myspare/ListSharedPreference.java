@@ -81,10 +81,19 @@ public class ListSharedPreference {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("mobile", "0123456789");
     }
+
     public boolean getLoginStatus(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("islogin", false);
     }
 
+    public String getImage(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("image", "");
+    }
 
+    public void setImage(Context applicationContext, String image) {
+        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(applicationContext).edit();
+        prefEditor.putString("image", image).apply();
+    }
 }

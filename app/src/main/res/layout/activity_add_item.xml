@@ -106,8 +106,9 @@
                         android:id="@+id/name_editText_addItem"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/rounded_yellow_background"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:textAlignment="center" />
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
@@ -151,9 +152,11 @@
                         android:id="@+id/serialNum_ET_addItem"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/rounded_yellow_background"
                         android:gravity="center"
-                        android:inputType="number"
-                        android:textAlignment="center" />
+                        android:inputType="text"
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor" />
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
             </LinearLayout>
@@ -498,9 +501,11 @@
                         android:id="@+id/price_editText_addItem"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/rounded_yellow_background"
                         android:gravity="center"
                         android:inputType="number"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor" />
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
             </LinearLayout>
@@ -509,28 +514,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:orientation="horizontal"
                 android:paddingBottom="10dp">
 
                 <ImageView
                     android:id="@+id/addImg1"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_gravity="start"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:ignore="ContentDescription" />
 
 
                 <ImageView
                     android:id="@+id/addImg2"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
 

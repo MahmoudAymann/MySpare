@@ -97,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                     String email = response.body().getData().getMail();
                     String token = response.body().getData().getToken();
                     String mobile = response.body().getData().getMobile();
-                    //String image = response.body().getData().getImage();
+                    String image = response.body().getData().getImage();
 
-                    saveUserInfo(id, email, name, mobile, token);
+                    saveUserInfo(id, email, name, mobile, token, image);
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("login", 1);
@@ -117,12 +117,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserInfo(String id, String name, String email, String token, String mobile) {
+    private void saveUserInfo(String id, String name, String email, String token, String mobile, String image) {
         listSharedPreference.setUId(getApplicationContext(),id);
         listSharedPreference.setUName(getApplicationContext(),name);
         listSharedPreference.setEmail(getApplicationContext(),email);
         listSharedPreference.setToken(getApplicationContext(),token);
         listSharedPreference.setMobile(getApplicationContext(),mobile);
+        listSharedPreference.setImage(getApplicationContext(), image);
         listSharedPreference.setLoginStatus(getApplicationContext(),true);
     }
 

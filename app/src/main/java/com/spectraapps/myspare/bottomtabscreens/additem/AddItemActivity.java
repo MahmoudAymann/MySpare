@@ -70,15 +70,19 @@ import retrofit2.Response;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private static final int IMG_CODE1 = 111;
-    private static final int IMG_CODE2 = 222;
+    private static final int IMG_CODE1 = 10001;
+    private static final int IMG_CODE2 = 10002;
+
+    public static String image_path1, image_path2;
 
     // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    public static String image_path1, image_path2;
-    private static String[] PERMISSIONS_STORAGE = {
+    String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+
+    };
+
     Toolbar mToolbar;
     TextView mToolbarTilte;
     Button mToolbarButton, mAddButton;
@@ -94,24 +98,31 @@ public class AddItemActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     ImageView imageView1, imageView2;
 
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permissionWrite = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permissionRead = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        } else if (permissionRead != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == 100) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // do something
+                Toast.makeText(this, "done perm", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -134,21 +145,15 @@ public class AddItemActivity extends AppCompatActivity {
         serverCurrency();
         serverCategories();
 
+        checkPermissions();
+
+
         getUserInfo();
         addYears();
 
 
     }//end onCreate()
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (ContextCompat.checkSelfPermission(AddItemActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "error perm", Toast.LENGTH_SHORT).show();
-            // Permission is not granted
-        }
-    }
 
     private void initClickListener() {
 
@@ -237,7 +242,6 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void submitAddItem() {
-        verifyStoragePermissions(AddItemActivity.this);
         progressDialog.show();
         serverAddItem();
     }
@@ -294,7 +298,7 @@ public class AddItemActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 Log.v("esddd", t.getMessage());
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                serverAddItem();
+                //serverAddItem();
             }
         });
 
@@ -370,8 +374,7 @@ public class AddItemActivity extends AppCompatActivity {
     ///////////////////////////////////////////
     private String getLangkey() {
         String lang_key = "";
-        switch  (new ListSharedPreference().getLanguage(AddItemActivity.this.getApplication()))
-        {
+        switch (new ListSharedPreference().getLanguage(AddItemActivity.this.getApplication())) {
             case "en":
                 lang_key = "en";
                 break;
@@ -747,6 +750,7 @@ public class AddItemActivity extends AppCompatActivity {
                 Uri path = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(path);
                 image_path1 = getRealPathFromURIPath(path, AddItemActivity.this);
+                Log.d("plzx", image_path1 + "");
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 imageView1.setImageBitmap(selectedImage);
 
@@ -755,7 +759,8 @@ public class AddItemActivity extends AppCompatActivity {
                 Toast.makeText(AddItemActivity.this, "Something went wrong while picking image", Toast.LENGTH_LONG).show();
             }
 
-        } else if (requestCode == IMG_CODE2 && resultCode == RESULT_OK && data != null) {
+        }
+        if (requestCode == IMG_CODE2 && resultCode == RESULT_OK && data != null) {
             try {
                 Uri path = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(path);

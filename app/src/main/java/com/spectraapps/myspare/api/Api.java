@@ -8,6 +8,7 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
+import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.model.RegisterModel;
@@ -34,6 +35,12 @@ public interface Api {
     Call<LoginModel> login(@Field("mail") String email,
                            @Field("password") String password,
                            @Field("token") String token);
+
+    @Multipart
+    @POST("updateProfileImage.php")
+    Call<UpdateProfileImageModel> uploadProfileImage(@Part("id") RequestBody id,
+                                                     @Part MultipartBody.Part file1);
+
 
     @FormUrlEncoded
     @POST("register")

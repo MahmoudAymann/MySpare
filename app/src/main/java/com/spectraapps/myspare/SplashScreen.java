@@ -11,6 +11,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -20,16 +21,21 @@ public class SplashScreen extends Activity {
 
     Button button_ar, button_en;
     ListSharedPreference listSharedPreference = new ListSharedPreference();
-
+    RelativeLayout relativeLayout;
     boolean isFirstRun;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash_screen);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+
 
         button_ar = findViewById(R.id.btn_ar);
         button_en = findViewById(R.id.btn_en);
+
+        relativeLayout = findViewById(R.id.splash_rela);
+        relativeLayout.setBackgroundResource(R.drawable.app_background);
 
         insertAnimation();
         initButtonClickListener();
@@ -37,9 +43,10 @@ public class SplashScreen extends Activity {
         isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
 
         if (isFirstRun) {
-            Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
+        } else {
+        }
+        //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
 
     }//end oncreate
 

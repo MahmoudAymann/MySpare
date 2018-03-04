@@ -1,19 +1,27 @@
 package com.spectraapps.myspare;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,10 +30,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soundcloud.android.crop.Crop;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
@@ -34,24 +45,38 @@ import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 
 import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.login.LoginActivity;
+import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.model.LoginModel;
+import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import devlight.io.library.ntb.NavigationTabBar;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ProductsFragment.myCall_Back {
+        implements NavigationView.OnNavigationItemSelectedListener, ProductsFragment.myCall_Back, Home.HomeCallBack {
 
     @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
+    public static String image_path1;
     protected IOnBackPressed onBackPressedListener;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
@@ -60,10 +85,16 @@ public class MainActivity extends AppCompatActivity
     CircleImageView mNavCircleImageView;
     TextView mNavNameTextView, mNavEmailTextView;
     String mId, mName, mEmail, mToken, mMobile, mImage;
-
     ListSharedPreference listSharedPreference = new ListSharedPreference();
+    int loginKey;
     boolean mIsLogged;
     AlertDialog.Builder alertDialogBuilder;
+    String[] permissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+
+    };
 
     public static void restartActivity(Activity activity) {
         activity.recreate();
@@ -80,14 +111,23 @@ public class MainActivity extends AppCompatActivity
         mToolbarText = findViewById(R.id.toolbar_title);
         mToolbarText.setText(R.string.home_title);
 
+        initNavigationDrawer();
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout, new Home()).commit();
 
         initBottomTabBar();
-        initNavigationDrawer();
+
+        setAlertDialog();
 
         getUserInfo();
 
+        if (getIntent().hasExtra("login"))
+            loginKey = getIntent().getIntExtra("login", 3);
+        else {
+            loginKey = 3;
+            Toast.makeText(this, "default set to 3", Toast.LENGTH_SHORT).show();
+        }
 
     }//end onCreate()
 
@@ -98,7 +138,11 @@ public class MainActivity extends AppCompatActivity
         if (mIsLogged) {
             mNavNameTextView.setText(mName);
             mNavEmailTextView.setText(mEmail);
-            //Picasso.with(MainActivity.this).load(model).with(image);
+            Picasso.with(MainActivity.this)
+                    .load(mImage)
+                    .error(R.drawable.profile_placeholder)
+                    .placeholder(R.drawable.profile_placeholder)
+                    .into(mNavCircleImageView);
         }
     }
 
@@ -140,6 +184,108 @@ public class MainActivity extends AppCompatActivity
         mNavCircleImageView = header.findViewById(R.id.nav_header_imageView);
         mNavNameTextView = header.findViewById(R.id.nav_header_name);
         mNavEmailTextView = header.findViewById(R.id.nav_header_email);
+        mNavCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkPermissions();
+            }
+        });
+    }
+
+    private void serverUpdateProfileImage() {
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        File file1 = new File(image_path1);
+        RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
+        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mId);
+
+        MultipartBody.Part image1 = MultipartBody.Part.createFormData("image", file1.getName(), mFile1);
+
+        Call<UpdateProfileImageModel> updateProfileImageCall = retrofit.uploadProfileImage(id, image1);
+
+        updateProfileImageCall.enqueue(new Callback<UpdateProfileImageModel>() {
+            @Override
+            public void onResponse(Call<UpdateProfileImageModel> call, Response<UpdateProfileImageModel> response) {
+
+                if (response.isSuccessful()) {
+
+                } else {
+                    Toast.makeText(MainActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateProfileImageModel> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == 100) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // do something
+                Toast.makeText(this, "done perm", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
+
+        if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            beginCrop(result.getData());
+            image_path1 = getRealPathFromURIPath(result.getData(), MainActivity.this);
+            Log.d("plzx", "" + image_path1);
+        } else if (requestCode == Crop.REQUEST_CROP) {
+            handleCrop(resultCode, result);
+        }
+    }
+
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(this);
+
+    }
+
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            mNavCircleImageView.setImageURI(Crop.getOutput(result));
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(MainActivity.this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(
+                contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
     }
 
     @Override
@@ -350,14 +496,27 @@ public class MainActivity extends AppCompatActivity
         mEmail = listSharedPreference.getEmail(context);
         mToken = listSharedPreference.getToken(context);
         mMobile = listSharedPreference.getToken(context);
-        //mImage = prefs.getString("image", "");
+        mImage = listSharedPreference.getImage(context);
         mIsLogged = listSharedPreference.getLoginStatus(context);
     }
 
     @Override
     public void ProudctSFrag(String year) {
         Bundle bundle = new Bundle();
-        bundle.putString("dex", year);
+        bundle.putString("yearpop", year);
+        ProductsFragment fragment = new ProductsFragment();
+        fragment.setArguments(bundle);
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_frameLayout, fragment).commit();
+    }
+
+    @Override
+    public void HomeFrag(String categ) {
+        Bundle bundle = new Bundle();
+        bundle.putString("home", categ);
+
         ProductsFragment fragment = new ProductsFragment();
         fragment.setArguments(bundle);
 

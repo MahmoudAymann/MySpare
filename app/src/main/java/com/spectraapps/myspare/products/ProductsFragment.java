@@ -70,13 +70,18 @@ public class ProductsFragment extends Fragment {
     PullRefreshLayout pullRefreshLayout;
 
     Calendar mCalendar;
-    boolean isFav = false;
 
     FButton fButton;
 
     String mUserID;
 
+    String categ_Num;
+    String yearPop;
+
     String spin;
+
+    ListSharedPreference listSharedPreference;
+
 
     public ProductsFragment() {
 
@@ -91,16 +96,24 @@ public class ProductsFragment extends Fragment {
         initUI(rootView);
         initRecyclerView();
         try {
-            if (getArguments().containsKey("dex")) {
-                Log.v("plzx", getArguments().getString("dex"));
-                Toast.makeText(getActivity(), getArguments().getString("dex"), Toast.LENGTH_SHORT).show();
+            if (getArguments().containsKey("yearpop")) {
+                Log.v("plzx", getArguments().getString("yearpop"));
+                Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
 
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-        //Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
+        try {
+            if (getArguments().containsKey("home")) {
+                Log.v("plzx", getArguments().getString("home"));
+                categ_Num = getArguments().getString("home");
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
 
         return rootView;
     }//end onCreateView()
@@ -110,20 +123,6 @@ public class ProductsFragment extends Fragment {
         super.onAttach(context);
         myCall_back = (myCall_Back) context;
     }
-
-    private String getLangkey() {
-        String lang_key = "";
-        switch (new ListSharedPreference().getLanguage(ProductsFragment.this.getActivity().getApplication())) {
-            case "en":
-                lang_key = "en";
-                break;
-            case "ar":
-                lang_key = "ar";
-                break;
-        }
-        return lang_key;
-    }//end getLangKey()
-
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -143,9 +142,8 @@ public class ProductsFragment extends Fragment {
                 showPopUp();
             }
         });
-        YoYo.with(Techniques.BounceInUp)
+        YoYo.with(Techniques.ZoomIn)
                 .duration(700)
-                .repeat(1)
                 .playOn(fabButton);
 
         recyclerView = rootView.findViewById(R.id.products_recycler);
@@ -161,7 +159,7 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //   turnOnServers(MainActivity.login_key);
+                turnOnServers(3);
             }
         });
     }
@@ -230,7 +228,7 @@ public class ProductsFragment extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProductsAllModel> productsCall = retrofit.productsAll("en", Home.CATEGK_KEY.toString());
+            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), categ_Num);
 
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
@@ -241,9 +239,10 @@ public class ProductsFragment extends Fragment {
 
                         mProductAllDataList.addAll(response.body().getData());
                         mAllProductsAdapter.notifyDataSetChanged();
-                        //Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
+
                         Log.v("jkjk", response.body().getData().size() + "");
                         pullRefreshLayout.setRefreshing(false);
+
                     } else {
                         pullRefreshLayout.setRefreshing(false);
                         Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
@@ -252,17 +251,28 @@ public class ProductsFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ProductsAllModel> call, Throwable t) {
-                    //if (call != null){
+
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Erorr::" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Erorr:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private String getLang() {
+        String lang = listSharedPreference.getLanguage(ProductsFragment.this.getActivity().getApplicationContext());
+        switch (lang) {
+            case "en":
+                return "en";
+            case "ar":
+                return "ar";
+            default:
+                return "ar";
+        }
     }
 
     @Override
@@ -275,7 +285,7 @@ public class ProductsFragment extends Fragment {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<ProductsModel> productsCall = retrofit.productsWithMail("en", Home.CATEGK_KEY.toString(), mUserID);
+        final Call<ProductsModel> productsCall = retrofit.productsWithMail("en", categ_Num, mUserID);
 
         productsCall.enqueue(new Callback<ProductsModel>() {
             @Override

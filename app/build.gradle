@@ -62,6 +62,9 @@ dependencies {
     implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
     //passing data
     compile 'com.github.kimkevin:cachepot:1.2.0'
+    //cropProfileImage
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+
 
 
 }
