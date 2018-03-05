@@ -17,13 +17,8 @@ import java.util.ArrayList;
 
 public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNotificationAdapter.MyViewHolder> {
 
-    private ArrayList<NotificationData> mNotificationDataList;
     private final OnItemClickListener listener;
-
-
-    public interface OnItemClickListener {
-        void onItemClick(NotificationData notificationData);
-    }
+    private ArrayList<NotificationData> mNotificationDataList;
 
     RecyclerNotificationAdapter(ArrayList<NotificationData> mNotificationDataList, OnItemClickListener listener) {
         this.mNotificationDataList = mNotificationDataList;
@@ -44,7 +39,14 @@ public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNo
 
     @Override
     public int getItemCount() {
-        return mNotificationDataList.size();
+        if ( mNotificationDataList != null) {
+            return mNotificationDataList.size();
+        }else
+            return 0;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(NotificationData notificationData);
     }
 
      class MyViewHolder extends RecyclerView.ViewHolder {

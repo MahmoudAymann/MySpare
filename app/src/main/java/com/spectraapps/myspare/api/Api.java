@@ -9,6 +9,7 @@ import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
+import com.spectraapps.myspare.model.UpdateProfileModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.model.RegisterModel;
@@ -41,6 +42,13 @@ public interface Api {
     Call<UpdateProfileImageModel> uploadProfileImage(@Part("id") RequestBody id,
                                                      @Part MultipartBody.Part file1);
 
+
+    @FormUrlEncoded
+    @POST("updateProfile")
+    Call<UpdateProfileModel> updateProfile(@Field("id") String id,
+                                           @Field("name") String name,
+                                           @Field("mail") String mail,
+                                           @Field("mobile") String mobile);
 
     @FormUrlEncoded
     @POST("register")

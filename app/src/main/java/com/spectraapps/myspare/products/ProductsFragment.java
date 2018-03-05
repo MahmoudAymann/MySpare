@@ -1,8 +1,6 @@
 package com.spectraapps.myspare.products;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,12 +26,9 @@ import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.adapters.AllProductsAdapter;
 import com.spectraapps.myspare.adapters.ProductsRecyclerAdapter;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
-import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
@@ -45,7 +39,6 @@ import com.spectraapps.myspare.products.productdetail.ProductDetail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import info.hoang8f.widget.FButton;
 import retrofit2.Call;
@@ -170,7 +163,7 @@ public class ProductsFragment extends Fragment {
         new EasyDialog(getActivity())
                 //.setLayoutResourceId(R.layout.popup_filter_layout)//layout resource id
                 .setLayout(popupView)
-                .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.white_gray))
+                .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.app_background_color))
                 .setLocationByAttachedView(fabButton)
                 .setGravity(EasyDialog.GRAVITY_TOP)
                 .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 800, -600, 100, -50, 50, 0)
@@ -189,7 +182,7 @@ public class ProductsFragment extends Fragment {
 
         fButton = popupView.findViewById(R.id.flatButton);
         fButton.setButtonColor(getResources().getColor(R.color.dark_yellow));
-        fButton.setShadowColor(getResources().getColor(R.color.white_gray));
+        fButton.setShadowColor(getResources().getColor(R.color.app_background_color));
         fButton.setCornerRadius(10);
         fButton.setShadowEnabled(true);
         fButton.setShadowHeight(7);
@@ -264,7 +257,7 @@ public class ProductsFragment extends Fragment {
     }
 
     private String getLang() {
-        String lang = listSharedPreference.getLanguage(ProductsFragment.this.getActivity().getApplicationContext());
+        String lang = CachePot.getInstance().pop("langs");
         switch (lang) {
             case "en":
                 return "en";

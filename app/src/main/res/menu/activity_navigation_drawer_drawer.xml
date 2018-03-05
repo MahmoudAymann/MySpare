@@ -7,6 +7,10 @@
         <item android:title="@string/account">
             <menu>
                 <item
+                    android:id="@+id/updateAccount_nav"
+                    android:icon="@drawable/ic_account_nav_24dp"
+                    android:title="@string/update_accountInfo" />
+                <item
                     android:id="@+id/updatePass_nav"
                     android:icon="@drawable/ic_lock_nav_24dp"
                     android:title="@string/update_password" />

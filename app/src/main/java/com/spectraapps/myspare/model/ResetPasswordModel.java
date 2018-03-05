@@ -1,62 +1,49 @@
 package com.spectraapps.myspare.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by MahmoudAyman on 13/02/2018.
  */
 
-public class ResetPasswordModel implements Parcelable{
+public class ResetPasswordModel {
+
+
     /**
-     * type : ""
-     * title : ""
+     * status : {"type":"success","title":"email sent successfully"}
      */
 
-    private String type;
-    private String title;
+    private StatusBean status;
 
-    protected ResetPasswordModel(Parcel in) {
-        type = in.readString();
-        title = in.readString();
+    public StatusBean getStatus() {
+        return status;
     }
 
-    public static final Creator<ResetPasswordModel> CREATOR = new Creator<ResetPasswordModel>() {
-        @Override
-        public ResetPasswordModel createFromParcel(Parcel in) {
-            return new ResetPasswordModel(in);
+    public void setStatus(StatusBean status) {
+        this.status = status;
+    }
+
+    public static class StatusBean {
+        /**
+         * type : success
+         * title : email sent successfully
+         */
+
+        private String type;
+        private String title;
+
+        public String getType() {
+            return type;
         }
 
-        @Override
-        public ResetPasswordModel[] newArray(int size) {
-            return new ResetPasswordModel[size];
+        public void setType(String type) {
+            this.type = type;
         }
-    };
 
-    public String getType() {
-        return type;
-    }
+        public String getTitle() {
+            return title;
+        }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(type);
-        parcel.writeString(title);
+        public void setTitle(String title) {
+            this.title = title;
+        }
     }
 }

@@ -50,6 +50,7 @@ import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
+import com.spectraapps.myspare.navdrawer.ProfileActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.products.ProductsFragment;
@@ -86,14 +87,16 @@ public class MainActivity extends AppCompatActivity
     TextView mNavNameTextView, mNavEmailTextView;
     String mId, mName, mEmail, mToken, mMobile, mImage;
     ListSharedPreference listSharedPreference = new ListSharedPreference();
-    int loginKey;
+
     boolean mIsLogged;
     AlertDialog.Builder alertDialogBuilder;
     String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-
+            Manifest.permission.INTERNET,
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.GET_ACCOUNTS
     };
 
     public static void restartActivity(Activity activity) {
@@ -122,12 +125,6 @@ public class MainActivity extends AppCompatActivity
 
         getUserInfo();
 
-        if (getIntent().hasExtra("login"))
-            loginKey = getIntent().getIntExtra("login", 3);
-        else {
-            loginKey = 3;
-            Toast.makeText(this, "default set to 3", Toast.LENGTH_SHORT).show();
-        }
 
     }//end onCreate()
 
@@ -144,6 +141,18 @@ public class MainActivity extends AppCompatActivity
                     .placeholder(R.drawable.profile_placeholder)
                     .into(mNavCircleImageView);
         }
+
+        if( getIntent().getExtras() != null)
+        {
+            mNavNameTextView.setText(getIntent().getStringExtra("name"));
+            mNavEmailTextView.setText(getIntent().getStringExtra("email"));
+            Picasso.with(MainActivity.this)
+                    .load(getIntent().getStringExtra("image"))
+                    .error(R.drawable.profile_placeholder)
+                    .placeholder(R.drawable.profile_placeholder)
+                    .into(mNavCircleImageView);
+        }
+
     }
 
     @Override
@@ -172,9 +181,11 @@ public class MainActivity extends AppCompatActivity
 
     private void initNavigationDrawer() {
         mDrawer = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
+
         toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
@@ -187,7 +198,13 @@ public class MainActivity extends AppCompatActivity
         mNavCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkPermissions();
+               if (!checkPermissions()){
+                   if (mIsLogged)
+                   Crop.pickImage(MainActivity.this);
+                   else
+                       Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+               }
+
             }
         });
     }
@@ -197,7 +214,7 @@ public class MainActivity extends AppCompatActivity
 
         File file1 = new File(image_path1);
         RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
-        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mId);
+        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), "");
 
         MultipartBody.Part image1 = MultipartBody.Part.createFormData("image", file1.getName(), mFile1);
 
@@ -208,7 +225,8 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<UpdateProfileImageModel> call, Response<UpdateProfileImageModel> response) {
 
                 if (response.isSuccessful()) {
-
+                    Toast.makeText(MainActivity.this, ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    updateNavigationBarImage(response.body().getData().getImage());
                 } else {
                     Toast.makeText(MainActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
@@ -220,6 +238,16 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void updateNavigationBarImage(String image) {
+        Picasso.with(MainActivity.this)
+                .load(image)
+                .error(R.drawable.profile_placeholder)
+                .placeholder(R.drawable.profile_placeholder)
+                .into(mNavCircleImageView);
+
+        listSharedPreference.setImage(getApplicationContext(),image);
     }
 
     private boolean checkPermissions() {
@@ -244,7 +272,8 @@ public class MainActivity extends AppCompatActivity
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // do something
-                Toast.makeText(this, "done perm", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "done perm", Toast.LENGTH_SHORT).show();
+                Crop.pickImage(MainActivity.this);
             }
         }
     }
@@ -265,12 +294,12 @@ public class MainActivity extends AppCompatActivity
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
         Crop.of(source, destination).asSquare().start(this);
-
     }
 
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
             mNavCircleImageView.setImageURI(Crop.getOutput(result));
+            serverUpdateProfileImage();
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(MainActivity.this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -432,6 +461,18 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.updatePass_nav) {
             startActivity(new Intent(MainActivity.this, ResetPassword.class));
+        }else if (id == R.id.updateAccount_nav) {
+            if (mIsLogged) {
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                i.putExtra("name", mName);
+                i.putExtra("email", mEmail);
+                i.putExtra("mobile", mMobile);
+                i.putExtra("image", mImage);
+                i.putExtra("id", mId);
+                startActivity(i);
+            }
+            else
+                Toast.makeText(this, "please sign in first", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.language_nav) {
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
@@ -487,6 +528,12 @@ public class MainActivity extends AppCompatActivity
 
     private void setLogout() {
         listSharedPreference.setLoginStatus(getApplicationContext(), false);
+        listSharedPreference.setUName(getApplicationContext(),"");
+        listSharedPreference.setEmail(getApplicationContext(),"");
+        listSharedPreference.setUId(getApplicationContext(),"");
+        listSharedPreference.setMobile(getApplicationContext(),"");
+        listSharedPreference.setImage(getApplicationContext(),"");
+
     }
 
     private void getUserInfo() {

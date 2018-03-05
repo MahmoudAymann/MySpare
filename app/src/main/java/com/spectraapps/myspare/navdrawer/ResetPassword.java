@@ -52,12 +52,12 @@ public class ResetPassword extends AppCompatActivity {
             public void onResponse(Call<ResetPasswordModel> call, Response<ResetPasswordModel> response)
             {
                 if (response.isSuccessful()){
-                    Toast.makeText(ResetPassword.this, ""+response.body().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPassword.this, ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(ResetPassword.this, MainActivity.class);
                     startActivity(i);
                 }
                 else{
-                    Toast.makeText(ResetPassword.this, ""+response.body().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPassword.this, ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
 

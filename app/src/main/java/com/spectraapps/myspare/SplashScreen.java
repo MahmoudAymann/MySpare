@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.github.kimkevin.cachepot.CachePot;
 
 public class SplashScreen extends Activity {
 
@@ -30,7 +31,6 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.activity_splash_screen);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
 
-
         button_ar = findViewById(R.id.btn_ar);
         button_en = findViewById(R.id.btn_en);
 
@@ -43,10 +43,10 @@ public class SplashScreen extends Activity {
         isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
 
         if (isFirstRun) {
-            //Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
         } else {
+            //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
         }
-        //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
 
     }//end oncreate
 
@@ -55,7 +55,8 @@ public class SplashScreen extends Activity {
             @Override
             public void onClick(View view) {
 
-                listSharedPreference.setLanguage(getApplicationContext(), "en");
+               //listSharedPreference.setLanguage(getApplicationContext(), "en");
+                CachePot.getInstance().push("langs", "en");
                 listSharedPreference.setFirstLaunch(getApplicationContext(), false);
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);

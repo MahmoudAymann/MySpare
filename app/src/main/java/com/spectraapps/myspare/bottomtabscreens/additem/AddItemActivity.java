@@ -427,7 +427,7 @@ public class AddItemActivity extends AppCompatActivity {
     private void serverCountries() {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<CountriesModel> countriesCall = retrofit.countries("ar");
+        Call<CountriesModel> countriesCall = retrofit.countries(getLangkey());
 
         countriesCall.enqueue(new Callback<CountriesModel>() {
             @Override

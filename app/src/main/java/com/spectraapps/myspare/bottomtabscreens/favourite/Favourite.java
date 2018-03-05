@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.baoyz.widget.PullRefreshLayout;
 import com.baoyz.widget.RefreshDrawable;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
+import com.spectraapps.myspare.model.inproducts.ProductsModel;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 public class Favourite extends Fragment {
     RecyclerView recyclerView;
     RecyclerFavouriteAdapter recyclerFavouriteAdapter;
-    ArrayList<FavouriteData> mFavouriteDataList;
+    ArrayList<ProductsAllModel.DataBean> mFavouriteDataList;
 
     public Favourite() {
         // Required empty public constructor
@@ -49,29 +51,22 @@ public class Favourite extends Fragment {
         pullRefreshLayout.setRefreshing(false);
 
         recyclerView = rootView.findViewById(R.id.fav_recycler);
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        }
-
-        else
-        {
+        } else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
 
-        mFavouriteDataList = new ArrayList<FavouriteData>();
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","19/2/2017"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","18/3/2016"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","1/9/1995"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","2/2/2014"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","4/9/2017"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","7/1/2017"));
-        mFavouriteDataList.add(new FavouriteData("اسم المنتج","7/1/2017"));
-
-        recyclerFavouriteAdapter = new RecyclerFavouriteAdapter(getActivity(),mFavouriteDataList, new RecyclerFavouriteAdapter.OnItemClickListener() {
+        mFavouriteDataList = new ArrayList<>();
+        recyclerFavouriteAdapter = new RecyclerFavouriteAdapter(getContext(), mFavouriteDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
             @Override
-            public void onItemClick(FavouriteData favouriteData) {
-                Toast.makeText(getActivity(), ""+favouriteData.getName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), ""+favouriteData.getName2(), Toast.LENGTH_SHORT).show();
+            public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+
+            }
+
+            @Override
+            public void onFavButtonClick(View v, int position, boolean isFav) {
+
             }
         });
 

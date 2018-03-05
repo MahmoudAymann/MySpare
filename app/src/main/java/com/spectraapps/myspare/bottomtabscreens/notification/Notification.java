@@ -18,9 +18,6 @@ import com.spectraapps.myspare.helper.BaseBackPressedListener;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Notification extends Fragment {
 
     RecyclerView recyclerView;
@@ -43,17 +40,11 @@ public class Notification extends Fragment {
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         }
+
         else
         {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         }
-
-        notificationDataList = new ArrayList<>();
-        notificationDataList.add(new NotificationData("6/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("10/5/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-        notificationDataList.add(new NotificationData("19/2/2017","ولذلك يجب على جميع الرواد بالصعود فورا لمالاقاه الحدث العظيم المبجل الذى لم يتم الصعود إليه من قبل."));
-
 
         recyclerNotificationAdapter = new RecyclerNotificationAdapter(notificationDataList, new RecyclerNotificationAdapter.OnItemClickListener() {
             @Override

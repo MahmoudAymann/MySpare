@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView textViewForgetPassword;
     ListSharedPreference listSharedPreference = new ListSharedPreference();
     Locale locale;
-    //UI references.
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
@@ -92,18 +91,20 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                    String id = response.body().getData().getId();
-                    String name = response.body().getData().getName();
-                    String email = response.body().getData().getMail();
-                    String token = response.body().getData().getToken();
-                    String mobile = response.body().getData().getMobile();
-                    String image = response.body().getData().getImage();
+                    if (response.body().getData() !=null) {
+                        String id = response.body().getData().getId();
+                        String name = response.body().getData().getName();
+                        String email = response.body().getData().getMail();
+                        String token = response.body().getData().getToken();
+                        String mobile = response.body().getData().getMobile();
+                        String image = response.body().getData().getImage();
 
-                    saveUserInfo(id, email, name, mobile, token, image);
+                        saveUserInfo(id, name, email, mobile, token, image);
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("login", 1);
-                    startActivity(intent);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("login", 1);
+                        startActivity(intent);
+                    }
                     progressDialog.dismiss();
                 } else {
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();

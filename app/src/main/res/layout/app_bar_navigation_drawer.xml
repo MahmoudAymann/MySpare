@@ -5,7 +5,7 @@
     android:id="@+id/constrainLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_gray"
+    android:background="@color/app_background_color"
     tools:context="com.spectraapps.myspare.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -42,7 +42,7 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/white_gray"
+        android:background="@color/app_background_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
             app:ntb_badge_position="center"
             app:ntb_badge_title_color="@android:color/white"
             app:ntb_badged="true"
-            app:ntb_inactive_color="@color/white_gray"
+            app:ntb_inactive_color="@color/app_background_color"
             app:ntb_scaled="true"
             app:ntb_swiped="true"
             app:ntb_tinted="true" />
@@ -71,11 +71,11 @@
             android:id="@+id/main_frameLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/white_gray_transperant"
             app:layout_constraintBottom_toTopOf="@+id/ntb_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/white_gray_transperant"/>
+            app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
