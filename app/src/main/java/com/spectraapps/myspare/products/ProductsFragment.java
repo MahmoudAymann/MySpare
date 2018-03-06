@@ -68,7 +68,7 @@ public class ProductsFragment extends Fragment {
 
     String mUserID;
 
-    String categ_Num;
+    String categ_Num,lang;
     String yearPop;
 
     String spin;
@@ -99,15 +99,16 @@ public class ProductsFragment extends Fragment {
         }
 
         try {
-            if (getArguments().containsKey("home")) {
-                Log.v("plzx", getArguments().getString("home"));
+            if (getArguments().containsKey("home") && getArguments().containsKey("lang")) {
+                //Log.v("plzx", getArguments().getString("home"));
                 categ_Num = getArguments().getString("home");
+                lang = getArguments().getString("lang");
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-
+        Toast.makeText(getContext(), ""+listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext()), Toast.LENGTH_SHORT).show();
         return rootView;
     }//end onCreateView()
 
@@ -251,14 +252,15 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception e) {
+            pullRefreshLayout.setRefreshing(false);
             Toast.makeText(getContext(), "Erorr:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private String getLang() {
         String lang = CachePot.getInstance().pop("langs");
-        switch (lang) {
+        String ll = listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext());
+        switch (ll) {
             case "en":
                 return "en";
             case "ar":
@@ -370,7 +372,9 @@ public class ProductsFragment extends Fragment {
 
 
     private void initAdapterAllWith() {
-        /////////
+
+
+
     }//end
 
     private void fireBackButtonEvent() {

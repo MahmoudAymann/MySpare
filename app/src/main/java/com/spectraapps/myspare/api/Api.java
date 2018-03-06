@@ -8,6 +8,7 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
+import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.UpdateProfileModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
@@ -49,6 +50,12 @@ public interface Api {
                                            @Field("name") String name,
                                            @Field("mail") String mail,
                                            @Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST("updateProfile")
+    Call<ProfileProdModel> profile(@Field("id") String id,
+                                   @Field("lang") String language);
+
 
     @FormUrlEncoded
     @POST("register")

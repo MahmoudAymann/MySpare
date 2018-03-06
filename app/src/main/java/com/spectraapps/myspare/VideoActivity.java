@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.login.LoginActivity;
 
 public class VideoActivity extends Activity {
@@ -22,6 +23,9 @@ public class VideoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        mIsLogged = getIntent().getBooleanExtra("islog",true);
+
         try {
             videoHolder = VideoActivity.this.findViewById(R.id.videoView1);
             Uri video = Uri.parse("android.resource://" + getPackageName()
@@ -32,6 +36,7 @@ public class VideoActivity extends Activity {
 
                 public void onCompletion(MediaPlayer mp) {
                     jump();
+                  //  Toast.makeText(VideoActivity.this, ""+mIsLogged, Toast.LENGTH_SHORT).show();
                 }
             });
             videoHolder.start();
@@ -39,19 +44,6 @@ public class VideoActivity extends Activity {
             jump();
         }
 
-        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                .getBoolean("isFirstRun", true);
-
-        if (isFirstRun) {
-            //show start activity
-            startActivity(new Intent(VideoActivity.this, SplashScreen.class));
-            Toast.makeText(VideoActivity.this, "First Run", Toast.LENGTH_LONG)
-                    .show();
-        }
-
-
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstRun", false).apply();
 
     }//end VideoActivity
 
@@ -62,21 +54,26 @@ public class VideoActivity extends Activity {
     }
 
     private void jump() {
-        if (isFinishing())
-        {
+
             checkForLogging();
-            return;
-        }
-        if (mIsLogged)
-            startActivity(new Intent(VideoActivity.this, MainActivity.class));
-        else
-            startActivity(new Intent(VideoActivity.this, LoginActivity.class));
-        finish();
+           // Toast.makeText(this, "finish", Toast.LENGTH_SHORT).show();
+
     }
 
-    void checkForLogging(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mIsLogged = prefs.getBoolean("isLoggedIn", false);
+    void checkForLogging() {
+
+        if (mIsLogged) {
+            Intent intent = new Intent(VideoActivity.this, MainActivity.class);
+            startActivity(intent);
+           // Toast.makeText(this, "loggenin", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Intent intent = new Intent(VideoActivity.this, LoginActivity.class);
+            startActivity(intent);
+           // Toast.makeText(this, "loggen", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
     }
 
 }

@@ -24,6 +24,7 @@ public class SplashScreen extends Activity {
     ListSharedPreference listSharedPreference = new ListSharedPreference();
     RelativeLayout relativeLayout;
     boolean isFirstRun;
+    boolean isLogged;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,22 +42,20 @@ public class SplashScreen extends Activity {
         initButtonClickListener();
 
         isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
-
-        if (isFirstRun) {
-           // Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
-        } else {
-            //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
-        }
+        if (CachePot.getInstance().pop("islogged")!= null)
+        isLogged =  CachePot.getInstance().pop("islogged");
 
     }//end oncreate
 
     private void initButtonClickListener() {
+
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-               //listSharedPreference.setLanguage(getApplicationContext(), "en");
+                listSharedPreference.setLanguage(getApplicationContext(), "en");
                 CachePot.getInstance().push("langs", "en");
+                CachePot.getInstance().push("islogged", false);
                 listSharedPreference.setFirstLaunch(getApplicationContext(), false);
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);
@@ -70,6 +69,8 @@ public class SplashScreen extends Activity {
             public void onClick(View view) {
 
                 listSharedPreference.setLanguage(getApplicationContext(), "ar");
+                CachePot.getInstance().push("langs", "ar");
+                CachePot.getInstance().push("islogged", false);
                 listSharedPreference.setFirstLaunch(getApplicationContext(), false);
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);
@@ -77,11 +78,6 @@ public class SplashScreen extends Activity {
                 finish();
             }
         });
-    }
-
-
-    private void hideButtons() {
-
     }
 
     private void insertAnimation() {
@@ -97,13 +93,27 @@ public class SplashScreen extends Activity {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                if (isFirstRun) {
+                    button_ar.setVisibility(View.VISIBLE);
+                    button_en.setVisibility(View.VISIBLE);
+                } else {
+                    button_ar.setVisibility(View.INVISIBLE);
+                    button_en.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                YoYo.with(Techniques.BounceIn).playOn(button_ar);
-                YoYo.with(Techniques.BounceIn).playOn(button_en);
+                if (isFirstRun) {
+                    YoYo.with(Techniques.BounceIn).playOn(button_ar);
+                    YoYo.with(Techniques.BounceIn).playOn(button_en);
+                } else {
+
+                    Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
+                    intent.putExtra("islog",isLogged);
+                    startActivity(intent);
+                    finish();
+                }
             }
 
             @Override

@@ -17,7 +17,7 @@ public class ListSharedPreference {
 
     public boolean getFirstLaunch(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("isFirstRun", false);
+        return prefs.getBoolean("isFirstRun", true);
     }
 
     public void setLanguage(Context context, String lang) {

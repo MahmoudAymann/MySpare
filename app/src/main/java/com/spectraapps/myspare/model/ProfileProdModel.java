@@ -1,19 +1,17 @@
-package com.spectraapps.myspare.model.inproducts;
+package com.spectraapps.myspare.model;
 
 import java.util.List;
 
 /**
- * Created by MahmoudAyman on 24/02/2018.
+ * Created by MahmoudAyman on 06/03/2018.
  */
 
-public class ProductsModel {
+public class ProfileProdModel {
 
     /**
+     * data : [{"pid":"90","productName":"spareparttt","productPrice":"2000","productNumber":"200","currency":"دينار اماراتي","mobile":"0","image1":"http://myspare.net/public/upload/1520256835image1.png","image2":null,"image3":null,"id":"42","name":"","date":"2017","country":"germany","brand":"audi","model":"S5","isFavorite":"false"},{"pid":"89","productName":"lpl","productPrice":"2000","productNumber":"2","currency":"ريال قطرى","mobile":"1234567890","image1":"1520256063onejpg","image2":"1520256063twojpg","image3":"1520256063threejpg","id":"42","name":"nashwaa","date":"1990","country":"australia","brand":"acura","model":"Acura TSX","isFavorite":"false"}]
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"pid":"6","productName":"تجربه ٤","productPrice":"444","productNumber":"444","currency":"Saudi Riyal",
-     * "mobile":"111111111","image1":"http://myspare.net/api/uploadedimage/image1.png",
-     * "image2":"http://myspare.net/api/uploadedimage/image2.png","image3":null,"id":"19","name":"أحمد","date":"2014",
-     * "country":"Qatar","brand":"bmw","model":"M3","isFavorite":"false"}*/
+     */
 
     private StatusBean status;
     private List<DataBean> data;
@@ -62,21 +60,21 @@ public class ProductsModel {
 
     public static class DataBean {
         /**
-         * pid : 6
-         * productName : تجربه ٤
-         * productPrice : 444
-         * productNumber : 444
-         * currency : Saudi Riyal
-         * mobile : 111111111
-         * image1 : http://myspare.net/api/uploadedimage/image1.png
-         * image2 : http://myspare.net/api/uploadedimage/image2.png
+         * pid : 90
+         * productName : spareparttt
+         * productPrice : 2000
+         * productNumber : 200
+         * currency : دينار اماراتي
+         * mobile : 0
+         * image1 : http://myspare.net/public/upload/1520256835image1.png
+         * image2 : null
          * image3 : null
-         * id : 19
-         * name : أحمد
-         * date : 2014
-         * country : Qatar
-         * brand : bmw
-         * model : M3
+         * id : 42
+         * name :
+         * date : 2017
+         * country : germany
+         * brand : audi
+         * model : S5
          * isFavorite : false
          */
 
@@ -87,7 +85,7 @@ public class ProductsModel {
         private String currency;
         private String mobile;
         private String image1;
-        private String image2;
+        private Object image2;
         private Object image3;
         private String id;
         private String name;
@@ -153,11 +151,11 @@ public class ProductsModel {
             this.image1 = image1;
         }
 
-        public String getImage2() {
+        public Object getImage2() {
             return image2;
         }
 
-        public void setImage2(String image2) {
+        public void setImage2(Object image2) {
             this.image2 = image2;
         }
 

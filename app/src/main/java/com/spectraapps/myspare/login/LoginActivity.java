@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
@@ -38,6 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+
     TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
     Button mSignInButton, mRegisterButton, mSkipButton;
     boolean isPasswordShown;
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView textViewForgetPassword;
     ListSharedPreference listSharedPreference = new ListSharedPreference();
     Locale locale;
+    boolean mIsLogged;
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
@@ -57,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
 
         initUI();
         initClickListener();
+
+        if (CachePot.getInstance().pop("islogged")!=null)
+        mIsLogged = CachePot.getInstance().pop("islogged");
 
     }//end onCreate()
 
@@ -99,11 +105,14 @@ public class LoginActivity extends AppCompatActivity {
                         String mobile = response.body().getData().getMobile();
                         String image = response.body().getData().getImage();
 
+                        CachePot.getInstance().push("islogged", true);
+
                         saveUserInfo(id, name, email, mobile, token, image);
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("login", 1);
                         startActivity(intent);
+                        finish();
                     }
                     progressDialog.dismiss();
                 } else {
@@ -125,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
         listSharedPreference.setToken(getApplicationContext(),token);
         listSharedPreference.setMobile(getApplicationContext(),mobile);
         listSharedPreference.setImage(getApplicationContext(), image);
-        listSharedPreference.setLoginStatus(getApplicationContext(),true);
     }
 
     private void initUI() {

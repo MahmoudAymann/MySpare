@@ -26,8 +26,8 @@
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="12dp"
         android:scaleType="fitXY"
-        android:text="عربى"
-        android:textSize="40dp"
+        android:text="@string/splash_btn_ar"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <Button
@@ -39,32 +39,32 @@
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:text="English"
-        android:textSize="30dp"
+        android:text="@string/splash_btn_en"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_ar"
-        android:layout_alignEnd="@+id/btn_ar"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="45dp"
-        android:text="إختر اللغة"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/btn_ar"-->
+        <!--android:layout_alignEnd="@+id/btn_ar"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginEnd="45dp"-->
+        <!--android:text="إختر اللغة"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textStyle="bold" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/btn_en"
-        android:layout_alignStart="@+id/btn_en"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="10dp"
-        android:text="choose language"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@id/btn_en"-->
+        <!--android:layout_alignStart="@+id/btn_en"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:text="choose language"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textStyle="bold" />-->
 
 </RelativeLayout>

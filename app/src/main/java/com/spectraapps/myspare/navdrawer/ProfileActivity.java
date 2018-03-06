@@ -208,9 +208,9 @@ public class ProfileActivity extends AppCompatActivity{
     }
 
     private void saveUserInfo(String name, String email, String mobile) {
-        listSharedPreference.setUName(getApplicationContext(),name);
-        listSharedPreference.setEmail(getApplicationContext(),email);
-        listSharedPreference.setMobile(getApplicationContext(),mobile);
+//        listSharedPreference.setUName(getApplicationContext(),name);
+//        listSharedPreference.setEmail(getApplicationContext(),email);
+//        listSharedPreference.setMobile(getApplicationContext(),mobile);
 
         Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
         intent.putExtra("name",name);

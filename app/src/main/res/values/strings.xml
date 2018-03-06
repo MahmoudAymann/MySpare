@@ -78,5 +78,7 @@
     <string name="country_PD">Country:</string>
     <string name="brand_PD">Brand:</string>
     <string name="model_PD">Model:</string>
+    <string name="splash_btn_ar">عربى</string>
+    <string name="splash_btn_en">English</string>
 
 </resources>

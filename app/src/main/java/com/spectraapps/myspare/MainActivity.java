@@ -35,6 +35,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.kimkevin.cachepot.CachePot;
 import com.soundcloud.android.crop.Crop;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.CALL_PHONE,
             Manifest.permission.GET_ACCOUNTS
     };
+    private String langhere;
 
     public static void restartActivity(Activity activity) {
         activity.recreate();
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity
 
         getUserInfo();
 
+        langhere = listSharedPreference.getLanguage(getApplicationContext());
 
     }//end onCreate()
 
@@ -132,18 +135,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         Log.d("plzlog", "" + mIsLogged);
-        if (mIsLogged) {
-            mNavNameTextView.setText(mName);
-            mNavEmailTextView.setText(mEmail);
-            Picasso.with(MainActivity.this)
-                    .load(mImage)
-                    .error(R.drawable.profile_placeholder)
-                    .placeholder(R.drawable.profile_placeholder)
-                    .into(mNavCircleImageView);
-        }
 
-        if( getIntent().getExtras() != null)
-        {
             mNavNameTextView.setText(getIntent().getStringExtra("name"));
             mNavEmailTextView.setText(getIntent().getStringExtra("email"));
             Picasso.with(MainActivity.this)
@@ -151,7 +143,6 @@ public class MainActivity extends AppCompatActivity
                     .error(R.drawable.profile_placeholder)
                     .placeholder(R.drawable.profile_placeholder)
                     .into(mNavCircleImageView);
-        }
 
     }
 
@@ -413,24 +404,35 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.main_frameLayout, new Home()).commit();
                 break;
             case 1:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Favourite()).commit();
+                if (mIsLogged)
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_frameLayout, new Favourite()).commit();
+                else
+                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
+                if (mIsLogged)
                 startActivity(new Intent(MainActivity.this, AddItemActivity.class));
+                else
+                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
+                if (mIsLogged)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new Notification()).commit();
+                else
+                Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
+               // if (mIsLogged)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new Profile()).commit();
+              //  else
+                  //  Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
         }//end switch
     }
 
     private void addToolbarTitleAndIcons(int index) {
-
         switch (index) {
             case 4:
                 mToolbarText.setText(getString(R.string.profile_title));
@@ -527,25 +529,42 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setLogout() {
+
         listSharedPreference.setLoginStatus(getApplicationContext(), false);
-        listSharedPreference.setUName(getApplicationContext(),"");
-        listSharedPreference.setEmail(getApplicationContext(),"");
-        listSharedPreference.setUId(getApplicationContext(),"");
-        listSharedPreference.setMobile(getApplicationContext(),"");
-        listSharedPreference.setImage(getApplicationContext(),"");
+        listSharedPreference.setUName(getApplicationContext()," ");
+        listSharedPreference.setEmail(getApplicationContext()," ");
+        listSharedPreference.setUId(getApplicationContext()," ");
+        listSharedPreference.setMobile(getApplicationContext()," ");
+        listSharedPreference.setImage(getApplicationContext()," ");
+
+        CachePot.getInstance().push("islogged", false);
 
     }
 
     private void getUserInfo() {
-        Context context = getApplicationContext();
-        mId = listSharedPreference.getUId(context);
-        mName = listSharedPreference.getUName(context);
-        mEmail = listSharedPreference.getEmail(context);
-        mToken = listSharedPreference.getToken(context);
-        mMobile = listSharedPreference.getToken(context);
-        mImage = listSharedPreference.getImage(context);
-        mIsLogged = listSharedPreference.getLoginStatus(context);
-    }
+        if (mIsLogged) {
+
+            Context context = getApplicationContext();
+            mId = listSharedPreference.getUId(context);
+            mName = listSharedPreference.getUName(context);
+            mEmail = listSharedPreference.getEmail(context);
+            mToken = listSharedPreference.getToken(context);
+            mMobile = listSharedPreference.getToken(context);
+            mImage = listSharedPreference.getImage(context);
+
+            mNavNameTextView.setText(mName);
+            mNavEmailTextView.setText(mEmail);
+            Picasso.with(MainActivity.this)
+                    .load(mImage)
+                    .error(R.drawable.profile_placeholder)
+                    .placeholder(R.drawable.profile_placeholder)
+                    .into(mNavCircleImageView);
+        }//end if
+
+        Log.d("userinfo",mId+" "+mName+" "+" "+mEmail+" "+mToken+" "+mMobile+" "+mImage+" "+mIsLogged);
+
+    }//end getUserInfo
+
 
     @Override
     public void ProudctSFrag(String year) {
@@ -563,7 +582,7 @@ public class MainActivity extends AppCompatActivity
     public void HomeFrag(String categ) {
         Bundle bundle = new Bundle();
         bundle.putString("home", categ);
-
+     bundle.putString("lang",langhere);
         ProductsFragment fragment = new ProductsFragment();
         fragment.setArguments(bundle);
 
