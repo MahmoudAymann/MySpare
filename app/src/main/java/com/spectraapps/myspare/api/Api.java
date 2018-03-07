@@ -1,10 +1,12 @@
 package com.spectraapps.myspare.api;
 
 import com.spectraapps.myspare.model.AddModel;
+import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.BrandsModel;
 import com.spectraapps.myspare.model.CategoriesModel;
 import com.spectraapps.myspare.model.CountriesModel;
 import com.spectraapps.myspare.model.CurrencyModel;
+import com.spectraapps.myspare.model.FavouriteModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
@@ -52,7 +54,19 @@ public interface Api {
                                            @Field("mobile") String mobile);
 
     @FormUrlEncoded
-    @POST("updateProfile")
+    @POST("favorites")
+    Call<FavouriteModel> favourite(@Field("id") String id,
+                                   @Field("language") String language);
+
+    @FormUrlEncoded
+    @POST("addTofavorite")
+    Call<AddToFavModel> addToFavourite(@Field("id") String id,
+                                       @Field("pid") String pid,
+                                       @Field("isFavorite") String isFavorite);
+
+
+    @FormUrlEncoded
+    @POST("profile")
     Call<ProfileProdModel> profile(@Field("id") String id,
                                    @Field("lang") String language);
 

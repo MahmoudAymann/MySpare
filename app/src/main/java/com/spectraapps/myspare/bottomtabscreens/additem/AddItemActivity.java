@@ -717,6 +717,7 @@ public class AddItemActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        checkPermissions();
                         pickImage(IMG_CODE1);
                     }
                 }
@@ -728,6 +729,7 @@ public class AddItemActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         pickImage(IMG_CODE2);
+                        checkPermissions();
                     }
                 }
         );

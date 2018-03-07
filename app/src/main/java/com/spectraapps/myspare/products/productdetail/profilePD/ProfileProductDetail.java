@@ -1,13 +1,15 @@
-package com.spectraapps.myspare.products.productdetail;
+package com.spectraapps.myspare.products.productdetail.profilePD;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,15 +22,14 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
-import com.spectraapps.myspare.products.ProductsFragment;
+import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-
+import com.spectraapps.myspare.products.ProductsFragment;
 
 import java.util.HashMap;
 
-public class ProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener {
+public class ProfileProductDetail extends Fragment
+        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
@@ -38,11 +39,7 @@ public class ProductDetail extends Fragment
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
 
-    RelativeLayout relativeLayout;
-
-    String langhere;
-
-    public ProductDetail() {
+    public ProfileProductDetail() {
 
     }
 
@@ -51,16 +48,15 @@ public class ProductDetail extends Fragment
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
-
+        fireBackButtonEvent();
         MainActivity.mToolbarText.setText(pName);
+
 
         initUI(rootView);
 
         getProductData();
 
         imageSliderInitilaize();
-        fireBackButtonEvent();
-        langhere = CachePot.getInstance().pop("langy");
 
         return rootView;
     }
@@ -68,9 +64,6 @@ public class ProductDetail extends Fragment
     private void initUI(View rootView) {
         mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
-
-        relativeLayout = rootView.findViewById(R.id.relative_user_info);
-        relativeLayout.setOnClickListener(this);
 
         pName_tv = rootView.findViewById(R.id.get_PName_PD);
         pPrice_tv = rootView.findViewById(R.id.get_PPrice_PD);
@@ -83,7 +76,6 @@ public class ProductDetail extends Fragment
 
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
-        uMobile_tv.setOnClickListener(this);
     }
 
     private void setData() {
@@ -99,7 +91,6 @@ public class ProductDetail extends Fragment
         pCountry_tv.setText(pCountry);
         pBrand_tv.setText(pBrand);
         pModel_tv.setText(pModel);
-
 
     }
 
@@ -117,9 +108,16 @@ public class ProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
+            Log.v("jkjkl",pImage1+" pop1");
+            Log.v("jkjkl",pImage2+" pop2");
+            Log.v("jkjkl",pName+" pop3");
+
+
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
+
+            MainActivity.mToolbarText.setText(pName);
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -130,7 +128,7 @@ public class ProductDetail extends Fragment
             @Override
             public void onBackPressed() {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsFragment())
+                        .replace(R.id.main_frameLayout, new Profile())
                         .commit();
             }
         });
@@ -151,7 +149,7 @@ public class ProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-        file_maps.put(pName, pImage1);
+        file_maps.put(pName,  pImage1);
         if (pImage2 != null)
         file_maps.put(pName, pImage2);
 
@@ -180,7 +178,6 @@ public class ProductDetail extends Fragment
         mDemoSlider.addOnPageChangeListener(this);
     }
 
-
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
@@ -198,24 +195,5 @@ public class ProductDetail extends Fragment
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.textView_phone_PD:
-                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                dialIntent.setData(Uri.parse("tel:" + uMobile));
-                startActivity(dialIntent);
-                break;
-            case R.id.relative_user_info:
-                CachePot.getInstance().push("suid",uId);
-                CachePot.getInstance().push("slangh",langhere);
-
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
-
-                break;
-        }
     }
 }//end class

@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.adapters;
+package com.spectraapps.myspare.adapters.adpProducts;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,27 +11,24 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 /**
- * Created by MahmoudAyman on 03/01/2018.
+ * Created by MahmoudAyman on 13/01/2018.
  */
 
-public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfileAdapter.MyViewHolder>{
+public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder>{
 
     private final OnItemClickListener listener;
     private final OnFavClickListener favListener;
-    private ArrayList<ProfileProdModel.DataBean> mProductsModelList;
+    private ArrayList<ProductsModel.DataBean> mProductsModelList;
     private Context mContext;
 
-    public RecyclerProfileAdapter(Context mContext, ArrayList<ProfileProdModel.DataBean> profileProdModelArrayList,
-                                  OnItemClickListener listener,
-                                  OnFavClickListener favListener) {
-        this.mProductsModelList = profileProdModelArrayList;
+    public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, OnItemClickListener listener, OnFavClickListener favListener) {
+        this.mProductsModelList = productsModelArrayList;
         this.listener = listener;
         this.mContext = mContext;
         this.favListener = favListener;
@@ -47,6 +44,9 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.bind(mProductsModelList.get(position), listener, favListener);
+
+        if (mProductsModelList.get(position).getIsFavorite().equals("true"))
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
     }
 
     @Override
@@ -59,11 +59,11 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
 
     //Onitemclickli
     public interface OnItemClickListener {
-        void onItemClick(ProfileProdModel.DataBean productsModel);
+        void onItemClick(ProductsModel.DataBean productsModel);
     }
 
     public interface OnFavClickListener {
-        void onFavClick(ProfileProdModel.DataBean productsModel);
+        void onFavClick(ProductsModel.DataBean productsModel);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -81,9 +81,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
             imageView.setCornerRadiiDP(4,4,0,0);
         }
 
-        private void bind(final ProfileProdModel.DataBean productsModel,
-                          final OnItemClickListener listener,
-                          final OnFavClickListener onFavClickListener) {
+        private void bind(final ProductsModel.DataBean productsModel, final OnItemClickListener listener, final OnFavClickListener onFavClickListener) {
 
             nameTV.setText(productsModel.getName());
             priceTV.setText(productsModel.getProductPrice());
@@ -93,6 +91,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
                     .placeholder(R.drawable.place_holder)
                     .error(R.drawable.place_holder)
                     .into(imageView);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

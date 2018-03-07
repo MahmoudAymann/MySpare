@@ -9,13 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.baoyz.widget.RefreshDrawable;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
-import com.spectraapps.myspare.model.inproducts.ProductsModel;
+import com.spectraapps.myspare.adapters.adpFav.RecyclerFavouriteAdapter;
+import com.spectraapps.myspare.model.FavouriteModel;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 public class Favourite extends Fragment {
     RecyclerView recyclerView;
     RecyclerFavouriteAdapter recyclerFavouriteAdapter;
-    ArrayList<ProductsAllModel.DataBean> mFavouriteDataList;
+    ArrayList<FavouriteModel.DataBean> mFavouriteDataList;
 
     public Favourite() {
         // Required empty public constructor
@@ -59,8 +57,9 @@ public class Favourite extends Fragment {
 
         mFavouriteDataList = new ArrayList<>();
         recyclerFavouriteAdapter = new RecyclerFavouriteAdapter(getContext(), mFavouriteDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
+
             @Override
-            public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+            public void onCardViewClick(FavouriteModel.DataBean favouriteDataBean) {
 
             }
 

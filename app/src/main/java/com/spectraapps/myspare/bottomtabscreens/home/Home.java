@@ -2,40 +2,28 @@ package com.spectraapps.myspare.bottomtabscreens.home;
 
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
-import com.spectraapps.myspare.SplashScreen;
-import com.spectraapps.myspare.adapters.HomeAdapter;
+import com.spectraapps.myspare.adapters.adpHome.HomeAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.CategoriesModel;
-import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.R;
-import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;

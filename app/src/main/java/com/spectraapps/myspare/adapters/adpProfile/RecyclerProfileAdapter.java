@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.adapters;
+package com.spectraapps.myspare.adapters.adpProfile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,42 +11,41 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
+import com.spectraapps.myspare.model.ProfileProdModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 /**
- * Created by MahmoudAyman on 13/01/2018.
+ * Created by MahmoudAyman on 03/01/2018.
  */
 
-public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.MyViewHolder> {
-
+public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfileAdapter.MyViewHolder> {
 
     ListAllListeners listAllListeners;
-    private ArrayList<ProductsAllModel.DataBean> mProductsAllModelList;
+    private ArrayList<ProfileProdModel.DataBean> mProfileArrayList;
     private Context mContext;
     private boolean isFav = false;
 
 
-    public AllProductsAdapter(Context mContext, ArrayList<ProductsAllModel.DataBean> productsAllModelList,
-                              ListAllListeners listAllListeners) {
+    public RecyclerProfileAdapter(Context mContext, ArrayList<ProfileProdModel.DataBean> productsAllModelList,
+                                  ListAllListeners listAllListeners) {
         this.mContext = mContext;
-        this.mProductsAllModelList = productsAllModelList;
+        this.mProfileArrayList = productsAllModelList;
         this.listAllListeners = listAllListeners;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.single_item_products_view, parent, false);
+        View view = inflater.inflate(R.layout.single_item_profile_view, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public int getItemCount() {
-        if (mProductsAllModelList != null)
-            return mProductsAllModelList.size();
+        if (mProfileArrayList != null)
+            return mProfileArrayList.size();
         else
             return 0;
     }
@@ -54,19 +53,22 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        holder.nameTV.setText(mProductsAllModelList.get(position).getProductName());
-        holder.priceTV.setText(mProductsAllModelList.get(position).getProductPrice());
+        holder.nameTV.setText(mProfileArrayList.get(position).getProductName());
+        holder.priceTV.setText(mProfileArrayList.get(position).getProductPrice());
 
         Picasso.with(holder.itemView.getContext())
-                .load(mProductsAllModelList.get(position).getImage1())
+                .load(mProfileArrayList.get(position).getImage1())
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
+        if (mProfileArrayList.get(position).getIsFavorite().equals("true"))
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProductsAllModelList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mProfileArrayList.get(holder.getAdapterPosition()));
             }
         });
 
@@ -88,7 +90,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
     public interface ListAllListeners {
 
-        void onCardViewClick(ProductsAllModel.DataBean produtsAllModel);
+        void onCardViewClick(ProfileProdModel.DataBean produtsAllModel);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }

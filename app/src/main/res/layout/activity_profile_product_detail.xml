@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".products.productdetail.ProductDetail">
+    tools:context=".products.productdetail.profilePD.ProfileProductDetail">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,23 +16,14 @@
             android:layout_margin="10dp">
 
             <RelativeLayout
-                android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:id="@+id/relative_user_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/user_image_PD"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginLeft="10dp"
@@ -44,54 +35,11 @@
                     app:civ_border_color="@color/colorAccent"
                     app:civ_border_width="1dp" />
 
-                <TextView
-                    android:id="@+id/user_name_PD"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_toEndOf="@id/user_image_PD"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                    <TextView
-                        android:id="@+id/textView_phone_PD"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:visibility="visible"
-                        android:textColor="@android:color/holo_blue_dark"
-                        android:layout_below="@id/user_image_PD"
-                        android:layout_toEndOf="@id/user_image_PD"
-                        android:layout_alignParentBottom="true"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/static_mobile_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mobile:"
-                        android:layout_below="@id/user_image_PD"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="20dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_alignParentBottom="true"/>
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/slider_linlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/relative_user_info">
-
                 <com.daimajia.slider.library.SliderLayout
                     android:id="@+id/slider"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_below="@id/user_image_PD"
                     android:layout_marginBottom="8dp"
                     android:isScrollContainer="true"
                     android:visibility="visible"
@@ -116,14 +64,31 @@
                         app:unselected_width="6dp" />
 
                 </com.daimajia.slider.library.SliderLayout>
-                </LinearLayout>
 
+                <TextView
+                    android:id="@+id/user_name_PD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toStartOf="@id/user_image_PD"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_phone_PD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/user_name_PD"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/user_image_PD"
+                    android:visibility="visible" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/slider_linlayout"
+                    android:layout_below="@id/slider"
                     android:orientation="vertical"
                     android:padding="10dp">
 

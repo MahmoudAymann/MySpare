@@ -1,22 +1,17 @@
-package com.spectraapps.myspare.bottomtabscreens.favourite;
+package com.spectraapps.myspare.adapters.adpFav;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.joooonho.SelectableRoundedImageView;
-import com.spectraapps.myspare.helper.MenueHelper;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
-import com.spectraapps.myspare.model.inproducts.ProductsModel;
+import com.spectraapps.myspare.model.FavouriteModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,16 +22,16 @@ import java.util.ArrayList;
 
 public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavouriteAdapter.MyViewHolder>{
 
-    ListAllListeners listAllListeners;
-    private ArrayList<ProductsAllModel.DataBean> mProductsAllModelList;
+    private ListAllListeners listAllListeners;
+    private ArrayList<FavouriteModel.DataBean> mFavArrayList;
     private Context mContext;
     private boolean isFav = false;
 
 
-    public RecyclerFavouriteAdapter(Context mContext, ArrayList<ProductsAllModel.DataBean> productsAllModelList,
+    public RecyclerFavouriteAdapter(Context mContext, ArrayList<FavouriteModel.DataBean> FavArrayList,
                               ListAllListeners listAllListeners) {
         this.mContext = mContext;
-        this.mProductsAllModelList = productsAllModelList;
+        this.mFavArrayList = FavArrayList;
         this.listAllListeners = listAllListeners;
     }
 
@@ -49,8 +44,8 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
 
     @Override
     public int getItemCount() {
-        if (mProductsAllModelList != null)
-            return mProductsAllModelList.size();
+        if (mFavArrayList != null)
+            return mFavArrayList.size();
         else
             return 5;
     }
@@ -58,19 +53,22 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        holder.nameTV.setText(mProductsAllModelList.get(position).getProductName());
-        holder.priceTV.setText(mProductsAllModelList.get(position).getProductPrice());
+        holder.nameTV.setText(mFavArrayList.get(position).getProductName());
+        holder.priceTV.setText(mFavArrayList.get(position).getProductPrice());
 
         Picasso.with(holder.itemView.getContext())
-                .load(mProductsAllModelList.get(position).getImage1())
+                .load(mFavArrayList.get(position).getImage1())
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
+        if (mFavArrayList.get(position).getIsFavorite().equals("true"))
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProductsAllModelList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mFavArrayList.get(holder.getAdapterPosition()));
             }
         });
 
@@ -92,7 +90,7 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
 
     public interface ListAllListeners {
 
-        void onCardViewClick(ProductsAllModel.DataBean produtsAllModel);
+        void onCardViewClick(FavouriteModel.DataBean favouriteDataBean);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }

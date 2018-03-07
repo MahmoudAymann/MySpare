@@ -26,8 +26,8 @@ import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.adapters.AllProductsAdapter;
-import com.spectraapps.myspare.adapters.ProductsRecyclerAdapter;
+import com.spectraapps.myspare.adapters.adpProducts.AllProductsAdapter;
+import com.spectraapps.myspare.adapters.adpProducts.ProductsRecyclerAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
@@ -88,6 +88,7 @@ public class ProductsFragment extends Fragment {
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
+
         try {
             if (getArguments().containsKey("yearpop")) {
                 Log.v("plzx", getArguments().getString("yearpop"));
@@ -108,7 +109,6 @@ public class ProductsFragment extends Fragment {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-        Toast.makeText(getContext(), ""+listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext()), Toast.LENGTH_SHORT).show();
         return rootView;
     }//end onCreateView()
 
@@ -141,8 +141,6 @@ public class ProductsFragment extends Fragment {
                 .playOn(fabButton);
 
         recyclerView = rootView.findViewById(R.id.products_recycler);
-
-        //btnFav = rootView.findViewById(R.id.imageButtonFav);
 
     }//end initUI
 
@@ -222,7 +220,7 @@ public class ProductsFragment extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), categ_Num);
+            final Call<ProductsAllModel> productsCall = retrofit.productsAll("en", categ_Num);
 
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
@@ -258,9 +256,9 @@ public class ProductsFragment extends Fragment {
     }
 
     private String getLang() {
-        String lang = CachePot.getInstance().pop("langs");
-        String ll = listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext());
-        switch (ll) {
+       // String lang = CachePot.getInstance().pop("langs");
+       //String ll = listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext());
+        switch (lang) {
             case "en":
                 return "en";
             case "ar":
@@ -357,6 +355,8 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
+                        CachePot.getInstance().push("langy", lang);
+
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();

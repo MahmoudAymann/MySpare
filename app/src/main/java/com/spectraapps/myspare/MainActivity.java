@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     protected IOnBackPressed onBackPressedListener;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
+
     Locale locale;
     Toolbar mToolBar;
     CircleImageView mNavCircleImageView;
@@ -120,12 +121,14 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout, new Home()).commit();
+        //mIsLogged = CachePot.getInstance().pop("islogged");
+
+        mIsLogged = getIntent().getBooleanExtra("lok", false);
+        Toast.makeText(this, "log: " + mIsLogged, Toast.LENGTH_SHORT).show();
 
         initBottomTabBar();
 
         setAlertDialog();
-
-        getUserInfo();
 
         langhere = listSharedPreference.getLanguage(getApplicationContext());
 
@@ -134,16 +137,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("plzlog", "" + mIsLogged);
-
-            mNavNameTextView.setText(getIntent().getStringExtra("name"));
-            mNavEmailTextView.setText(getIntent().getStringExtra("email"));
-            Picasso.with(MainActivity.this)
-                    .load(getIntent().getStringExtra("image"))
-                    .error(R.drawable.profile_placeholder)
-                    .placeholder(R.drawable.profile_placeholder)
-                    .into(mNavCircleImageView);
-
+       getUserInfo();
     }
 
     @Override
@@ -189,12 +183,12 @@ public class MainActivity extends AppCompatActivity
         mNavCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if (!checkPermissions()){
-                   if (mIsLogged)
-                   Crop.pickImage(MainActivity.this);
-                   else
-                       Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
-               }
+                if (!checkPermissions()) {
+                    if (mIsLogged)
+                        Crop.pickImage(MainActivity.this);
+                    else
+                        Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -216,7 +210,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<UpdateProfileImageModel> call, Response<UpdateProfileImageModel> response) {
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     updateNavigationBarImage(response.body().getData().getImage());
                 } else {
                     Toast.makeText(MainActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
@@ -238,7 +232,7 @@ public class MainActivity extends AppCompatActivity
                 .placeholder(R.drawable.profile_placeholder)
                 .into(mNavCircleImageView);
 
-        listSharedPreference.setImage(getApplicationContext(),image);
+        listSharedPreference.setImage(getApplicationContext(), image);
     }
 
     private boolean checkPermissions() {
@@ -308,20 +302,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks the locale has changed
-        if (!locale.equals(newConfig.locale)) {
-            locale = newConfig.locale;
-
-            this.setContentView(R.layout.activity_main);
-            NavigationView navigationView = this.findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(MainActivity.this);
-        }
-
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//
+//        // Checks the locale has changed
+//        if (!locale.equals(newConfig.locale)) {
+//            locale = newConfig.locale;
+//
+//            this.setContentView(R.layout.activity_main);
+//            NavigationView navigationView = this.findViewById(R.id.nav_view);
+//            navigationView.setNavigationItemSelectedListener(MainActivity.this);
+//        }
+//
+//    }
 
     private void initBottomTabBar() {
 
@@ -412,23 +406,36 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 2:
                 if (mIsLogged)
-                startActivity(new Intent(MainActivity.this, AddItemActivity.class));
+                    startActivity(new Intent(MainActivity.this, AddItemActivity.class));
                 else
                     Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
                 if (mIsLogged)
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Notification()).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_frameLayout, new Notification()).commit();
                 else
-                Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
-               // if (mIsLogged)
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Profile()).commit();
-              //  else
-                  //  Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                 if (mIsLogged){
+                     Bundle bundle = new Bundle();
+                     bundle.putString("puid", mId);
+                     bundle.putString("plang",langhere);
+                     Profile profileFrag = new Profile();
+                     profileFrag.setArguments(bundle);
+
+                     CachePot.getInstance().push("puid",mId);
+                     CachePot.getInstance().push("langh",langhere);
+
+                     android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                     fm.beginTransaction()
+                             .replace(R.id.main_frameLayout, profileFrag).commit();
+                 }
+
+                  else {
+                     Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                 }
         }//end switch
     }
 
@@ -463,7 +470,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.updatePass_nav) {
             startActivity(new Intent(MainActivity.this, ResetPassword.class));
-        }else if (id == R.id.updateAccount_nav) {
+        } else if (id == R.id.updateAccount_nav) {
             if (mIsLogged) {
                 Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                 i.putExtra("name", mName);
@@ -472,8 +479,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("image", mImage);
                 i.putExtra("id", mId);
                 startActivity(i);
-            }
-            else
+            } else
                 Toast.makeText(this, "please sign in first", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.language_nav) {
             AlertDialog alertDialog = alertDialogBuilder.create();
@@ -531,11 +537,11 @@ public class MainActivity extends AppCompatActivity
     private void setLogout() {
 
         listSharedPreference.setLoginStatus(getApplicationContext(), false);
-        listSharedPreference.setUName(getApplicationContext()," ");
-        listSharedPreference.setEmail(getApplicationContext()," ");
-        listSharedPreference.setUId(getApplicationContext()," ");
-        listSharedPreference.setMobile(getApplicationContext()," ");
-        listSharedPreference.setImage(getApplicationContext()," ");
+        listSharedPreference.setUName(getApplicationContext(), " ");
+        listSharedPreference.setEmail(getApplicationContext(), " ");
+        listSharedPreference.setUId(getApplicationContext(), " ");
+        listSharedPreference.setMobile(getApplicationContext(), " ");
+        listSharedPreference.setImage(getApplicationContext(), " ");
 
         CachePot.getInstance().push("islogged", false);
 
@@ -544,13 +550,13 @@ public class MainActivity extends AppCompatActivity
     private void getUserInfo() {
         if (mIsLogged) {
 
-            Context context = getApplicationContext();
-            mId = listSharedPreference.getUId(context);
-            mName = listSharedPreference.getUName(context);
-            mEmail = listSharedPreference.getEmail(context);
-            mToken = listSharedPreference.getToken(context);
-            mMobile = listSharedPreference.getToken(context);
-            mImage = listSharedPreference.getImage(context);
+            Intent intent = getIntent();
+            mId = intent.getStringExtra("uid");
+            mName = intent.getStringExtra("uname");
+            mEmail = intent.getStringExtra("umail");
+            mToken = intent.getStringExtra("utoken");
+            mMobile = intent.getStringExtra("umobile");
+            mImage = intent.getStringExtra("uimage");
 
             mNavNameTextView.setText(mName);
             mNavEmailTextView.setText(mEmail);
@@ -561,10 +567,9 @@ public class MainActivity extends AppCompatActivity
                     .into(mNavCircleImageView);
         }//end if
 
-        Log.d("userinfo",mId+" "+mName+" "+" "+mEmail+" "+mToken+" "+mMobile+" "+mImage+" "+mIsLogged);
+        Log.d("userinfo", mId + " " + mName + " " + " " + mEmail + " " + mToken + " " + mMobile + " " + mImage + " " + mIsLogged);
 
     }//end getUserInfo
-
 
     @Override
     public void ProudctSFrag(String year) {
@@ -582,7 +587,7 @@ public class MainActivity extends AppCompatActivity
     public void HomeFrag(String categ) {
         Bundle bundle = new Bundle();
         bundle.putString("home", categ);
-     bundle.putString("lang",langhere);
+        bundle.putString("lang", langhere);
         ProductsFragment fragment = new ProductsFragment();
         fragment.setArguments(bundle);
 

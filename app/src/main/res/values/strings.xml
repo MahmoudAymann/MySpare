@@ -80,5 +80,6 @@
     <string name="model_PD">Model:</string>
     <string name="splash_btn_ar">عربى</string>
     <string name="splash_btn_en">English</string>
+    <string name="title_activity_profile_product_detail">ProfileProductDetail</string>
 
 </resources>

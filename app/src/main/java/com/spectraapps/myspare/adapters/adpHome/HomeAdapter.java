@@ -1,18 +1,15 @@
-package com.spectraapps.myspare.adapters;
+package com.spectraapps.myspare.adapters.adpHome;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.model.CategoriesModel;
-import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,8 +23,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     private ListAllListeners listAllListeners;
     private ArrayList<CategoriesModel.DataBean> mCategoriesAllModelList;
 
-    public HomeAdapter(ArrayList<CategoriesModel.DataBean> mCategoriesAllModelList,
-                       ListAllListeners listAllListeners) {
+    public HomeAdapter( ArrayList<CategoriesModel.DataBean> mCategoriesAllModelList,
+                        ListAllListeners listAllListeners) {
         this.mCategoriesAllModelList = mCategoriesAllModelList;
         this.listAllListeners = listAllListeners;
     }

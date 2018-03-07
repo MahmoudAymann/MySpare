@@ -17,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,6 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
     Button mSignInButton, mRegisterButton, mSkipButton;
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
 
+    ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +63,14 @@ public class LoginActivity extends AppCompatActivity {
         initUI();
         initClickListener();
 
-        if (CachePot.getInstance().pop("islogged")!=null)
-        mIsLogged = CachePot.getInstance().pop("islogged");
+        if (CachePot.getInstance().pop("islogged") != null)
+            mIsLogged = CachePot.getInstance().pop("islogged");
 
     }//end onCreate()
 
     private void setLAyoutLanguage() {
         String langStr = listSharedPreference.getLanguage(getApplicationContext());
-        if (langStr.equals("en")){
+        if (langStr.equals("en")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
             Locale.setDefault(locale);
@@ -94,10 +96,11 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+
                 if (response.isSuccessful()) {
 
                     Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                    if (response.body().getData() !=null) {
+                    if (response.body().getData() != null) {
                         String id = response.body().getData().getId();
                         String name = response.body().getData().getName();
                         String email = response.body().getData().getMail();
@@ -105,46 +108,53 @@ public class LoginActivity extends AppCompatActivity {
                         String mobile = response.body().getData().getMobile();
                         String image = response.body().getData().getImage();
 
-                        CachePot.getInstance().push("islogged", true);
+                        CachePot.getInstance().push("isloggedy", true);
 
                         saveUserInfo(id, name, email, mobile, token, image);
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("login", 1);
+                        intent.putExtra("lok", true);
+                        intent.putExtra("uid", id);
+                        intent.putExtra("uname", name);
+                        intent.putExtra("umail", email);
+                        intent.putExtra("utoken", token);
+                        intent.putExtra("umobile", mobile);
+                        intent.putExtra("uimage", image);
                         startActivity(intent);
                         finish();
                     }
+
                     progressDialog.dismiss();
                 } else {
-                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "error:" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void saveUserInfo(String id, String name, String email, String token, String mobile, String image) {
-        listSharedPreference.setUId(getApplicationContext(),id);
-        listSharedPreference.setUName(getApplicationContext(),name);
-        listSharedPreference.setEmail(getApplicationContext(),email);
-        listSharedPreference.setToken(getApplicationContext(),token);
-        listSharedPreference.setMobile(getApplicationContext(),mobile);
+        listSharedPreference.setUId(getApplicationContext(), id);
+        listSharedPreference.setUName(getApplicationContext(), name);
+        listSharedPreference.setEmail(getApplicationContext(), email);
+        listSharedPreference.setToken(getApplicationContext(), token);
+        listSharedPreference.setMobile(getApplicationContext(), mobile);
         listSharedPreference.setImage(getApplicationContext(), image);
     }
 
     private void initUI() {
-
-        textInputLayoutEmail = findViewById(R.id.textinput_email);
-        textInputLayoutPassword = findViewById(R.id.textinput_pass);
-        textInputLayoutEmail.setHint(getString(R.string.prompt_email));
+        imageView = findViewById(R.id.loginImageView);
+        imageView.setBackgroundResource(R.drawable.app_logo);
 
         mEmailEditText = findViewById(R.id.emailET);
         mPasswordEditText = findViewById(R.id.passwordET);
-        mEmailEditText.setHint(R.string.prompt_email);
 
         mSignInButton = findViewById(R.id.email_sign_in_button);
         mSignInButton.setText(R.string.action_sign_in);
@@ -188,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("login", 3);
+                intent.putExtra("lok", false);
                 startActivity(intent);
                 progressDialog.dismiss();
                 finish();
@@ -236,7 +247,7 @@ public class LoginActivity extends AppCompatActivity {
             YoYo.with(Techniques.Shake)
                     .duration(700)
                     .repeat(1)
-                    .playOn(textInputLayoutEmail);
+                    .playOn(mEmailEditText);
             return false;
         }
     }//end isEmailValid()
@@ -249,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
             YoYo.with(Techniques.Shake)
                     .duration(700)
                     .repeat(1)
-                    .playOn(textInputLayoutPassword);
+                    .playOn(mPasswordEditText);
             return false;
         }
     }//end isPasswordValid()

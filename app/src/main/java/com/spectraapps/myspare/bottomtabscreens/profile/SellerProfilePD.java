@@ -30,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Profile extends Fragment {
+public class SellerProfilePD extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerProfileAdapter mRecyclerProfileAdapter;
@@ -40,7 +40,7 @@ public class Profile extends Fragment {
     String uId, language;
     private ProgressDialog progressDialog;
 
-    public Profile() {
+    public SellerProfilePD() {
         // Required empty public constructo
     }
 
@@ -49,16 +49,15 @@ public class Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_seller_profile, container, false);
         MainActivity.mToolbarText.setText(getString(R.string.profile_title));
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
-
         try {
-            uId = CachePot.getInstance().pop("puid");
-            language = CachePot.getInstance().pop("langh");
+            uId = CachePot.getInstance().pop("suid");
+            language = CachePot.getInstance().pop("slangh");
         } catch (Exception e) {
             Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
