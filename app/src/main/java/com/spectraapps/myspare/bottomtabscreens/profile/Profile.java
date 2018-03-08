@@ -63,7 +63,6 @@ public class Profile extends Fragment {
             Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-
         return rootView;
     }//end oncreate
 
