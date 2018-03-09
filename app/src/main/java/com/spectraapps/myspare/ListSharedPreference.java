@@ -1,8 +1,11 @@
 package com.spectraapps.myspare;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.spectraapps.myspare.login.LoginActivity;
 
 /**
  * Created by mahmo on 3/2/2018.
@@ -12,12 +15,13 @@ public class ListSharedPreference {
 
     public void setFirstLaunch(Context context, boolean isFirstRun) {
         SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        prefEditor.putBoolean("isFirstRun", isFirstRun).apply();
+        prefEditor.putBoolean("langx", isFirstRun).apply();
+
     }
 
     public boolean getFirstLaunch(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("isFirstRun", true);
+        return prefs.getBoolean("langx", true);
     }
 
     public void setLanguage(Context context, String lang) {

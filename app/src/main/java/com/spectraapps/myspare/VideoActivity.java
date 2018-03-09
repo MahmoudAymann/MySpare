@@ -18,13 +18,13 @@ public class VideoActivity extends Activity {
 
     VideoView videoHolder;
     boolean mIsLogged;
-
+ListSharedPreference listSharedPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
-        mIsLogged = getIntent().getBooleanExtra("islog",true);
+        mIsLogged = listSharedPreference.getLoginStatus(VideoActivity.this.getApplicationContext());
 
         try {
             videoHolder = VideoActivity.this.findViewById(R.id.videoView1);
@@ -63,14 +63,12 @@ public class VideoActivity extends Activity {
     void checkForLogging() {
 
         if (mIsLogged) {
-            Intent intent = new Intent(VideoActivity.this, MainActivity.class);
-            startActivity(intent);
-           // Toast.makeText(this, "loggenin", Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
             Intent intent = new Intent(VideoActivity.this, LoginActivity.class);
             startActivity(intent);
-           // Toast.makeText(this, "loggen", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Intent intent = new Intent(VideoActivity.this, MainActivity.class);
+            startActivity(intent);
             finish();
         }
 

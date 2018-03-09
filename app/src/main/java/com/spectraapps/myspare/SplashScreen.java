@@ -2,7 +2,9 @@ package com.spectraapps.myspare;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -42,8 +44,6 @@ public class SplashScreen extends Activity {
         initButtonClickListener();
 
         isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
-        if (CachePot.getInstance().pop("islogged")!= null)
-        isLogged =  CachePot.getInstance().pop("islogged");
 
     }//end oncreate
 
@@ -52,7 +52,6 @@ public class SplashScreen extends Activity {
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 listSharedPreference.setLanguage(getApplicationContext(), "en");
                 CachePot.getInstance().push("langs", "en");
                 CachePot.getInstance().push("islogged", false);
@@ -69,9 +68,7 @@ public class SplashScreen extends Activity {
             public void onClick(View view) {
 
                 listSharedPreference.setLanguage(getApplicationContext(), "ar");
-                CachePot.getInstance().push("langs", "ar");
-                CachePot.getInstance().push("islogged", false);
-                listSharedPreference.setFirstLaunch(getApplicationContext(), false);
+                listSharedPreference.setFirstLaunch(SplashScreen.this.getApplicationContext(), false);
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);
 

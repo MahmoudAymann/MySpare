@@ -194,7 +194,11 @@ public class LoginActivity extends AppCompatActivity {
 
         mSkipButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+
+            {
+
+
                 progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("login", 3);

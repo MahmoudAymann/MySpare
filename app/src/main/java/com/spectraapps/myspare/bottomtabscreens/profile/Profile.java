@@ -77,12 +77,10 @@ public class Profile extends Fragment {
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
         recyclerView = rootView.findViewById(R.id.profile_recycler);
-
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(getString(R.string.loading));
         progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCanceledOnTouchOutside(false);
-
     }
 
     private void initPullRefreshLayout(View rootView) {
