@@ -2,11 +2,10 @@ package com.spectraapps.myspare.login;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -25,7 +24,8 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import com.github.kimkevin.cachepot.CachePot;
-import com.spectraapps.myspare.ListSharedPreference;
+import com.spectraapps.myspare.SplashScreen;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
@@ -45,12 +45,16 @@ public class LoginActivity extends AppCompatActivity {
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
-    ListSharedPreference listSharedPreference = new ListSharedPreference();
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
     Locale locale;
     boolean mIsLogged;
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
+
+    AlertDialog.Builder alertDialogBuilder;
+
 
     ImageView imageView;
 
@@ -58,18 +62,32 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setSharedPreference = new ListSharedPreference.Set(LoginActivity.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(LoginActivity.this.getApplicationContext());
+
         setLAyoutLanguage();
 
         initUI();
         initClickListener();
+        setAlertDialog();
 
-        if (CachePot.getInstance().pop("islogged") != null)
-            mIsLogged = CachePot.getInstance().pop("islogged");
+        mIsLogged = getSharedPreference.getLoginStatus();
 
     }//end onCreate()
 
+    private void setAlertDialog() {
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setNegativeButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+    }//end setAlertDialog
+
     private void setLAyoutLanguage() {
-        String langStr = listSharedPreference.getLanguage(getApplicationContext());
+        String langStr = getSharedPreference.getLanguage();
         if (langStr.equals("en")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
@@ -97,56 +115,62 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
 
-                if (response.isSuccessful()) {
+                try {
 
-                    Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                    if (response.body().getData() != null) {
-                        String id = response.body().getData().getId();
-                        String name = response.body().getData().getName();
-                        String email = response.body().getData().getMail();
-                        String token = response.body().getData().getToken();
-                        String mobile = response.body().getData().getMobile();
-                        String image = response.body().getData().getImage();
+                    if (response.isSuccessful()) {
 
-                        CachePot.getInstance().push("isloggedy", true);
+                        Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        if (response.body().getData() != null) {
+                            String id = response.body().getData().getId();
+                            String name = response.body().getData().getName();
+                            String email = response.body().getData().getMail();
+                            String token = response.body().getData().getToken();
+                            String mobile = response.body().getData().getMobile();
+                            String image = response.body().getData().getImage();
 
-                        saveUserInfo(id, name, email, mobile, token, image);
+                            setSharedPreference.setLoginStatus(true);
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("login", 1);
-                        intent.putExtra("lok", true);
-                        intent.putExtra("uid", id);
-                        intent.putExtra("uname", name);
-                        intent.putExtra("umail", email);
-                        intent.putExtra("utoken", token);
-                        intent.putExtra("umobile", mobile);
-                        intent.putExtra("uimage", image);
-                        startActivity(intent);
-                        finish();
+                            saveUserInfo(id, name, email, mobile, token, image);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+
+                            finish();
+                        }
+
+                        progressDialog.dismiss();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "error:" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
-
-                    progressDialog.dismiss();
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "error:" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialogBuilder.setMessage("Error: " + e);
+                    alertDialog.show();
                 }
+
             }
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
+                try {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialogBuilder.setMessage("Error: " + e);
+                    alertDialog.show();
+                }
             }
         });
     }
 
     private void saveUserInfo(String id, String name, String email, String token, String mobile, String image) {
-        listSharedPreference.setUId(getApplicationContext(), id);
-        listSharedPreference.setUName(getApplicationContext(), name);
-        listSharedPreference.setEmail(getApplicationContext(), email);
-        listSharedPreference.setToken(getApplicationContext(), token);
-        listSharedPreference.setMobile(getApplicationContext(), mobile);
-        listSharedPreference.setImage(getApplicationContext(), image);
+        setSharedPreference.setUId(id);
+        setSharedPreference.setUName(name);
+        setSharedPreference.setEmail(email);
+        setSharedPreference.setToken(token);
+        setSharedPreference.setMobile(mobile);
+        setSharedPreference.setImage(image);
     }
 
     private void initUI() {
@@ -186,7 +210,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.putExtra("login", 2);
                 startActivity(intent);
                 progressDialog.dismiss();
             }
@@ -198,11 +221,8 @@ public class LoginActivity extends AppCompatActivity {
 
             {
 
-
                 progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("login", 3);
-                intent.putExtra("lok", false);
                 startActivity(intent);
                 progressDialog.dismiss();
                 finish();

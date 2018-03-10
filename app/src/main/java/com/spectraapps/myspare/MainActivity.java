@@ -3,20 +3,14 @@ package com.spectraapps.myspare;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -30,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,20 +39,16 @@ import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 
 import com.spectraapps.myspare.helper.IOnBackPressed;
 import com.spectraapps.myspare.login.LoginActivity;
-import com.spectraapps.myspare.model.CategoriesModel;
-import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
-import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ProfileActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.products.ProductsFragment;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -83,12 +72,14 @@ public class MainActivity extends AppCompatActivity
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
 
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
     Locale locale;
     Toolbar mToolBar;
     CircleImageView mNavCircleImageView;
     TextView mNavNameTextView, mNavEmailTextView;
     String mId, mName, mEmail, mToken, mMobile, mImage;
-    ListSharedPreference listSharedPreference = new ListSharedPreference();
 
     boolean mIsLogged;
     AlertDialog.Builder alertDialogBuilder;
@@ -111,11 +102,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setSharedPreference = new ListSharedPreference.Set(MainActivity.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(MainActivity.this.getApplicationContext());
+
         setLAyoutLanguage();
 
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
         mToolbarText.setText(R.string.home_title);
+
 
         initNavigationDrawer();
 
@@ -123,14 +118,13 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout, new Home()).commit();
         //mIsLogged = CachePot.getInstance().pop("islogged");
 
-        mIsLogged = getIntent().getBooleanExtra("lok", false);
-        Toast.makeText(this, "log: " + mIsLogged, Toast.LENGTH_SHORT).show();
-
+        mIsLogged = getSharedPreference.getLoginStatus();
+        //Toast.makeText(MainActivity.this, ""+mIsLogged, Toast.LENGTH_SHORT).show();
         initBottomTabBar();
 
         setAlertDialog();
 
-        langhere = listSharedPreference.getLanguage(getApplicationContext());
+        langhere = getSharedPreference.getLanguage();
 
     }//end onCreate()
 
@@ -146,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setLAyoutLanguage() {
-        String langStr = listSharedPreference.getLanguage(getApplicationContext());
+        String langStr = getSharedPreference.getLanguage();
         if (langStr.equals("en")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
@@ -189,7 +183,6 @@ public class MainActivity extends AppCompatActivity
                     else
                         Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
@@ -232,7 +225,7 @@ public class MainActivity extends AppCompatActivity
                 .placeholder(R.drawable.profile_placeholder)
                 .into(mNavCircleImageView);
 
-        listSharedPreference.setImage(getApplicationContext(), image);
+        setSharedPreference.setImage(image);
     }
 
     private boolean checkPermissions() {
@@ -329,12 +322,14 @@ public class MainActivity extends AppCompatActivity
                         Color.parseColor(colors[0]))
                         .build()
         );
+
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_favourite_black_24dp),
                         Color.parseColor(colors[0]))
                         .build()
         );
+
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_add_black_24dp),
@@ -388,7 +383,7 @@ public class MainActivity extends AppCompatActivity
         navigationTabBar.setBackgroundColor(Color.parseColor(colors[2]));
         //badgetColor
         navigationTabBar.setBadgeBgColor(Color.RED);
-        navigationTabBar.setBadgeSize(20);
+        navigationTabBar.setBadgeSize(15);
     }//end initUi
 
     private void beginFragmentTransactions(int index) {
@@ -487,6 +482,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.logout_nav) {
             setLogout();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         } else if (id == R.id.nav_privacy) {
             Uri uriUrl = Uri.parse("http://myspare.net");
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -512,11 +508,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
-                if (listSharedPreference.getLanguage(getApplicationContext()).equals("en")) {
-                    listSharedPreference.setLanguage(getApplicationContext(), "ar");
+                if (getSharedPreference.getLanguage().equals("en")) {
+                    setSharedPreference.setLanguage("ar");
                     restartActivity(MainActivity.this);
                 } else {
-                    listSharedPreference.setLanguage(getApplicationContext(), "en");
+                    setSharedPreference.setLanguage("en");
                     restartActivity(MainActivity.this);
                 }
             }
@@ -528,6 +524,7 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         });
+
     }//end setAlertDialog
 
     public void setOnBackPressedListener(IOnBackPressed onBackPressedListener) {
@@ -535,28 +532,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setLogout() {
-
-        listSharedPreference.setLoginStatus(getApplicationContext(), false);
-        listSharedPreference.setUName(getApplicationContext(), " ");
-        listSharedPreference.setEmail(getApplicationContext(), " ");
-        listSharedPreference.setUId(getApplicationContext(), " ");
-        listSharedPreference.setMobile(getApplicationContext(), " ");
-        listSharedPreference.setImage(getApplicationContext(), " ");
-
-        CachePot.getInstance().push("islogged", false);
-
+        setSharedPreference.setLoginStatus(false);
+        setSharedPreference.setUName("agent");
+        setSharedPreference.setEmail("example@domain.com");
+        setSharedPreference.setUId("id");
+        setSharedPreference.setMobile("0123456789");
+        setSharedPreference.setImage("http://myspare.net/api/images/pp_placeholder_400400.png");
     }
 
     private void getUserInfo() {
         if (mIsLogged) {
 
-            Intent intent = getIntent();
-            mId = intent.getStringExtra("uid");
-            mName = intent.getStringExtra("uname");
-            mEmail = intent.getStringExtra("umail");
-            mToken = intent.getStringExtra("utoken");
-            mMobile = intent.getStringExtra("umobile");
-            mImage = intent.getStringExtra("uimage");
+//            Intent intent = getIntent();
+//            mId = intent.getStringExtra("uid");
+//            mName = intent.getStringExtra("uname");
+//            mEmail = intent.getStringExtra("umail");
+//            mToken = intent.getStringExtra("utoken");
+//            mMobile = intent.getStringExtra("umobile");
+//            mImage = intent.getStringExtra("uimage");
+
+            mId = getSharedPreference.getUId();
+            mName = getSharedPreference.getUName();
+            mEmail = getSharedPreference.getEmail();
+            mToken = getSharedPreference.getToken();
+            mMobile = getSharedPreference.getMobile();
+            mImage = getSharedPreference.getImage();
 
             mNavNameTextView.setText(mName);
             mNavEmailTextView.setText(mEmail);

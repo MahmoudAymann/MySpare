@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.products.productdetail;
+package com.spectraapps.myspare.bottomtabscreens.favourite;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -20,15 +20,16 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
-import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
-
+import com.spectraapps.myspare.products.ProductsFragment;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.HashMap;
 
-public class ProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener {
+public class FavProductDetail extends Fragment
+        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener{
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
@@ -40,21 +41,25 @@ public class ProductDetail extends Fragment
 
     RelativeLayout relativeLayout;
 
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
+
     String langhere;
 
-    public ProductDetail() {
-
+    public FavProductDetail() {
+        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-        View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
+        // Inflate the layout for this fragment
+        View rootView =  inflater.inflate(R.layout.fragment_fav_product_detail, container, false);
 
         MainActivity.mToolbarText.setText(pName);
+        setSharedPreference = new ListSharedPreference.Set(FavProductDetail.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(FavProductDetail.this.getContext().getApplicationContext());
 
         initUI(rootView);
 
@@ -62,7 +67,7 @@ public class ProductDetail extends Fragment
 
         imageSliderInitilaize();
         fireBackButtonEvent();
-        langhere = CachePot.getInstance().pop("langy");
+        langhere = getSharedPreference.getLanguage();
 
         return rootView;
     }
@@ -122,6 +127,7 @@ public class ProductDetail extends Fragment
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
+
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -153,9 +159,9 @@ public class ProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-        file_maps.put(pName, pImage1);
+            file_maps.put(pName, pImage1);
         if (pImage2 != null)
-        file_maps.put(pName, pImage2);
+            file_maps.put(pName, pImage2);
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -211,6 +217,7 @@ public class ProductDetail extends Fragment
                 startActivity(dialIntent);
                 break;
             case R.id.relative_user_info:
+
                 CachePot.getInstance().push("suid",uId);
                 CachePot.getInstance().push("slangh",langhere);
 
@@ -220,4 +227,5 @@ public class ProductDetail extends Fragment
                 break;
         }
     }
+
 }//end class

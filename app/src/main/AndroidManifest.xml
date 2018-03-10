@@ -56,9 +56,10 @@
         <activity android:name=".VideoActivity" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
-            android:name=".products.productdetail.profilePD.ProfileProductDetail"
+            android:name=".bottomtabscreens.profile.ProfileProductDetail"
             android:label="@string/title_activity_profile_product_detail"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".bottomtabscreens.favourite.FavProductDetail"></activity>
     </application>
 
 </manifest>

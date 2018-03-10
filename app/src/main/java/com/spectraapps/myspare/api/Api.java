@@ -10,6 +10,7 @@ import com.spectraapps.myspare.model.FavouriteModel;
 import com.spectraapps.myspare.model.LoginModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
+import com.spectraapps.myspare.model.NotificationModel;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.UpdateProfileModel;
@@ -64,12 +65,10 @@ public interface Api {
                                        @Field("pid") String pid,
                                        @Field("isFavorite") String isFavorite);
 
-
     @FormUrlEncoded
     @POST("profile")
     Call<ProfileProdModel> profile(@Field("id") String id,
                                    @Field("lang") String language);
-
 
     @FormUrlEncoded
     @POST("register")
@@ -98,6 +97,11 @@ public interface Api {
     @FormUrlEncoded
     @POST("brands")
     Call<BrandsModel> brands(@Field("language") String language);
+
+    @FormUrlEncoded
+    @POST("notifications")
+    Call<NotificationModel> notification(@Field("id") String id);
+
 
     @FormUrlEncoded
     @POST("currencies")

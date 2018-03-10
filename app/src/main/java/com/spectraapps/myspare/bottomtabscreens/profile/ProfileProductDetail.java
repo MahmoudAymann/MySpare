@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.products.productdetail.profilePD;
+package com.spectraapps.myspare.bottomtabscreens.profile;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

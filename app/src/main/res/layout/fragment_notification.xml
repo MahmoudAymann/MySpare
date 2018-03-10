@@ -3,6 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/swipeRefreshLayoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/notification_recycler"
         android:layout_width="match_parent"
@@ -10,5 +16,6 @@
         android:padding="10dp"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
+    </com.baoyz.widget.PullRefreshLayout>
 
 </LinearLayout>

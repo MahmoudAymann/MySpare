@@ -24,13 +24,11 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
 
     private ListAllListeners listAllListeners;
     private ArrayList<FavouriteModel.DataBean> mFavArrayList;
-    private Context mContext;
     private boolean isFav = false;
 
 
-    public RecyclerFavouriteAdapter(Context mContext, ArrayList<FavouriteModel.DataBean> FavArrayList,
+    public RecyclerFavouriteAdapter(ArrayList<FavouriteModel.DataBean> FavArrayList,
                               ListAllListeners listAllListeners) {
-        this.mContext = mContext;
         this.mFavArrayList = FavArrayList;
         this.listAllListeners = listAllListeners;
     }
@@ -47,7 +45,7 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
         if (mFavArrayList != null)
             return mFavArrayList.size();
         else
-            return 5;
+            return 0;
     }
 
     @Override

@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,7 +27,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +34,10 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
-import com.michael.easydialog.EasyDialog;
-import com.spectraapps.myspare.ListSharedPreference;
-import com.spectraapps.myspare.MainActivity;
-import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.SplashScreen;
-import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.login.LoginActivity;
+import com.spectraapps.myspare.utility.ListSharedPreference;
+import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.model.AddModel;
 import com.spectraapps.myspare.model.BrandsModel;
 import com.spectraapps.myspare.model.CategoriesModel;
@@ -52,10 +47,8 @@ import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,6 +91,9 @@ public class AddItemActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     ImageView imageView1, imageView2;
 
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
 
     private boolean checkPermissions() {
         int result;
@@ -133,6 +129,9 @@ public class AddItemActivity extends AppCompatActivity {
 
         ConstraintLayout view = findViewById(R.id.add_wholeView);
         YoYo.with(Techniques.Bounce).duration(500).playOn(view);
+
+        setSharedPreference = new ListSharedPreference.Set(AddItemActivity.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(AddItemActivity.this.getApplicationContext());
 
         initToolbar();
         initUI();
@@ -373,16 +372,16 @@ public class AddItemActivity extends AppCompatActivity {
 
     ///////////////////////////////////////////
     private String getLangkey() {
-        String lang_key = "";
-        switch (new ListSharedPreference().getLanguage(AddItemActivity.this.getApplication())) {
+
+        switch (getSharedPreference.getLanguage())
+        {
             case "en":
-                lang_key = "en";
-                break;
+                return "en";
             case "ar":
-                lang_key = "ar";
-                break;
+                return "ar";
+            default:
+                return "en";
         }
-        return lang_key;
     }//end getLangKey()
 
     ////////////////////////////////////////////////////////////

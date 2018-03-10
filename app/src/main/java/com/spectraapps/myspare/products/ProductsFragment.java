@@ -23,7 +23,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.michael.easydialog.EasyDialog;
-import com.spectraapps.myspare.ListSharedPreference;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpProducts.AllProductsAdapter;

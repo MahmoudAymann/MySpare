@@ -9,7 +9,9 @@ import java.util.List;
 public class ProfileProdModel {
 
     /**
-     * data : [{"pid":"90","productName":"spareparttt","productPrice":"2000","productNumber":"200","currency":"دينار اماراتي","mobile":"0","image1":"http://myspare.net/public/upload/1520256835image1.png","image2":null,"image3":null,"id":"42","name":"","date":"2017","country":"germany","brand":"audi","model":"S5","isFavorite":"false"},{"pid":"89","productName":"lpl","productPrice":"2000","productNumber":"2","currency":"ريال قطرى","mobile":"1234567890","image1":"1520256063onejpg","image2":"1520256063twojpg","image3":"1520256063threejpg","id":"42","name":"nashwaa","date":"1990","country":"australia","brand":"acura","model":"Acura TSX","isFavorite":"false"}]
+     * data : [{"pid":"90","productName":"spareparttt","productPrice":"2000","productNumber":"200","currency":"دينار اماراتي",
+     * "mobile":"0","image1":"http://myspare.net/public/upload/1520256835image1.png","image2":null,"image3":null,
+     * "id":"42","name":"","date":"2017","country":"germany","brand":"audi","model":"S5","isFavorite":"false"},{"pid":"89","productName":"lpl","productPrice":"2000","productNumber":"2","currency":"ريال قطرى","mobile":"1234567890","image1":"1520256063onejpg","image2":"1520256063twojpg","image3":"1520256063threejpg","id":"42","name":"nashwaa","date":"1990","country":"australia","brand":"acura","model":"Acura TSX","isFavorite":"false"}]
      * status : {"type":"success","title":"Successfull request"}
      */
 

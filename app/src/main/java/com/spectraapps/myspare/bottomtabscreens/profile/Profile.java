@@ -22,7 +22,7 @@ import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
-import com.spectraapps.myspare.products.productdetail.profilePD.ProfileProductDetail;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.ArrayList;
 
@@ -36,6 +36,9 @@ public class Profile extends Fragment {
     RecyclerProfileAdapter mRecyclerProfileAdapter;
     ArrayList<ProfileProdModel.DataBean> mProfileDataList;
     PullRefreshLayout pullRefreshLayout;
+
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
 
     String uId, language;
     private ProgressDialog progressDialog;
@@ -51,17 +54,13 @@ public class Profile extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         MainActivity.mToolbarText.setText(getString(R.string.profile_title));
+
+        setSharedPreference = new ListSharedPreference.Set(Profile.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(Profile.this.getContext().getApplicationContext());
+
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
-
-
-        try {
-            uId = CachePot.getInstance().pop("puid");
-            language = CachePot.getInstance().pop("langh");
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
         return rootView;
     }//end oncreate
@@ -69,9 +68,16 @@ public class Profile extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        try {
+            uId = getSharedPreference.getUId();
+            language = getSharedPreference.getLanguage();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
         turnOnServer();
         initAdapterProfileProducts();
-        recyclerView.setAdapter(mRecyclerProfileAdapter);
     }
 
     private void initUI(View rootView) {
@@ -127,8 +133,8 @@ public class Profile extends Fragment {
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
 
 
-                        Log.v("jkjkl", produtsAllModel.getImage1() + " push ");
-                        Log.v("jkjkl", produtsAllModel.getImage2() + "  push");
+//                        Log.v("jkjkl", produtsAllModel.getImage1() + " push ");
+//                        Log.v("jkjkl", produtsAllModel.getImage2() + "  push");
                     }
 
                     @Override
@@ -166,23 +172,29 @@ public class Profile extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProfileProdModel> productsCall = retrofit.profile(uId, language);
+            final Call<ProfileProdModel> productsCall = retrofit.profile("42", "en");
 
             productsCall.enqueue(new Callback<ProfileProdModel>() {
                 @Override
                 public void onResponse(Call<ProfileProdModel> call, Response<ProfileProdModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProfileDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
+                            recyclerView.setAdapter(mRecyclerProfileAdapter);
+                            mRecyclerProfileAdapter.notifyDataSetChanged();
+                            Log.e("jkjk", response.body().getData().size() + "");
+                            Log.e("jkjk", mProfileDataList.size() + "ss");
+                            Toast.makeText(getContext(), "sssss"+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
 
-                    if (response.isSuccessful()) {
-                        mProfileDataList.addAll(response.body().getData());
-                        pullRefreshLayout.setRefreshing(false);
-                        progressDialog.dismiss();
-                        mRecyclerProfileAdapter.notifyDataSetChanged();
-                        Log.e("jkjk", response.body().getData().size() + "");
-                        Log.e("jkjk", mProfileDataList.size() + "ss");
-                    } else {
-                        pullRefreshLayout.setRefreshing(false);
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        } else {
+                            pullRefreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "NO DATA", Toast.LENGTH_LONG).show();
                     }
                 }
 

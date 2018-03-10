@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.spectraapps.myspare.ListSharedPreference;
+import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.adapters.adpHome.HomeAdapter;
 import com.spectraapps.myspare.api.Api;
@@ -44,6 +45,8 @@ public class Home extends Fragment {
     RecyclerView recyclerView;
 
     HomeCallBack homeCallBack;
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
 
     public Home() {
         // Required empty public constructor
@@ -68,6 +71,8 @@ public class Home extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         MainActivity.mToolbarText.setText(R.string.home_title);
+        setSharedPreference = new ListSharedPreference.Set(Home.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(Home.this.getContext().getApplicationContext());
 
         onTouchEvent(rootView, true);
 
@@ -129,12 +134,11 @@ public class Home extends Fragment {
     }//end serverCategories
 
     private String getLang_key() {
-        switch (listSharedPreference.getLanguage(Home.this.getActivity().getApplicationContext())) {
+        switch (getSharedPreference.getLanguage()) {
             case "en":
                 return "en";
             case "ar":
                 return "ar";
-
             default:
                 return "en";
         }
@@ -199,6 +203,5 @@ public class Home extends Fragment {
     public interface HomeCallBack {
         void HomeFrag(String categ);
     }
-
 
 }//end Home

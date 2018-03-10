@@ -2,37 +2,36 @@ package com.spectraapps.myspare;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.github.kimkevin.cachepot.CachePot;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 public class SplashScreen extends Activity {
 
     Button button_ar, button_en;
-    ListSharedPreference listSharedPreference = new ListSharedPreference();
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
     RelativeLayout relativeLayout;
     boolean isFirstRun;
-    boolean isLogged;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash_screen);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+
+        setSharedPreference = new ListSharedPreference.Set(SplashScreen.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(SplashScreen.this.getApplicationContext());
 
         button_ar = findViewById(R.id.btn_ar);
         button_en = findViewById(R.id.btn_en);
@@ -43,7 +42,7 @@ public class SplashScreen extends Activity {
         insertAnimation();
         initButtonClickListener();
 
-        isFirstRun = listSharedPreference.getFirstLaunch(getApplicationContext());
+        isFirstRun = getSharedPreference.getFirstRun();
 
     }//end oncreate
 
@@ -52,10 +51,10 @@ public class SplashScreen extends Activity {
         button_en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listSharedPreference.setLanguage(getApplicationContext(), "en");
-                CachePot.getInstance().push("langs", "en");
-                CachePot.getInstance().push("islogged", false);
-                listSharedPreference.setFirstLaunch(getApplicationContext(), false);
+
+                setSharedPreference.setLanguage("en");
+                setSharedPreference.setFirstRun(false);
+
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);
 
@@ -64,11 +63,13 @@ public class SplashScreen extends Activity {
         });
 
         button_ar.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
-                listSharedPreference.setLanguage(getApplicationContext(), "ar");
-                listSharedPreference.setFirstLaunch(SplashScreen.this.getApplicationContext(), false);
+                setSharedPreference.setLanguage("ar");
+                setSharedPreference.setFirstRun(false);
+
                 Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
                 startActivity(intent);
 
@@ -107,7 +108,6 @@ public class SplashScreen extends Activity {
                 } else {
 
                     Intent intent = new Intent(SplashScreen.this, VideoActivity.class);
-                    intent.putExtra("islog",isLogged);
                     startActivity(intent);
                     finish();
                 }

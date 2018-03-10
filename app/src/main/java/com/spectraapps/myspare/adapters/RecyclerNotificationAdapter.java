@@ -1,5 +1,6 @@
-package com.spectraapps.myspare.bottomtabscreens.notification;
+package com.spectraapps.myspare.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.model.NotificationModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -18,12 +21,13 @@ import java.util.ArrayList;
 public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNotificationAdapter.MyViewHolder> {
 
     private final OnItemClickListener listener;
-    private ArrayList<NotificationData> mNotificationDataList;
+    private ArrayList<NotificationModel.DataBean> mNotificationDataList;
 
-    RecyclerNotificationAdapter(ArrayList<NotificationData> mNotificationDataList, OnItemClickListener listener) {
+    public RecyclerNotificationAdapter(ArrayList<NotificationModel.DataBean> mNotificationDataList, OnItemClickListener listener) {
         this.mNotificationDataList = mNotificationDataList;
         this.listener = listener;
     }
+
 
     @Override
     public RecyclerNotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,7 +50,7 @@ public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNo
     }
 
     public interface OnItemClickListener {
-        void onItemClick(NotificationData notificationData);
+        void onItemClick(NotificationModel.DataBean notificationData);
     }
 
      class MyViewHolder extends RecyclerView.ViewHolder {
@@ -60,14 +64,20 @@ public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNo
             imageView = itemView.findViewById(R.id.thumbnail_noti);
         }
 
-         private void bind(final NotificationData notificationData, final OnItemClickListener listener) {
-             textTextView.setText(notificationData.getText());
-             dateTextView.setText(notificationData.getDate());
+         private void bind(final NotificationModel.DataBean notificationModel, final OnItemClickListener listener) {
+             textTextView.setText(notificationModel.getText());
+             dateTextView.setText(notificationModel.getCreated_at());
+
+             Picasso.with(itemView.getContext())
+                     .load(notificationModel.getImage())
+                     .placeholder(R.drawable.place_holder)
+                     .error(R.drawable.place_holder)
+                     .into(imageView);
 
              itemView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                      listener.onItemClick(notificationData);
+                      listener.onItemClick(notificationModel);
                  }
              });
          }

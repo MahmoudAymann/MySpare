@@ -22,7 +22,6 @@ import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
-import com.spectraapps.myspare.products.productdetail.profilePD.ProfileProductDetail;
 
 import java.util.ArrayList;
 
