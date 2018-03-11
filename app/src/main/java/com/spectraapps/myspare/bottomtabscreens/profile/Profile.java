@@ -186,7 +186,7 @@ public class Profile extends Fragment {
                             mRecyclerProfileAdapter.notifyDataSetChanged();
                             Log.e("jkjk", response.body().getData().size() + "");
                             Log.e("jkjk", mProfileDataList.size() + "ss");
-                            Toast.makeText(getContext(), "sssss"+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
 
                         } else {
                             pullRefreshLayout.setRefreshing(false);

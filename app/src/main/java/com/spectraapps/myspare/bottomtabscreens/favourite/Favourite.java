@@ -35,10 +35,10 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class Favourite extends Fragment {
+
     RecyclerView recyclerView;
-    RecyclerFavouriteAdapter recyclerFavouriteAdapter;
-    ArrayList<FavouriteModel.DataBean> mFavouriteDataList;
-    RecyclerFavouriteAdapter mFavouriteAdapter;
+    RecyclerFavouriteAdapter mFavAdapter;
+    ArrayList<FavouriteModel.DataBean> mFavDataList;
 
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
@@ -47,10 +47,15 @@ public class Favourite extends Fragment {
 
     PullRefreshLayout pullRefreshLayout;
 
-    String uEmail, language;
-
     public Favourite() {
         // Required empty public constructor
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setData();
     }
 
     @Override
@@ -58,8 +63,8 @@ public class Favourite extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_favourite, container, false);
-        MainActivity.mToolbarText.setText(getString(R.string.favourite));
 
+        MainActivity.mToolbarText.setText(R.string.favourite);
         setSharedPreference = new ListSharedPreference.Set(Favourite.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(Favourite.this.getContext().getApplicationContext());
 
@@ -67,93 +72,80 @@ public class Favourite extends Fragment {
         initUI(rootView);
         initRecyclerView();
 
+        serverCategories();
+
         return rootView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void serverCategories() {
+        progressDialog.show();
+        mFavDataList = new ArrayList<>();
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        try {
-            uEmail = getSharedPreference.getEmail();
-            language = getSharedPreference.getLanguage();
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUId(),getLang_key());
+        categoriesCall.enqueue(new Callback<FavouriteModel>() {
+            @Override
+            public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
 
-        turnOnServer();
-        initAdapterProfileProducts();
-        recyclerView.setAdapter(recyclerFavouriteAdapter);
+                if (response.isSuccessful()) {
+                    mFavDataList.addAll(response.body().getData());
+                    pullRefreshLayout.setRefreshing(false);
+                    progressDialog.dismiss();
+                    mFavAdapter.notifyDataSetChanged();
+                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                    Log.v( "titler" ," "+response.body().getData().size());
+
+                } else {
+                    progressDialog.dismiss();
+                    pullRefreshLayout.setRefreshing(false);
+                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FavouriteModel> call, Throwable t) {
+                progressDialog.dismiss();
+                pullRefreshLayout.setRefreshing(false);
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }//end serverCategories
+
+    private String getUId() {
+        Log.v("tagLang",getSharedPreference.getEmail());
+       return getSharedPreference.getEmail();
     }
+
+    private String getLang_key() {
+        Log.v("tagLang",getSharedPreference.getLanguage());
+       return getSharedPreference.getLanguage();
+    }
+
+    private void fireBackButtonEvent() {
+        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+            @Override
+            public void onBackPressed() {
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home())
+                        .commit();
+
+            }
+        });
+    }//end back pressed
 
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
-        recyclerView = rootView.findViewById(R.id.fav_recycler);
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(getString(R.string.loading));
         progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCanceledOnTouchOutside(false);
-    }
 
-    private void initPullRefreshLayout(View rootView) {
-        pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutFav);
-        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        recyclerView = rootView.findViewById(R.id.fav_recycler);
 
-        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                turnOnServer();
-                mFavouriteAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void turnOnServer() {
-        serverProfile();
-    }
-
-    private void initAdapterProfileProducts() {
-        mFavouriteAdapter = new RecyclerFavouriteAdapter(mFavouriteDataList,
-                new RecyclerFavouriteAdapter.ListAllListeners() {
-                    @Override
-                    public void onCardViewClick(FavouriteModel.DataBean favouriteDataBean) {
-                        CachePot.getInstance().push("pName", favouriteDataBean.getProductName());
-                        CachePot.getInstance().push("pId", favouriteDataBean.getProductNumber());
-                        CachePot.getInstance().push("pPrice", favouriteDataBean.getProductPrice());
-                        CachePot.getInstance().push("pNumber", favouriteDataBean.getProductNumber());
-                        CachePot.getInstance().push("pCurrency", favouriteDataBean.getCurrency());
-                        CachePot.getInstance().push("pImage1", favouriteDataBean.getImage1());
-                        CachePot.getInstance().push("pImage2", favouriteDataBean.getImage2());
-                        CachePot.getInstance().push("pDate", favouriteDataBean.getDate());
-                        CachePot.getInstance().push("pCountry", favouriteDataBean.getCountry());
-                        CachePot.getInstance().push("pBrand", favouriteDataBean.getBrand());
-                        CachePot.getInstance().push("pModel", favouriteDataBean.getModel());
-
-                        CachePot.getInstance().push("uMobile", favouriteDataBean.getMobile());
-                        CachePot.getInstance().push("uName", favouriteDataBean.getUser_name());
-
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.main_frameLayout, new FavProductDetail()).commit();
-
-                    }
-
-                    @Override
-                    public void onFavButtonClick(View v, int position, boolean isFav) {
-                        if (isFav)
-                            serverAddToFav();
-                        else
-                            removeFromFav();
-                    }
-                });
-    }
-
-    private void removeFromFav() {
-        Toast.makeText(getContext(), "removed", Toast.LENGTH_SHORT).show();
-    }
-
-    private void serverAddToFav() {
-        Toast.makeText(getContext(), "added", Toast.LENGTH_SHORT).show();
-    }
+    }//end initUI
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -161,65 +153,79 @@ public class Favourite extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
+        recyclerView.setNestedScrollingEnabled(false);
     }//end initRecyclerView()
 
-    private void serverProfile() {
-        progressDialog.show();
-        mFavouriteDataList = new ArrayList<>();
-        try {
-            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+    private void setData() {
 
-            final Call<FavouriteModel> favouriteCall = retrofit.favourite("nashwaali@gmail.com", "en");
-
-            favouriteCall.enqueue(new Callback<FavouriteModel>() {
-                @Override
-                public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            mFavouriteDataList.addAll(response.body().getData());
-                            pullRefreshLayout.setRefreshing(false);
-                            progressDialog.dismiss();
-
-                            mFavouriteAdapter.notifyDataSetChanged();
-                            Log.e("jkjk", response.body().getData().size() + "");
-                            Log.e("jkjk", mFavouriteDataList.size() + "ss");
-                            Toast.makeText(getContext(), "sssss" + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
-
-                        } else {
-                            pullRefreshLayout.setRefreshing(false);
-                            progressDialog.dismiss();
-                            Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(getContext(), "NO DATA" + e, Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<FavouriteModel> call, Throwable t) {
-                    Log.v("tagy", t.getMessage());
-                    pullRefreshLayout.setRefreshing(false);
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-        } catch (Exception e) {
-            pullRefreshLayout.setRefreshing(false);
-            progressDialog.dismiss();
-            Toast.makeText(getContext(), "Erorr: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }//end serverProfile()
-
-    private void fireBackButtonEvent() {
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
+        mFavAdapter = new RecyclerFavouriteAdapter(Favourite.this.getContext(),mFavDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
             @Override
-            public void onBackPressed() {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Home())
-                        .commit();
+            public void onCardViewClick(FavouriteModel.DataBean favModel) {
+                //homeCallBack.HomeFrag(favModel.getId());
+            }
+
+            @Override
+            public void onFavButtonClick(View v, int position, boolean isFav) {
+                if (isFav){
+                    serverAddToFav();
+                }else {
+                    serverRemoveFromFav();
+                }
             }
         });
-    }//end back pressed
+        recyclerView.setAdapter(mFavAdapter);
+    }
 
-}
+    private void serverRemoveFromFav() {
+        progressDialog.show();
+        mFavDataList = new ArrayList<>();
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUId(),getLang_key());
+        categoriesCall.enqueue(new Callback<FavouriteModel>() {
+            @Override
+            public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
+
+                if (response.isSuccessful()) {
+                    mFavDataList.addAll(response.body().getData());
+                    pullRefreshLayout.setRefreshing(false);
+                    progressDialog.dismiss();
+                    mFavAdapter.notifyDataSetChanged();
+                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                    Log.v( "titler" ," "+response.body().getData().size());
+
+                } else {
+                    progressDialog.dismiss();
+                    pullRefreshLayout.setRefreshing(false);
+                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FavouriteModel> call, Throwable t) {
+                progressDialog.dismiss();
+                pullRefreshLayout.setRefreshing(false);
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void serverAddToFav() {
+
+    }
+
+    private void initPullRefreshLayout(final View rootView) {
+
+        pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutFav);
+        pullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_CIRCLES);
+
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                serverCategories();
+                Toast.makeText(Favourite.this.getContext(), "Updated...", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+}//end Home

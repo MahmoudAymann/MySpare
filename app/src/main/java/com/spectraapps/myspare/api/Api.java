@@ -56,7 +56,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("favorites")
-    Call<FavouriteModel> favourite(@Field("id") String id,
+    Call<FavouriteModel> favourite(@Field("id") String email,
                                    @Field("language") String language);
 
     @FormUrlEncoded

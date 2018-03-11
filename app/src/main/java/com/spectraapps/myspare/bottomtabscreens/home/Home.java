@@ -36,7 +36,6 @@ import retrofit2.Response;
 public class Home extends Fragment {
 
     View rootView;
-    ListSharedPreference listSharedPreference = new ListSharedPreference();
     ProgressDialog progressDialog;
     PullRefreshLayout pullRefreshLayout;
 
@@ -140,7 +139,7 @@ public class Home extends Fragment {
             case "ar":
                 return "ar";
             default:
-                return "en";
+                return "ar";
         }
     }
 

@@ -348,6 +348,7 @@ public class AddItemActivity extends AppCompatActivity {
         for (int i = 0; i < manufactureCountryId_array.size(); i++) {
             if (spinnerPos == i) {
                 mManfactureCountry_Id = manufactureCountryId_array.get(i);
+                Toast.makeText(AddItemActivity.this, ""+mManfactureCountry_Id, Toast.LENGTH_SHORT).show();
             }
         }
     }//end
@@ -372,16 +373,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     ///////////////////////////////////////////
     private String getLangkey() {
-
-        switch (getSharedPreference.getLanguage())
-        {
-            case "en":
-                return "en";
-            case "ar":
-                return "ar";
-            default:
-                return "en";
-        }
+        return getSharedPreference.getLanguage();
     }//end getLangKey()
 
     ////////////////////////////////////////////////////////////
@@ -551,7 +543,6 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }//end serverModels()
-/////////////////////////////////////////
 
     private void getCategory(List<CategoriesModel.DataBean> data) {
         category_array = new ArrayList<>();
@@ -574,7 +565,6 @@ public class AddItemActivity extends AppCompatActivity {
         }
     }
 
-    ///////////////////////////////////
     private void getCountries(List<CountriesModel.DataBean> data) {
         countries_array = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
@@ -644,6 +634,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getManufacturerCountries(List<ManufacturerCountriesModel.DataBean> data) {
         manufactureCountry_array = new ArrayList<>();
+        manufactureCountry_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             manufactureCountry_array.add(data.get(i).getName());
         }
@@ -658,6 +649,8 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getManufacturerCountriesId(List<ManufacturerCountriesModel.DataBean> data) {
         manufactureCountryId_array = new ArrayList<>();
+        manufactureCountryId_array.add(0,"addItem");
+
         for (int i = 0; i < data.size(); i++) {
             manufactureCountryId_array.add(data.get(i).getId());
         }

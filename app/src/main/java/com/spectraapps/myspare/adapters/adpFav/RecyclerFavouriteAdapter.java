@@ -25,12 +25,14 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
     private ListAllListeners listAllListeners;
     private ArrayList<FavouriteModel.DataBean> mFavArrayList;
     private boolean isFav = false;
+    Context context;
 
 
-    public RecyclerFavouriteAdapter(ArrayList<FavouriteModel.DataBean> FavArrayList,
+    public RecyclerFavouriteAdapter(Context context,ArrayList<FavouriteModel.DataBean> FavArrayList,
                               ListAllListeners listAllListeners) {
         this.mFavArrayList = FavArrayList;
         this.listAllListeners = listAllListeners;
+        this.context = context;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
 
             btnFav = itemView.findViewById(R.id.imageButtonFav);
 
-            imageView = itemView.findViewById(R.id.image);
+            imageView = itemView.findViewById(R.id.fav_image);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setCornerRadiiDP(4, 4, 0, 0);
         }

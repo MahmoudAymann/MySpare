@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setLAyoutLanguage() {
         String langStr = getSharedPreference.getLanguage();
+        //Toast.makeText(MainActivity.this, ""+langStr, Toast.LENGTH_SHORT).show();
         if (langStr.equals("en")) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
@@ -295,20 +296,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//
-//        // Checks the locale has changed
-//        if (!locale.equals(newConfig.locale)) {
-//            locale = newConfig.locale;
-//
-//            this.setContentView(R.layout.activity_main);
-//            NavigationView navigationView = this.findViewById(R.id.nav_view);
-//            navigationView.setNavigationItemSelectedListener(MainActivity.this);
-//        }
-//
-//    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the locale has changed
+        if (!locale.equals(newConfig.locale)) {
+            locale = newConfig.locale;
+
+            this.setContentView(R.layout.activity_main);
+            NavigationView navigationView = this.findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(MainActivity.this);
+        }
+
+    }
 
     private void initBottomTabBar() {
 
@@ -542,14 +543,6 @@ public class MainActivity extends AppCompatActivity
 
     private void getUserInfo() {
         if (mIsLogged) {
-
-//            Intent intent = getIntent();
-//            mId = intent.getStringExtra("uid");
-//            mName = intent.getStringExtra("uname");
-//            mEmail = intent.getStringExtra("umail");
-//            mToken = intent.getStringExtra("utoken");
-//            mMobile = intent.getStringExtra("umobile");
-//            mImage = intent.getStringExtra("uimage");
 
             mId = getSharedPreference.getUId();
             mName = getSharedPreference.getUName();
