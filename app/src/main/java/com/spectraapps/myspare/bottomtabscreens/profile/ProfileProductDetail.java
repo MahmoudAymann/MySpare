@@ -25,8 +25,11 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.products.ProductsFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileProductDetail extends Fragment
         implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
@@ -34,10 +37,12 @@ public class ProfileProductDetail extends Fragment
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
 
-    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
+    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
 
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
+
+    CircleImageView profileImageView;
 
     public ProfileProductDetail() {
 
@@ -49,11 +54,8 @@ public class ProfileProductDetail extends Fragment
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
         fireBackButtonEvent();
-        MainActivity.mToolbarText.setText(pName);
-
 
         initUI(rootView);
-
         getProductData();
 
         imageSliderInitilaize();
@@ -65,6 +67,7 @@ public class ProfileProductDetail extends Fragment
         mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
 
+        //product
         pName_tv = rootView.findViewById(R.id.get_PName_PD);
         pPrice_tv = rootView.findViewById(R.id.get_PPrice_PD);
         pNumber_tv = rootView.findViewById(R.id.get_PSerialNum_PD);
@@ -73,16 +76,23 @@ public class ProfileProductDetail extends Fragment
         pCountry_tv = rootView.findViewById(R.id.get_PCountry_PD);
         pBrand_tv = rootView.findViewById(R.id.get_PBrand_PD);
         pModel_tv = rootView.findViewById(R.id.get_PModel_PD);
-
+        //user
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
+        profileImageView = rootView.findViewById(R.id.user_image_PD);
     }
 
     private void setData() {
 
+        //user
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
-
+        Picasso.with(ProfileProductDetail.this.getContext())
+                .load(uImage)
+                .error(R.drawable.profile_placeholder)
+                .placeholder(R.drawable.profile_placeholder)
+                .into(profileImageView);
+        //product
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
         pNumber_tv.setText(pNumber);
@@ -108,18 +118,18 @@ public class ProfileProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
-            Log.v("jkjkl",pImage1+" pop1");
-            Log.v("jkjkl",pImage2+" pop2");
-            Log.v("jkjkl",pName+" pop3");
-
-
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
+            uImage = CachePot.getInstance().pop("uImage");
+
+            Log.v("jkjkl", uId + "  "+uMobile+ " pop ");
+            Log.v("jkjkl", uName + "  "+uImage + "pop");
 
             MainActivity.mToolbarText.setText(pName);
+
         } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "ERROR: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -149,9 +159,9 @@ public class ProfileProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-        file_maps.put(pName,  pImage1);
+            file_maps.put(pName, pImage1);
         if (pImage2 != null)
-        file_maps.put(pName, pImage2);
+            file_maps.put(pName, pImage2);
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());

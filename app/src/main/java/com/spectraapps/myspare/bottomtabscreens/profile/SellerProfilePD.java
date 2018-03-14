@@ -123,6 +123,7 @@ public class SellerProfilePD extends Fragment {
                         CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
+                        CachePot.getInstance().push("uImage", produtsAllModel.getImage());
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
@@ -207,7 +208,7 @@ public class SellerProfilePD extends Fragment {
             @Override
             public void onBackPressed() {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new Home())
+                        .replace(R.id.main_frameLayout, new Profile())
                         .commit();
             }
         });

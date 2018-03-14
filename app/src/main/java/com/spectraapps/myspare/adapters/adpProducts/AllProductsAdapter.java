@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
  */
 
 public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.MyViewHolder> {
-
 
     private ListAllListeners listAllListeners;
     private ArrayList<ProductsAllModel.DataBean> mProductsAllModelList;
@@ -72,15 +72,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (isFav) {
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    isFav = false;
-                } else {
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    isFav = true;
-                }
-                listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), isFav);
+                Toast.makeText(mContext, "plz login first", Toast.LENGTH_SHORT).show();
             }
         });
     }//end onBindViewHolder()
@@ -88,8 +80,6 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     public interface ListAllListeners {
 
         void onCardViewClick(ProductsAllModel.DataBean produtsAllModel);
-
-        void onFavButtonClick(View v, int position, boolean isFav);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -8,7 +8,8 @@ public class UpdateProfileImageModel {
 
     /**
      * status : {"type":"success","title":" insertion with uploading has been completed "}
-     * data : {"id":"7","name":"mahmoudali","mail":"mahmoudali@gmail.com","mobile":"1125754879","token":null,"image":"http://myspare.net/public/upload/qwe.jpg"}
+     * data : {"id":"1","name":"Mahmoud Ayman","mail":"madopop007@yahoo.com",
+     * "mobile":"1118031092","token":"123","image":"http://myspare.net/public/upload/15209361211434223981465.jpg"}
      */
 
     private StatusBean status;
@@ -58,19 +59,19 @@ public class UpdateProfileImageModel {
 
     public static class DataBean {
         /**
-         * id : 7
-         * name : mahmoudali
-         * mail : mahmoudali@gmail.com
-         * mobile : 1125754879
-         * token : null
-         * image : http://myspare.net/public/upload/qwe.jpg
+         * id : 1
+         * name : Mahmoud Ayman
+         * mail : madopop007@yahoo.com
+         * mobile : 1118031092
+         * token : 123
+         * image : http://myspare.net/public/upload/15209361211434223981465.jpg
          */
 
         private String id;
         private String name;
         private String mail;
         private String mobile;
-        private Object token;
+        private String token;
         private String image;
 
         public String getId() {
@@ -105,11 +106,11 @@ public class UpdateProfileImageModel {
             this.mobile = mobile;
         }
 
-        public Object getToken() {
+        public String getToken() {
             return token;
         }
 
-        public void setToken(Object token) {
+        public void setToken(String token) {
             this.token = token;
         }
 

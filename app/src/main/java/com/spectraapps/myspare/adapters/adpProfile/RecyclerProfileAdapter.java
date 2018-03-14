@@ -55,6 +55,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
 
         holder.nameTV.setText(mProfileArrayList.get(position).getProductName());
         holder.priceTV.setText(mProfileArrayList.get(position).getProductPrice());
+        holder.currencyTV.setText(mProfileArrayList.get(position).getCurrency());
 
         Picasso.with(holder.itemView.getContext())
                 .load(mProfileArrayList.get(position).getImage1())
@@ -75,7 +76,6 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (isFav) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
                     isFav = false;
@@ -97,7 +97,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTV, priceTV;
+        TextView nameTV, priceTV, currencyTV;
         SelectableRoundedImageView imageView;
         ImageButton btnFav;
 
@@ -107,7 +107,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
 
             nameTV = itemView.findViewById(R.id.textName);
             priceTV = itemView.findViewById(R.id.textPrice);
-
+            currencyTV = itemView.findViewById(R.id.textCurrency);
             btnFav = itemView.findViewById(R.id.imageButtonFav);
 
             imageView = itemView.findViewById(R.id.image);

@@ -9,10 +9,12 @@ import java.util.List;
 public class ProfileProdModel {
 
     /**
-     * data : [{"pid":"90","productName":"spareparttt","productPrice":"2000","productNumber":"200","currency":"دينار اماراتي",
-     * "mobile":"0","image1":"http://myspare.net/public/upload/1520256835image1.png","image2":null,"image3":null,
-     * "id":"42","name":"","date":"2017","country":"germany","brand":"audi","model":"S5","isFavorite":"false"},{"pid":"89","productName":"lpl","productPrice":"2000","productNumber":"2","currency":"ريال قطرى","mobile":"1234567890","image1":"1520256063onejpg","image2":"1520256063twojpg","image3":"1520256063threejpg","id":"42","name":"nashwaa","date":"1990","country":"australia","brand":"acura","model":"Acura TSX","isFavorite":"false"}]
-     * status : {"type":"success","title":"Successfull request"}
+     * data : [{"pid":"182","productName":"golden tires","productPrice":"2500","productNumber":"122133","currency":"Egyptian Pound",
+     * "mobile":"","image1":"http://myspare.net/public/upload/1520931444tire1.jpg","image2":"http://myspare.net/public/upload/1520931444tire2.jpg",
+     * "image3":"",
+     * "id":"1","name":"","date":"2018","country":"turkey","brand":"bmw","model":"3 series",
+     * "image":"http://myspare.net/public/upload/default.jpg","isFavorite":"false"}]
+     * status : {"type":"success","title":"Successful request"}
      */
 
     private StatusBean status;
@@ -62,21 +64,22 @@ public class ProfileProdModel {
 
     public static class DataBean {
         /**
-         * pid : 90
-         * productName : spareparttt
-         * productPrice : 2000
-         * productNumber : 200
-         * currency : دينار اماراتي
-         * mobile : 0
-         * image1 : http://myspare.net/public/upload/1520256835image1.png
-         * image2 : null
-         * image3 : null
-         * id : 42
+         * pid : 182
+         * productName : golden tires
+         * productPrice : 2500
+         * productNumber : 122133
+         * currency : Egyptian Pound
+         * mobile :
+         * image1 : http://myspare.net/public/upload/1520931444tire1.jpg
+         * image2 : http://myspare.net/public/upload/1520931444tire2.jpg
+         * image3 :
+         * id : 1
          * name :
-         * date : 2017
-         * country : germany
-         * brand : audi
-         * model : S5
+         * date : 2018
+         * country : turkey
+         * brand : bmw
+         * model : 3 series
+         * image : http://myspare.net/public/upload/default.jpg
          * isFavorite : false
          */
 
@@ -87,14 +90,15 @@ public class ProfileProdModel {
         private String currency;
         private String mobile;
         private String image1;
-        private Object image2;
-        private Object image3;
+        private String image2;
+        private String image3;
         private String id;
         private String name;
         private String date;
         private String country;
         private String brand;
         private String model;
+        private String image;
         private String isFavorite;
 
         public String getPid() {
@@ -153,19 +157,19 @@ public class ProfileProdModel {
             this.image1 = image1;
         }
 
-        public Object getImage2() {
+        public String getImage2() {
             return image2;
         }
 
-        public void setImage2(Object image2) {
+        public void setImage2(String image2) {
             this.image2 = image2;
         }
 
-        public Object getImage3() {
+        public String getImage3() {
             return image3;
         }
 
-        public void setImage3(Object image3) {
+        public void setImage3(String image3) {
             this.image3 = image3;
         }
 
@@ -215,6 +219,14 @@ public class ProfileProdModel {
 
         public void setModel(String model) {
             this.model = model;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         public String getIsFavorite() {

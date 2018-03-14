@@ -266,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isEmailValid(String email) {
         if (email.contains("@"))
             return true;
+
         else {
             mEmailEditText.setError(getString(R.string.error_invalid_email));
             YoYo.with(Techniques.Shake)
@@ -274,6 +275,7 @@ public class LoginActivity extends AppCompatActivity {
                     .playOn(mEmailEditText);
             return false;
         }
+
     }//end isEmailValid()
 
     private boolean isPasswordValid(String password) {

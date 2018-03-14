@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity
         MultipartBody.Part image1 = MultipartBody.Part.createFormData("image", file1.getName(), mFile1);
 
         Call<UpdateProfileImageModel> updateProfileImageCall = retrofit.uploadProfileImage(id, image1);
+        Toast.makeText(MainActivity.this, ""+image1.toString(), Toast.LENGTH_SHORT).show();
 
         updateProfileImageCall.enqueue(new Callback<UpdateProfileImageModel>() {
             @Override
@@ -227,6 +228,7 @@ public class MainActivity extends AppCompatActivity
                 .into(mNavCircleImageView);
 
         setSharedPreference.setImage(image);
+        Toast.makeText(MainActivity.this, "tst2: "+image, Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkPermissions() {
@@ -550,7 +552,6 @@ public class MainActivity extends AppCompatActivity
             mToken = getSharedPreference.getToken();
             mMobile = getSharedPreference.getMobile();
             mImage = getSharedPreference.getImage();
-
             mNavNameTextView.setText(mName);
             mNavEmailTextView.setText(mEmail);
             Picasso.with(MainActivity.this)

@@ -12,7 +12,10 @@ import java.util.List;
 public class ManufacturerCountriesModel implements Parcelable{
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"id":"11","name":"تركيا"},{"id":"12","name":"اليمن"},{"id":"13","name":"استراليا"},{"id":"14","name":"كندا"},{"id":"15","name":"الأرجنتين"},{"id":"16","name":"الولايات المتحده الأمريكية"},{"id":"17","name":"المانيا"},{"id":"18","name":"الصين"},{"id":"19","name":"كوريا"},{"id":"20","name":"ماليزيا"},{"id":"21","name":"ايطاليا"},{"id":"23","name":"فرنسا"},{"id":"24","name":"روسيا"},{"id":"25","name":"اليابان"},{"id":"29","name":"الهند"}]
+     * data : [{"id":"11","name":"تركيا"},{"id":"12","name":"اليمن"},{"id":"13","name":"استراليا"},
+     * {"id":"14","name":"كندا"},{"id":"15","name":"الأرجنتين"},{"id":"16","name":"الولايات المتحده الأمريكية"},
+     * {"id":"17","name":"المانيا"},{"id":"18","name":"الصين"},{"id":"19","name":"كوريا"},{"id":"20","name":"ماليزيا"},{"id":"21","name":"ايطاليا"},
+     * {"id":"23","name":"فرنسا"},{"id":"24","name":"روسيا"},{"id":"25","name":"اليابان"},{"id":"29","name":"الهند"}]
      */
 
     private StatusBean status;

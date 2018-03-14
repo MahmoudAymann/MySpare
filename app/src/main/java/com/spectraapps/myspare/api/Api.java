@@ -61,14 +61,14 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("addTofavorite")
-    Call<AddToFavModel> addToFavourite(@Field("id") String id,
+    Call<AddToFavModel> addToFavourite(@Field("id") String email,
                                        @Field("pid") String pid,
-                                       @Field("isFavorite") String isFavorite);
+                                       @Field("isFavorite") boolean isFavorite);
 
     @FormUrlEncoded
     @POST("profile")
     Call<ProfileProdModel> profile(@Field("id") String id,
-                                   @Field("lang") String language);
+                                   @Field("language") String language);
 
     @FormUrlEncoded
     @POST("register")

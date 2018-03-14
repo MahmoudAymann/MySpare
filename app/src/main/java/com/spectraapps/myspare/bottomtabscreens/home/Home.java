@@ -81,6 +81,7 @@ public class Home extends Fragment {
         initRecyclerView();
 
         serverCategories();
+        Toast.makeText(getContext(), ""+getSharedPreference.getLanguage(), Toast.LENGTH_SHORT).show();
 
         return rootView;
     }

@@ -23,6 +23,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.michael.easydialog.EasyDialog;
+import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
@@ -48,12 +49,19 @@ import retrofit2.Response;
 public class ProductsFragment extends Fragment {
 
     myCall_Back myCall_back;
+
     FloatingActionButton fabButton;
+
     EditText editText;
+
     Spinner spinner1, spinner2, spinner3, spinner5;
+
     ArrayList<Integer> year_array = new ArrayList<>();
+
     RecyclerView recyclerView;
+
     ProductsRecyclerAdapter mProductsRecyclerAdapter;
+
     AllProductsAdapter mAllProductsAdapter;
 
     ArrayList<ProductsModel.DataBean> mProductDataList = new ArrayList<>();
@@ -69,12 +77,12 @@ public class ProductsFragment extends Fragment {
     String mUserID;
 
     String categ_Num,lang;
-    String yearPop;
 
     String spin;
 
-    ListSharedPreference listSharedPreference;
+    ListSharedPreference.Set setSharedPref;
 
+    ListSharedPreference.Get getSharedPref;
 
     public ProductsFragment() {
 
@@ -84,7 +92,13 @@ public class ProductsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
+
+        setSharedPref = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
+        getSharedPref = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
+        Toast.makeText(getContext(), ""+getSharedPref.getLanguage(), Toast.LENGTH_SHORT).show();
+
         getUserInfo();
+
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
@@ -213,8 +227,9 @@ public class ProductsFragment extends Fragment {
                 view.getContext(), android.R.layout.simple_spinner_item, year_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner3.setAdapter(spinnerArrayAdapter);
-
     }//end addYears();
+
+
 
     private void serverProductsAll() {
         try {
@@ -256,29 +271,25 @@ public class ProductsFragment extends Fragment {
     }
 
     private String getLang() {
-       // String lang = CachePot.getInstance().pop("langs");
-       //String ll = listSharedPreference.getLanguage(ProductsFragment.this.getContext().getApplicationContext());
-        switch (lang) {
-            case "en":
-                return "en";
-            case "ar":
-                return "ar";
-            default:
-                return "ar";
-        }
+        return getSharedPref.getLanguage();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        turnOnServers(3);
+        if(getSharedPref.getLoginStatus())
+        turnOnServers(1);
+        else if(!getSharedPref.getLoginStatus()){
+            turnOnServers(3);
+        }
+
     }
 
     private void serverproductsWithMail() {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<ProductsModel> productsCall = retrofit.productsWithMail("en", categ_Num, mUserID);
+        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLang(), categ_Num, mUserID);
 
         productsCall.enqueue(new Callback<ProductsModel>() {
             @Override
@@ -318,7 +329,6 @@ public class ProductsFragment extends Fragment {
                 recyclerView.setAdapter(mProductsRecyclerAdapter);
                 serverproductsWithMail();
                 mProductsRecyclerAdapter.notifyDataSetChanged();
-
                 break;
             case 3:
                 initAdapterAllProducts();
@@ -338,6 +348,7 @@ public class ProductsFragment extends Fragment {
                 new AllProductsAdapter.ListAllListeners() {
                     @Override
                     public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+
                         Log.e("plz", produtsAllModel.getProductName());
 
                         CachePot.getInstance().push("pName", produtsAllModel.getProductName());
@@ -363,10 +374,6 @@ public class ProductsFragment extends Fragment {
 
                     }
 
-                    @Override
-                    public void onFavButtonClick(View v, int position, boolean isFav) {
-                        Log.e("plz", "" + isFav + " pos " + position);
-                    }
                 });
     }
 

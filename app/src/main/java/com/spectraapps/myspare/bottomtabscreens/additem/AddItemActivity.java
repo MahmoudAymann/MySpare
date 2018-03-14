@@ -153,7 +153,6 @@ public class AddItemActivity extends AppCompatActivity {
 
     }//end onCreate()
 
-
     private void initClickListener() {
 
         manufactureCountry_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -173,9 +172,17 @@ public class AddItemActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 progressDialog.show();
                 getBrandId(brand_spinner.getSelectedItemPosition());
-                roundKornerTV.setVisibility(View.VISIBLE);
-                roundKornerSpinner.setVisibility(View.VISIBLE);
-                serverModels();
+                if (brand_spinner.getSelectedItemPosition()>0) {
+                    roundKornerTV.setVisibility(View.VISIBLE);
+                    roundKornerSpinner.setVisibility(View.VISIBLE);
+                    serverModels();
+                }
+                else {
+                    roundKornerTV.setVisibility(View.INVISIBLE);
+                    roundKornerSpinner.setVisibility(View.INVISIBLE);
+                    progressDialog.dismiss();
+
+                }
             }
 
             @Override
@@ -348,11 +355,10 @@ public class AddItemActivity extends AppCompatActivity {
         for (int i = 0; i < manufactureCountryId_array.size(); i++) {
             if (spinnerPos == i) {
                 mManfactureCountry_Id = manufactureCountryId_array.get(i);
-                Toast.makeText(AddItemActivity.this, ""+mManfactureCountry_Id, Toast.LENGTH_SHORT).show();
             }
         }
     }//end
-////////////////////////////////////////////////
+
 
     private void addYears() {
         int current_year = mCalendar.get(Calendar.YEAR);
@@ -371,13 +377,12 @@ public class AddItemActivity extends AppCompatActivity {
 
     }//end addYears();
 
-    ///////////////////////////////////////////
     private String getLangkey() {
         return getSharedPreference.getLanguage();
     }//end getLangKey()
 
-    ////////////////////////////////////////////////////////////
-    private void initToolbar() {
+    private void initToolbar()
+    {
         mToolbar = findViewById(R.id.additem_toolbar);
         mToolbarTilte = findViewById(R.id.toolbar_title);
         mToolbarButton = findViewById(R.id.toolbar_button);
@@ -530,7 +535,6 @@ public class AddItemActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     getCategory(response.body().getData());
                     getCategoryId(response.body().getData());
-
                 } else
                     Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
                             Toast.LENGTH_SHORT).show();
@@ -546,6 +550,8 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCategory(List<CategoriesModel.DataBean> data) {
         category_array = new ArrayList<>();
+        category_array.add(0,"Choose Category");
+
         for (int i = 0; i < data.size(); i++) {
             category_array.add(data.get(i).getName());
         }
@@ -560,6 +566,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCategoryId(List<CategoriesModel.DataBean> data) {
         categoryId_array = new ArrayList<>();
+        categoryId_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             categoryId_array.add(data.get(i).getId());
         }
@@ -567,6 +574,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCountries(List<CountriesModel.DataBean> data) {
         countries_array = new ArrayList<>();
+        countries_array.add(0,"Choose Country");
         for (int i = 0; i < data.size(); i++) {
             countries_array.add(data.get(i).getName());
         }
@@ -581,15 +589,15 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCountriesId(List<CountriesModel.DataBean> data) {
         countriesId_array = new ArrayList<>();
+        countriesId_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             countriesId_array.add(data.get(i).getId());
         }
     }
 
     private void getBrands(List<BrandsModel.DataBean> data) {
-
         brand_array = new ArrayList<>();
-
+        brand_array.add(0,"Choose Brand");
         for (int i = 0; i < data.size(); i++) {
             brand_array.add(data.get(i).getName());
         }
@@ -605,6 +613,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getBrandsId(List<BrandsModel.DataBean> data) {
         brandId_array = new ArrayList<>();
+        brandId_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             brandId_array.add(data.get(i).getId());
         }
@@ -612,6 +621,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCurrency(List<CurrencyModel.DataBean> data) {
         currency_array = new ArrayList<>();
+        currency_array.add(0,"Choose Currency");
         for (int i = 0; i < data.size(); i++) {
             currency_array.add(data.get(i).getName());
         }
@@ -626,6 +636,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCurrencyId(List<CurrencyModel.DataBean> data) {
         currencyId_array = new ArrayList<>();
+        currencyId_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             currencyId_array.add(data.get(i).getId());
         }
@@ -634,7 +645,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getManufacturerCountries(List<ManufacturerCountriesModel.DataBean> data) {
         manufactureCountry_array = new ArrayList<>();
-        manufactureCountry_array.add(0,"addItem");
+        manufactureCountry_array.add(0,"Choose Country");
         for (int i = 0; i < data.size(); i++) {
             manufactureCountry_array.add(data.get(i).getName());
         }
@@ -649,7 +660,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getManufacturerCountriesId(List<ManufacturerCountriesModel.DataBean> data) {
         manufactureCountryId_array = new ArrayList<>();
-        manufactureCountryId_array.add(0,"addItem");
+        manufactureCountryId_array.add(0,"choose countryid");
 
         for (int i = 0; i < data.size(); i++) {
             manufactureCountryId_array.add(data.get(i).getId());
@@ -658,6 +669,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getModels(List<ModelsModel.DataBean> data) {
         models_array = new ArrayList<>();
+        models_array.add(0,"Choose Model");
         for (int i = 0; i < data.size(); i++) {
             models_array.add(data.get(i).getName());
         }
@@ -672,6 +684,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getModelsId(List<ModelsModel.DataBean> data) {
         modelsId_array = new ArrayList<>();
+        modelsId_array.add(0,"addItem");
         for (int i = 0; i < data.size(); i++) {
             modelsId_array.add(data.get(i).getId());
         }
@@ -729,6 +742,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void pickImage(int keyImg) {
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
