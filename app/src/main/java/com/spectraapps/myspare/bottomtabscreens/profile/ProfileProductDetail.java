@@ -1,5 +1,7 @@
 package com.spectraapps.myspare.bottomtabscreens.profile;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -79,6 +81,14 @@ public class ProfileProductDetail extends Fragment
         //user
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
+        uMobile_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + uMobile));
+                startActivity(dialIntent);
+            }
+        });
         profileImageView = rootView.findViewById(R.id.user_image_PD);
     }
 

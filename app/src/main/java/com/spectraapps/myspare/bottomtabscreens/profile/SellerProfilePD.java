@@ -22,6 +22,7 @@ import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.ArrayList;
 
@@ -36,9 +37,10 @@ public class SellerProfilePD extends Fragment {
     ArrayList<ProfileProdModel.DataBean> mProfileDataList;
     PullRefreshLayout pullRefreshLayout;
 
-    String uId, language;
+    String uId;
     private ProgressDialog progressDialog;
-
+ListSharedPreference.Set setSharedPreference;
+ListSharedPreference.Get getSharedPreference;
     public SellerProfilePD() {
         // Required empty public constructo
     }
@@ -50,13 +52,19 @@ public class SellerProfilePD extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_seller_profile, container, false);
         MainActivity.mToolbarText.setText(getString(R.string.profile_title));
+
+        setSharedPreference = new ListSharedPreference.Set(SellerProfilePD.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(SellerProfilePD.this.getContext().getApplicationContext());
+
+
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
         try {
             uId = CachePot.getInstance().pop("suid");
-            language = CachePot.getInstance().pop("slangh");
+            Toast.makeText(getContext(), " "+uId, Toast.LENGTH_SHORT).show();
+
         } catch (Exception e) {
             Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -72,6 +80,9 @@ public class SellerProfilePD extends Fragment {
         initAdapterProfileProducts();
         recyclerView.setAdapter(mRecyclerProfileAdapter);
     }
+private String getLang(){
+        return getSharedPreference.getLanguage();
+}
 
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
@@ -168,7 +179,7 @@ public class SellerProfilePD extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProfileProdModel> productsCall = retrofit.profile(uId, language);
+            final Call<ProfileProdModel> productsCall = retrofit.profile(uId, getLang());
 
             productsCall.enqueue(new Callback<ProfileProdModel>() {
                 @Override
@@ -179,8 +190,6 @@ public class SellerProfilePD extends Fragment {
                         pullRefreshLayout.setRefreshing(false);
                         progressDialog.dismiss();
                         mRecyclerProfileAdapter.notifyDataSetChanged();
-                        Log.e("jkjk", response.body().getData().size() + "");
-                        Log.e("jkjk", mProfileDataList.size() + "ss");
                     } else {
                         pullRefreshLayout.setRefreshing(false);
                         progressDialog.dismiss();

@@ -1,12 +1,12 @@
 package com.spectraapps.myspare.products;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +23,11 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.michael.easydialog.EasyDialog;
-import com.spectraapps.myspare.login.LoginActivity;
+import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
+import com.spectraapps.myspare.model.AddToFavModel;
+import com.spectraapps.myspare.model.BrandsModel;
+import com.spectraapps.myspare.model.CountriesModel;
+import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
@@ -40,6 +44,7 @@ import com.spectraapps.myspare.products.productdetail.ProductDetail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import info.hoang8f.widget.FButton;
 import retrofit2.Call;
@@ -54,19 +59,22 @@ public class ProductsFragment extends Fragment {
 
     EditText editText;
 
-    Spinner spinner1, spinner2, spinner3, spinner5;
+    Spinner spinner_brand, spinner_country, spinner_year, spinner_model;
 
     ArrayList<Integer> year_array = new ArrayList<>();
 
     RecyclerView recyclerView;
 
-    ProductsRecyclerAdapter mProductsRecyclerAdapter;
+    AlertDialog.Builder alertDialogBuilder;
+
 
     AllProductsAdapter mAllProductsAdapter;
 
-    ArrayList<ProductsModel.DataBean> mProductDataList = new ArrayList<>();
+    ProductsRecyclerAdapter productsAdapter;
 
-    ArrayList<ProductsAllModel.DataBean> mProductAllDataList = new ArrayList<>();
+    ArrayList<ProductsModel.DataBean> mProductDataList;
+
+    ArrayList<ProductsAllModel.DataBean> mProductAllDataList;
 
     PullRefreshLayout pullRefreshLayout;
 
@@ -74,19 +82,18 @@ public class ProductsFragment extends Fragment {
 
     FButton fButton;
 
-    String mUserID;
-
-    String categ_Num,lang;
-
-    String spin;
+    String mUEmail,mCategory,lang,spin;
 
     ListSharedPreference.Set setSharedPref;
 
     ListSharedPreference.Get getSharedPref;
+    private ArrayList<String> countries_array,brand_array,models_array;
+    private ArrayList<String> countriesId_array,modelsId_array,brandId_array;
 
     public ProductsFragment() {
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,42 +102,34 @@ public class ProductsFragment extends Fragment {
 
         setSharedPref = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
         getSharedPref = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
-        Toast.makeText(getContext(), ""+getSharedPref.getLanguage(), Toast.LENGTH_SHORT).show();
+
+        MainActivity.mToolbarText.setText("Products");
 
         getUserInfo();
-
+        setAlertDialog();
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
-        try {
-            if (getArguments().containsKey("yearpop")) {
-                Log.v("plzx", getArguments().getString("yearpop"));
-                Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
-
-            }
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        try {
-            if (getArguments().containsKey("home") && getArguments().containsKey("lang")) {
-                //Log.v("plzx", getArguments().getString("home"));
-                categ_Num = getArguments().getString("home");
-                lang = getArguments().getString("lang");
-            }
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
         return rootView;
     }//end onCreateView()
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        myCall_back = (myCall_Back) context;
-    }
+    private void setAlertDialog() {
+        alertDialogBuilder = new AlertDialog.Builder(ProductsFragment.this.getContext());
+
+        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+    }//end setAlertDialog
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        myCall_back = (myCall_Back) context;
+//    }
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -165,7 +164,12 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                turnOnServers(3);
+
+                if (getSharedPref.getLoginStatus())
+                    turnOnServers(1);
+                else if (!getSharedPref.getLoginStatus()) {
+                    turnOnServers(3);
+                }
             }
         });
     }
@@ -188,10 +192,10 @@ public class ProductsFragment extends Fragment {
                 .setMarginLeftAndRight(30, 30)
                 .show();
 
-        spinner1 = popupView.findViewById(R.id.spinner_brand_popup);
-        spinner2 = popupView.findViewById(R.id.spinner_country_popup);
-        spinner3 = popupView.findViewById(R.id.spinner_year_popup);
-        spinner5 = popupView.findViewById(R.id.spinner_model_popup);
+        spinner_brand = popupView.findViewById(R.id.spinner_brand_popup);
+        spinner_country = popupView.findViewById(R.id.spinner_country_popup);
+        spinner_year = popupView.findViewById(R.id.spinner_year_popup);
+        spinner_model = popupView.findViewById(R.id.spinner_model_popup);
 
         fButton = popupView.findViewById(R.id.flatButton);
         fButton.setButtonColor(getResources().getColor(R.color.dark_yellow));
@@ -204,20 +208,169 @@ public class ProductsFragment extends Fragment {
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spin = spinner3.getSelectedItem().toString();
-                Log.v("DeX", spinner3.getSelectedItem().toString());
-                myCall_back.ProudctSFrag(spinner3.getSelectedItem().toString());
+                spin = spinner_year.getSelectedItem().toString();
+                Log.v("DeX", spinner_year.getSelectedItem().toString());
+                myCall_back.ProudctSFrag(spinner_year.getSelectedItem().toString());
             }
         });
 
         editText = popupView.findViewById(R.id.editText1_pop);
         mCalendar = Calendar.getInstance();
         addYears(popupView);
+
+        serverCountries(popupView.getContext(), spinner_country);
+        serverModels(popupView.getContext(), spinner_model);
+        serverBrands(popupView.getContext(), spinner_brand);
+    }
+
+    private void serverCountries(final Context popup, final Spinner spinner) {
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<CountriesModel> countriesCall = retrofit.countries(getSharedPref.getLanguage());
+
+        countriesCall.enqueue(new Callback<CountriesModel>() {
+            @Override
+            public void onResponse(Call<CountriesModel> call, Response<CountriesModel> response) {
+                if (response.isSuccessful()) {
+
+                    getCountries(response.body().getData(),popup,spinner);
+                    getCountriesId(response.body().getData());
+                    Log.v("res", response.body().getData() + "");
+                } else
+                    // Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
+                    // Toast.LENGTH_SHORT).show();
+                    Log.v("res", response.body().getData() + "");
+            }
+
+            @Override
+            public void onFailure(Call<CountriesModel> call, Throwable t) {
+                Toast.makeText(ProductsFragment.this.getContext(), t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }//end serverCountries()
+
+    private void getCountriesId(List<CountriesModel.DataBean> data) {
+        countriesId_array = new ArrayList<>();
+        countriesId_array.add(0,"addItem");
+        for (int i = 0; i < data.size(); i++) {
+            countriesId_array.add(data.get(i).getId());
+        }
+    }
+    private void getCountries(List<CountriesModel.DataBean> data,Context popupView, Spinner spinner) {
+        countries_array = new ArrayList<>();
+        countries_array.add(0,"Choose Country");
+        for (int i = 0; i < data.size(); i++) {
+            countries_array.add(data.get(i).getName());
+        }
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
+                (popupView, android.R.layout.simple_spinner_item,
+                        countries_array);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void serverBrands(final Context context, final Spinner spinner) {
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<BrandsModel> brandsCall = retrofit.brands(getLang());
+
+        brandsCall.enqueue(new Callback<BrandsModel>() {
+            @Override
+            public void onResponse(Call<BrandsModel> call, Response<BrandsModel> response) {
+                if (response.isSuccessful()) {
+
+                    getBrands(response.body().getData(),context,spinner);
+                    getBrandsId(response.body().getData());
+
+                } else
+                    Toast.makeText(getContext(), response.body().getStatus().getTitle(),
+                            Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<BrandsModel> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }//end serverBrands()
+
+    private void getBrands(List<BrandsModel.DataBean> data, Context context, Spinner spinner) {
+        brand_array = new ArrayList<>();
+        brand_array.add(0,"Choose Brand");
+        for (int i = 0; i < data.size(); i++) {
+            brand_array.add(data.get(i).getName());
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (context, android.R.layout.simple_spinner_item,
+                        brand_array);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+    }
+
+    private void getBrandsId(List<BrandsModel.DataBean> data) {
+        brandId_array = new ArrayList<>();
+        brandId_array.add(0,"addItem");
+        for (int i = 0; i < data.size(); i++) {
+            brandId_array.add(data.get(i).getId());
+        }
+    }
+
+    private void serverModels(final Context context, final Spinner spinner) {
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<ModelsModel> modelsCall = retrofit.models("2");
+
+        modelsCall.enqueue(new Callback<ModelsModel>() {
+            @Override
+            public void onResponse(Call<ModelsModel> call, Response<ModelsModel> response) {
+                if (response.isSuccessful()) {
+                    getModels(response.body().getData(), context, spinner);
+                    getModelsId(response.body().getData());
+                } else
+                    Toast.makeText(getContext(), response.body().getStatus().getTitle(),
+                            Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ModelsModel> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }//end serverModels()
+
+    private void getModels(List<ModelsModel.DataBean> data, Context context, Spinner spinner) {
+        models_array = new ArrayList<>();
+        models_array.add(0,"Choose Model");
+        for (int i = 0; i < data.size(); i++) {
+            models_array.add(data.get(i).getName());
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
+                (context, android.R.layout.simple_spinner_item,
+                        models_array); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void getModelsId(List<ModelsModel.DataBean> data) {
+        modelsId_array = new ArrayList<>();
+        modelsId_array.add(0,"addItem");
+        for (int i = 0; i < data.size(); i++) {
+            modelsId_array.add(data.get(i).getId());
+        }
     }
 
     private void addYears(View view) {
         int current_year = mCalendar.get(Calendar.YEAR);
-
 
         for (int i = current_year; i >= 1990; i--) {
             year_array.add(i);
@@ -226,16 +379,14 @@ public class ProductsFragment extends Fragment {
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(
                 view.getContext(), android.R.layout.simple_spinner_item, year_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner3.setAdapter(spinnerArrayAdapter);
+        spinner_year.setAdapter(spinnerArrayAdapter);
     }//end addYears();
-
-
 
     private void serverProductsAll() {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProductsAllModel> productsCall = retrofit.productsAll("en", categ_Num);
+            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), mCategory);
 
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
@@ -245,8 +396,8 @@ public class ProductsFragment extends Fragment {
                         Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
 
                         mProductAllDataList.addAll(response.body().getData());
+                        recyclerView.setAdapter(mAllProductsAdapter);
                         mAllProductsAdapter.notifyDataSetChanged();
-
                         Log.v("jkjk", response.body().getData().size() + "");
                         pullRefreshLayout.setRefreshing(false);
 
@@ -266,7 +417,9 @@ public class ProductsFragment extends Fragment {
             });
         } catch (Exception e) {
             pullRefreshLayout.setRefreshing(false);
-            Toast.makeText(getContext(), "Erorr:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            alertDialogBuilder.setMessage(e.getMessage());
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -277,31 +430,30 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(getSharedPref.getLoginStatus())
-        turnOnServers(1);
-        else if(!getSharedPref.getLoginStatus()){
+        if (getSharedPref.getLoginStatus()) {
+            turnOnServers(1);
+        } else if (!getSharedPref.getLoginStatus()) {
             turnOnServers(3);
         }
 
     }
 
-    private void serverproductsWithMail() {
+    private void serverProductsWithMail() {
 
+        mProductDataList = new ArrayList<>();
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLang(), categ_Num, mUserID);
+        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLang(), mCategory, mUEmail);
 
         productsCall.enqueue(new Callback<ProductsModel>() {
             @Override
             public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
-
                     mProductDataList.addAll(response.body().getData());
-                    mProductsRecyclerAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "asd" + response.body().getData(), Toast.LENGTH_SHORT).show();
                     pullRefreshLayout.setRefreshing(false);
+                    recyclerView.setAdapter(productsAdapter);
+                    productsAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
@@ -310,7 +462,10 @@ public class ProductsFragment extends Fragment {
             @Override
             public void onFailure(Call<ProductsModel> call, Throwable t) {
                 Log.v("tagy", t.getMessage());
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                pullRefreshLayout.setRefreshing(false);
+                alertDialogBuilder.setMessage(t.getMessage());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 
@@ -319,28 +474,130 @@ public class ProductsFragment extends Fragment {
     private void turnOnServers(Integer key) {
         switch (key) {
             case 1:
-                initAdapterAllWith();
-                recyclerView.setAdapter(mProductsRecyclerAdapter);
-                serverproductsWithMail();
-                mProductsRecyclerAdapter.notifyDataSetChanged();
-                break;
-            case 2:
-                initAdapterAllWith();
-                recyclerView.setAdapter(mProductsRecyclerAdapter);
-                serverproductsWithMail();
-                mProductsRecyclerAdapter.notifyDataSetChanged();
+                serverProductsWithMail();
+                initAdapterWith();
                 break;
             case 3:
-                initAdapterAllProducts();
-                recyclerView.setAdapter(mAllProductsAdapter);
                 serverProductsAll();
-                mAllProductsAdapter.notifyDataSetChanged();
+                initAdapterAllProducts();
+
                 break;
             default:
-                Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
                 break;
 
         }
+    }
+
+    private void initAdapterWith() {
+
+        productsAdapter = new ProductsRecyclerAdapter(getContext(), mProductDataList,
+                new ProductsRecyclerAdapter.ListAllListeners() {
+                    @Override
+                    public void onCardViewClick(ProductsModel.DataBean produtsModel) {
+
+                        Log.e("plz", produtsModel.getProductName());
+
+                        CachePot.getInstance().push("pName", produtsModel.getProductName());
+                        CachePot.getInstance().push("pId", produtsModel.getProductNumber());
+                        CachePot.getInstance().push("pPrice", produtsModel.getProductPrice());
+                        CachePot.getInstance().push("pNumber", produtsModel.getProductNumber());
+                        CachePot.getInstance().push("pCurrency", produtsModel.getCurrency());
+                        CachePot.getInstance().push("pImage1", produtsModel.getImage1());
+                        CachePot.getInstance().push("pImage2", produtsModel.getImage2());
+                        CachePot.getInstance().push("pDate", produtsModel.getDate());
+                        CachePot.getInstance().push("pCountry", produtsModel.getCountry());
+                        CachePot.getInstance().push("pBrand", produtsModel.getBrand());
+                        CachePot.getInstance().push("pModel", produtsModel.getModel());
+
+                        CachePot.getInstance().push("uId", produtsModel.getId());
+                        CachePot.getInstance().push("uMobile", produtsModel.getMobile());
+                        CachePot.getInstance().push("uName", produtsModel.getName());
+                        CachePot.getInstance().push("uImage", produtsModel.getImage());
+                        CachePot.getInstance().push("langy", lang);
+
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.main_frameLayout, new ProductDetail()).commit();
+                    }
+
+                    @Override
+                    public void onFavButtonClick (View v, int position, boolean isFav) {
+
+                     Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+
+
+    private void serverRemoveFromFav(int position) {
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(),false);
+
+        productsCall.enqueue(new Callback<AddToFavModel>() {
+            @Override
+            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    if (getSharedPref.getLoginStatus()) {
+                        turnOnServers(1);
+                    } else if (!getSharedPref.getLoginStatus()) {
+                        turnOnServers(3);
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
+                pullRefreshLayout.setRefreshing(false);
+                alertDialogBuilder.setMessage(t.getMessage());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+    }
+
+    private void serverAddToFav(int position) {
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(),true);
+
+        productsCall.enqueue(new Callback<AddToFavModel>() {
+            @Override
+            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    if (getSharedPref.getLoginStatus()) {
+                        turnOnServers(1);
+                    } else if (!getSharedPref.getLoginStatus()) {
+                        turnOnServers(3);
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
+                pullRefreshLayout.setRefreshing(false);
+                alertDialogBuilder.setMessage(t.getMessage());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
     }
 
     private void initAdapterAllProducts() {
@@ -371,18 +628,9 @@ public class ProductsFragment extends Fragment {
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();
-
                     }
-
                 });
     }
-
-
-    private void initAdapterAllWith() {
-
-
-
-    }//end
 
     private void fireBackButtonEvent() {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
@@ -396,8 +644,8 @@ public class ProductsFragment extends Fragment {
     }//end back pressed
 
     private void getUserInfo() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        mUserID = prefs.getString("email", "nashwa@gmail.com");
+        mUEmail = getSharedPref.getEmail();
+        mCategory = getSharedPref.getCategory();
     }
 
     public interface myCall_Back {

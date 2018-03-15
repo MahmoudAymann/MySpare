@@ -65,6 +65,10 @@ public class ListSharedPreference {
             prefEditor.putString("image", image).apply();
         }
 
+        public void setCategory(String category) {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putString("category", category).apply();
+        }
     }//end Set
 
 
@@ -120,6 +124,10 @@ public class ListSharedPreference {
             return prefs.getString("image", "http://myspare.net/api/images/pp_placeholder_400400.png");
         }
 
+        public String getCategory() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString("category", "1");
+        }
     }//end Get
 
 }//end ListSharedPreference

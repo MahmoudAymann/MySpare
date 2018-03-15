@@ -20,20 +20,25 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.utility.ListSharedPreference;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener {
+        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
 
-    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
+    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
 
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
@@ -41,6 +46,10 @@ public class ProductDetail extends Fragment
     RelativeLayout relativeLayout;
 
     String langhere;
+    CircleImageView imageView;
+
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
 
     public ProductDetail() {
 
@@ -51,10 +60,10 @@ public class ProductDetail extends Fragment
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
 
-        MainActivity.mToolbarText.setText(pName);
+        setSharedPreference = new ListSharedPreference.Set(ProductDetail.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(ProductDetail.this.getContext().getApplicationContext());
 
         initUI(rootView);
 
@@ -70,7 +79,7 @@ public class ProductDetail extends Fragment
     private void initUI(View rootView) {
         mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
-
+        imageView = rootView.findViewById(R.id.user_image_PD);
         relativeLayout = rootView.findViewById(R.id.relative_user_info);
         relativeLayout.setOnClickListener(this);
 
@@ -92,7 +101,10 @@ public class ProductDetail extends Fragment
 
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
-
+        Picasso.with(getContext()).load(uImage)
+                .error(R.drawable.place_holder)
+                .placeholder(R.drawable.place_holder)
+                .into(imageView);
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
         pNumber_tv.setText(pNumber);
@@ -101,8 +113,6 @@ public class ProductDetail extends Fragment
         pCountry_tv.setText(pCountry);
         pBrand_tv.setText(pBrand);
         pModel_tv.setText(pModel);
-
-
     }
 
     private void getProductData() {
@@ -119,9 +129,12 @@ public class ProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
+            MainActivity.mToolbarText.setText(getSharedPreference.getCategory());
+
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
+            uImage = CachePot.getInstance().pop("uImage");
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -153,9 +166,9 @@ public class ProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-        file_maps.put(pName, pImage1);
+            file_maps.put(pName, pImage1);
         if (pImage2 != null)
-        file_maps.put(pName, pImage2);
+            file_maps.put(pName, pImage2);
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -204,15 +217,15 @@ public class ProductDetail extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.textView_phone_PD:
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + uMobile));
                 startActivity(dialIntent);
                 break;
             case R.id.relative_user_info:
-                CachePot.getInstance().push("suid",uId);
-                CachePot.getInstance().push("slangh",langhere);
+                CachePot.getInstance().push("suid", uId);
+                CachePot.getInstance().push("slangh", langhere);
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();

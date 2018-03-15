@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.adapters.adpProfile.RecyclerProfileAdapter;
+import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.squareup.picasso.Picasso;
 
@@ -22,16 +25,22 @@ import java.util.ArrayList;
 
 public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder>{
 
-    private final OnItemClickListener listener;
-    private final OnFavClickListener favListener;
+    private ListAllListeners listAllListeners;
     private ArrayList<ProductsModel.DataBean> mProductsModelList;
     private Context mContext;
+    private boolean isFav;
 
-    public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, OnItemClickListener listener, OnFavClickListener favListener) {
+    public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, ListAllListeners listener) {
         this.mProductsModelList = productsModelArrayList;
-        this.listener = listener;
+        this.listAllListeners = listener;
         this.mContext = mContext;
-        this.favListener = favListener;
+    }
+
+    public interface ListAllListeners {
+
+        void onCardViewClick(ProductsModel.DataBean produtsAllModel);
+
+        void onFavButtonClick(View v, int position, boolean isFav);
     }
 
     @Override
@@ -43,10 +52,52 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.bind(mProductsModelList.get(position), listener, favListener);
 
-        if (mProductsModelList.get(position).getIsFavorite().equals("true"))
+        holder.nameTV.setText(mProductsModelList.get(position).getProductName());
+        holder.priceTV.setText(mProductsModelList.get(position).getProductPrice());
+        holder.currencyTV.setText(mProductsModelList.get(position).getCurrency());
+
+        Picasso.with(mContext).load(mProductsModelList.get(position).getImage1())
+                .error(R.drawable.place_holder)
+                .placeholder(R.drawable.place_holder)
+                .into(holder.imageView);
+
+
+
+        if (mProductsModelList.get(position).getIsFavorite().equals("true")) {
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listAllListeners.onCardViewClick(mProductsModelList.get(holder.getAdapterPosition()));
+            }
+        });
+
+        holder.btnFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFav) {
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    isFav = true;
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(),isFav);
+
+                } else {
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    isFav = false;
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(),isFav);
+                }
+            }
+        });
+    }
+
+    private void serverRemoveFromFav(int adapterPosition) {
+
+    }
+
+    private void serverAddToFav(int adapterPosition) {
+
     }
 
     @Override
@@ -57,17 +108,8 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             return 0;
     }
 
-    //Onitemclickli
-    public interface OnItemClickListener {
-        void onItemClick(ProductsModel.DataBean productsModel);
-    }
-
-    public interface OnFavClickListener {
-        void onFavClick(ProductsModel.DataBean productsModel);
-    }
-
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTV,priceTV;
+        TextView nameTV,priceTV,currencyTV;
         SelectableRoundedImageView imageView;
         ImageButton btnFav;
 
@@ -75,38 +117,12 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             super(itemView);
             nameTV = itemView.findViewById(R.id.textName);
             priceTV = itemView.findViewById(R.id.textPrice);
+            currencyTV = itemView.findViewById(R.id.textCurrency);
             btnFav = itemView.findViewById(R.id.imageButtonFav);
             imageView = itemView.findViewById(R.id.image);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setCornerRadiiDP(4,4,0,0);
         }
 
-        private void bind(final ProductsModel.DataBean productsModel, final OnItemClickListener listener, final OnFavClickListener onFavClickListener) {
-
-            nameTV.setText(productsModel.getName());
-            priceTV.setText(productsModel.getProductPrice());
-
-            Picasso.with(itemView.getContext())
-                    .load(productsModel.getImage1())
-                    .placeholder(R.drawable.place_holder)
-                    .error(R.drawable.place_holder)
-                    .into(imageView);
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onItemClick(productsModel);
-                }
-            });
-
-            btnFav.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onFavClickListener.onFavClick(productsModel);
-                }
-            });
-
-        }
-    }
-}
+    }//end MyViewHolder
+}//end class ProdutsRecyclerAdpapter

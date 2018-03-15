@@ -1,6 +1,5 @@
 package com.spectraapps.myspare.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,26 +17,26 @@ import java.util.ArrayList;
  * Created by MahmoudAyman on 02/01/2018.
  */
 
-public class RecyclerNotificationAdapter extends RecyclerView.Adapter<RecyclerNotificationAdapter.MyViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
     private final OnItemClickListener listener;
     private ArrayList<NotificationModel.DataBean> mNotificationDataList;
 
-    public RecyclerNotificationAdapter(ArrayList<NotificationModel.DataBean> mNotificationDataList, OnItemClickListener listener) {
+    public NotificationAdapter(ArrayList<NotificationModel.DataBean> mNotificationDataList, OnItemClickListener listener) {
         this.mNotificationDataList = mNotificationDataList;
         this.listener = listener;
     }
 
 
     @Override
-    public RecyclerNotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.single_item_notification_view, parent, false);
-        return new RecyclerNotificationAdapter.MyViewHolder(view);
+        return new NotificationAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerNotificationAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(NotificationAdapter.MyViewHolder holder, int position) {
         holder.bind(mNotificationDataList.get(position), listener);
     }
 

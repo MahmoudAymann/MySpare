@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
+import com.spectraapps.myspare.products.ProductsFragment;
+import com.spectraapps.myspare.products.productdetail.ProductDetail;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.adapters.adpHome.HomeAdapter;
@@ -43,7 +45,6 @@ public class Home extends Fragment {
     HomeAdapter homeAdapter;
     RecyclerView recyclerView;
 
-    HomeCallBack homeCallBack;
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 
@@ -56,12 +57,12 @@ public class Home extends Fragment {
         super.onStart();
         setData();
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        homeCallBack = (HomeCallBack) context;
-    }
+//
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        homeCallBack = (HomeCallBack) context;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +82,6 @@ public class Home extends Fragment {
         initRecyclerView();
 
         serverCategories();
-        Toast.makeText(getContext(), ""+getSharedPreference.getLanguage(), Toast.LENGTH_SHORT).show();
 
         return rootView;
     }
@@ -179,7 +179,10 @@ public class Home extends Fragment {
         homeAdapter = new HomeAdapter(dataBeanArrayList, new HomeAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(CategoriesModel.DataBean categoriesModel) {
-                homeCallBack.HomeFrag(categoriesModel.getId());
+                setSharedPreference.setCategory(categoriesModel.getId());
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
             }
         });
         recyclerView.setAdapter(homeAdapter);
@@ -200,8 +203,8 @@ public class Home extends Fragment {
     }
 
 
-    public interface HomeCallBack {
-        void HomeFrag(String categ);
-    }
+//    public interface HomeCallBack {
+//        void HomeFrag(String categ);
+//    }
 
 }//end Home

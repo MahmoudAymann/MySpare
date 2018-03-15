@@ -63,7 +63,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ProductsFragment.myCall_Back, Home.HomeCallBack {
+        implements NavigationView.OnNavigationItemSelectedListener, ProductsFragment.myCall_Back {
 
     @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
@@ -577,16 +577,16 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout, fragment).commit();
     }
 
-    @Override
-    public void HomeFrag(String categ) {
-        Bundle bundle = new Bundle();
-        bundle.putString("home", categ);
-        bundle.putString("lang", langhere);
-        ProductsFragment fragment = new ProductsFragment();
-        fragment.setArguments(bundle);
-
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.main_frameLayout, fragment).commit();
-    }
+//    @Override
+//    public void HomeFrag(String categ) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString("home", categ);
+//        bundle.putString("lang", langhere);
+//        ProductsFragment fragment = new ProductsFragment();
+//        fragment.setArguments(bundle);
+//
+//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//        fm.beginTransaction()
+//                .replace(R.id.main_frameLayout, fragment).commit();
+//    }
 }//end class main

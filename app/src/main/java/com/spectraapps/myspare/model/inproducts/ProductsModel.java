@@ -10,10 +10,8 @@ public class ProductsModel {
 
     /**
      * status : {"type":"success","title":"Successfull request"}
-     * data : [{"pid":"6","productName":"تجربه ٤","productPrice":"444","productNumber":"444","currency":"Saudi Riyal",
-     * "mobile":"111111111","image1":"http://myspare.net/api/uploadedimage/image1.png",
-     * "image2":"http://myspare.net/api/uploadedimage/image2.png","image3":null,"id":"19","name":"أحمد","date":"2014",
-     * "country":"Qatar","brand":"bmw","model":"M3","isFavorite":"false"}*/
+     * data : [{"pid":"174","productName":"TIRES","productPrice":"5000","productNumber":"845621","currency":"Saudi Riyal","mobile":"123456","image1":"http://myspare.net/public/upload/1520931108onejpg","image2":"http://myspare.net/public/upload/1520931108twojpg","image3":"http://myspare.net/public/upload/1520931108threejpg","id":"64","name":"nashwaaly","date":"2017","country":"korea","brand":"audi","model":"R8","image":"http://myspare.net/public/upload/1520868842image.png","isFavorite":"false"},{"pid":"182","productName":"golden tires","productPrice":"2500","productNumber":"122133","currency":"Egyptian Pound","mobile":"1118031092","image1":"http://myspare.net/public/upload/1520931444tire1.jpg","image2":"http://myspare.net/public/upload/1520931444tire2.jpg","image3":"","id":"1","name":"Mahmoud Ayman","date":"2018","country":"turkey","brand":"bmw","model":"3 series","image":"http://myspare.net/public/upload/15209361211434223981465.jpg","isFavorite":"true"},{"pid":"187","productName":"جنت المانى سبور","productPrice":"6262","productNumber":"6526","currency":"Egyptian Pound","mobile":"1125736264","image1":"http://myspare.net/public/upload/1520932214onejpg","image2":"http://myspare.net/public/upload/1520932214twojpg","image3":"http://myspare.net/public/upload/1520932214threejpg","id":"50","name":"mahmoudmahmad90","date":"1990","country":"australia","brand":"honda","model":"city","image":"http://myspare.net/public/upload/default.jpg","isFavorite":"false"}]
+     */
 
     private StatusBean status;
     private List<DataBean> data;
@@ -62,21 +60,22 @@ public class ProductsModel {
 
     public static class DataBean {
         /**
-         * pid : 6
-         * productName : تجربه ٤
-         * productPrice : 444
-         * productNumber : 444
+         * pid : 174
+         * productName : TIRES
+         * productPrice : 5000
+         * productNumber : 845621
          * currency : Saudi Riyal
-         * mobile : 111111111
-         * image1 : http://myspare.net/api/uploadedimage/image1.png
-         * image2 : http://myspare.net/api/uploadedimage/image2.png
-         * image3 : null
-         * id : 19
-         * name : أحمد
-         * date : 2014
-         * country : Qatar
-         * brand : bmw
-         * model : M3
+         * mobile : 123456
+         * image1 : http://myspare.net/public/upload/1520931108onejpg
+         * image2 : http://myspare.net/public/upload/1520931108twojpg
+         * image3 : http://myspare.net/public/upload/1520931108threejpg
+         * id : 64
+         * name : nashwaaly
+         * date : 2017
+         * country : korea
+         * brand : audi
+         * model : R8
+         * image : http://myspare.net/public/upload/1520868842image.png
          * isFavorite : false
          */
 
@@ -88,13 +87,14 @@ public class ProductsModel {
         private String mobile;
         private String image1;
         private String image2;
-        private Object image3;
+        private String image3;
         private String id;
         private String name;
         private String date;
         private String country;
         private String brand;
         private String model;
+        private String image;
         private String isFavorite;
 
         public String getPid() {
@@ -161,11 +161,11 @@ public class ProductsModel {
             this.image2 = image2;
         }
 
-        public Object getImage3() {
+        public String getImage3() {
             return image3;
         }
 
-        public void setImage3(Object image3) {
+        public void setImage3(String image3) {
             this.image3 = image3;
         }
 
@@ -215,6 +215,14 @@ public class ProductsModel {
 
         public void setModel(String model) {
             this.model = model;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         public String getIsFavorite() {
