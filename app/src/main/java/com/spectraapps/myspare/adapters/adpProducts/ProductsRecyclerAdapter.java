@@ -15,6 +15,7 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpProfile.RecyclerProfileAdapter;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ import java.util.ArrayList;
  * Created by MahmoudAyman on 13/01/2018.
  */
 
-public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder>{
+public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder> {
 
     private ListAllListeners listAllListeners;
     private ArrayList<ProductsModel.DataBean> mProductsModelList;
     private Context mContext;
-    private boolean isFav;
+
 
     public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, ListAllListeners listener) {
         this.mProductsModelList = productsModelArrayList;
@@ -53,6 +54,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
+
         holder.nameTV.setText(mProductsModelList.get(position).getProductName());
         holder.priceTV.setText(mProductsModelList.get(position).getProductPrice());
         holder.currencyTV.setText(mProductsModelList.get(position).getCurrency());
@@ -62,11 +64,11 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
                 .placeholder(R.drawable.place_holder)
                 .into(holder.imageView);
 
-
-
-        if (mProductsModelList.get(position).getIsFavorite().equals("true")) {
+        if (!new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getId()).equals("true"))
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+        else
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,27 +80,20 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isFav) {
+                if (new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getId()).equals("true")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    isFav = true;
-                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(),isFav);
+                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getId(), "false");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
 
                 } else {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    isFav = false;
-                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(),isFav);
+                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getId(), "true");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
             }
         });
     }
 
-    private void serverRemoveFromFav(int adapterPosition) {
-
-    }
-
-    private void serverAddToFav(int adapterPosition) {
-
-    }
 
     @Override
     public int getItemCount() {
@@ -109,7 +104,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTV,priceTV,currencyTV;
+        TextView nameTV, priceTV, currencyTV;
         SelectableRoundedImageView imageView;
         ImageButton btnFav;
 
@@ -121,7 +116,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             btnFav = itemView.findViewById(R.id.imageButtonFav);
             imageView = itemView.findViewById(R.id.image);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageView.setCornerRadiiDP(4,4,0,0);
+            imageView.setCornerRadiiDP(4, 4, 0, 0);
         }
 
     }//end MyViewHolder

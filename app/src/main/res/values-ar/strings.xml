@@ -61,5 +61,16 @@
     <string name="enter_year">السنة</string>
     <string name="hintET_cost">التكلفة</string>
     <string name="category">الفئة</string>
+    <string name="model_PD">موديل:</string>
+    <string name="brand_PD">براند:</string>
+    <string name="country_PD">البلد:</string>
+    <string name="pdate_PD">بلد الصنع:</string>
+    <string name="currency_PD">العملة:</string>
+    <string name="price_PD">السعر:</string>
+    <string name="serialNumber_PD">السيريال:</string>
+    <string name="product_name_PD">الاسم:</string>
+    <string name="serial_number">السيريال:</string>
+    <string name="please_wait">الرجاء الانتظار</string>
+    <string name="loading">تحميل...</string>
 
 </resources>

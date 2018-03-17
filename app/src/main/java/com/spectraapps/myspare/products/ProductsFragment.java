@@ -105,6 +105,14 @@ public class ProductsFragment extends Fragment {
 
         MainActivity.mToolbarText.setText("Products");
 
+        try {
+            if (getArguments().containsKey("yearpop")) {
+               // Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            //Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
         getUserInfo();
         setAlertDialog();
         fireBackButtonEvent();
@@ -125,11 +133,11 @@ public class ProductsFragment extends Fragment {
         });
     }//end setAlertDialog
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        myCall_back = (myCall_Back) context;
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        myCall_back = (myCall_Back) context;
+    }
 
     private void initRecyclerView() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -435,7 +443,6 @@ public class ProductsFragment extends Fragment {
         } else if (!getSharedPref.getLoginStatus()) {
             turnOnServers(3);
         }
-
     }
 
     private void serverProductsWithMail() {
@@ -468,7 +475,6 @@ public class ProductsFragment extends Fragment {
                 alertDialog.show();
             }
         });
-
     }
 
     private void turnOnServers(Integer key) {
@@ -490,7 +496,6 @@ public class ProductsFragment extends Fragment {
     }
 
     private void initAdapterWith() {
-
         productsAdapter = new ProductsRecyclerAdapter(getContext(), mProductDataList,
                 new ProductsRecyclerAdapter.ListAllListeners() {
                     @Override
@@ -522,14 +527,18 @@ public class ProductsFragment extends Fragment {
 
                     @Override
                     public void onFavButtonClick (View v, int position, boolean isFav) {
-
-                     Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
-
+                        if (isFav){
+                            serverAddToFav(position);
+                            Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                            serverRemoveFromFav(position);
+                        }
                     }
                 });
     }
-
-
 
     private void serverRemoveFromFav(int position) {
 

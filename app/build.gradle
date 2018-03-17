@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'mysparekey'
+            keyPassword 'myspare@welly07'
+            storeFile file('D:/AppLicense.jks')
+            storePassword 'android@welly07'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.spectraapps.myspare"
@@ -64,8 +72,6 @@ dependencies {
     compile 'com.github.kimkevin:cachepot:1.2.0'
     //cropProfileImage
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-//restart
+    //restart
     //compile 'com.jakewharton:process-phoenix:2.0.0'
-
-
 }

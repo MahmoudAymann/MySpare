@@ -65,21 +65,35 @@ public class ListSharedPreference {
             prefEditor.putString("image", image).apply();
         }
 
-        public void setCategory(String category) {
+        public void setCategory(String category)
+        {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             prefEditor.putString("category", category).apply();
+        }
+
+        public void setFav(String key,String val)
+        {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putString(key, val).apply();
         }
     }//end Set
 
 
-    public static class Get {
+    public static class Get
+    {
         Context context;
 
         public Get(Context context) {
             this.context = context;
         }
 
-        public boolean getFirstRun() {
+        public String getFav(String a7a )
+        {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString(a7a, "false");
+        }
+        public boolean getFirstRun()
+        {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return prefs.getBoolean("isFirstRun", true);
         }

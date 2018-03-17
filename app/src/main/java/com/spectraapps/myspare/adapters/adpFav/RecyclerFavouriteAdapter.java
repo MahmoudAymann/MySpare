@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.model.FavouriteModel;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
 
     private ListAllListeners listAllListeners;
     private ArrayList<FavouriteModel.DataBean> mFavArrayList;
-    private boolean isFav = false;
     Context context;
 
 
@@ -62,8 +62,13 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (mFavArrayList.get(position).getIsFavorite().equals("true"))
+
+
+        if (!new ListSharedPreference.Get(context).getFav(mFavArrayList.get(holder.getAdapterPosition()).getPid()).equals("true"))
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+        else
+        holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,15 +80,16 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (isFav) {
+                if (new ListSharedPreference.Get(context).getFav(mFavArrayList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    isFav = false;
+                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
+
                 } else {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    isFav = true;
+                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "true");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
-                listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), isFav);
             }
         });
     }//end onBindViewHolder()

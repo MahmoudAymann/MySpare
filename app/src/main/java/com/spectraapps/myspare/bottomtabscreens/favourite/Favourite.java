@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpFav.RecyclerFavouriteAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.FavouriteModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
@@ -31,9 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class Favourite extends Fragment {
 
     RecyclerView recyclerView;
@@ -55,7 +53,8 @@ public class Favourite extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setData();
+        serverFavourites();
+        initAdapter();
     }
 
     @Override
@@ -71,18 +70,15 @@ public class Favourite extends Fragment {
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
-
-        serverCategories();
-
         return rootView;
     }
 
-    private void serverCategories() {
+    private void serverFavourites() {
         progressDialog.show();
         mFavDataList = new ArrayList<>();
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUId(),getLang_key());
+        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUEmail(),getLang_key());
         categoriesCall.enqueue(new Callback<FavouriteModel>() {
             @Override
             public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
@@ -91,14 +87,13 @@ public class Favourite extends Fragment {
                     mFavDataList.addAll(response.body().getData());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
+                    recyclerView.setAdapter(mFavAdapter);
                     mFavAdapter.notifyDataSetChanged();
-                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
-                    Log.v( "titler" ," "+response.body().getData().size());
-
                 } else {
                     progressDialog.dismiss();
                     pullRefreshLayout.setRefreshing(false);
                     Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -112,9 +107,10 @@ public class Favourite extends Fragment {
 
     }//end serverCategories
 
-    private String getUId() {
+
+    private String getUEmail() {
         Log.v("tagLang",getSharedPreference.getEmail());
-       return getSharedPreference.getEmail();
+        return getSharedPreference.getEmail();
     }
 
     private String getLang_key() {
@@ -156,62 +152,80 @@ public class Favourite extends Fragment {
         recyclerView.setNestedScrollingEnabled(false);
     }//end initRecyclerView()
 
-    private void setData() {
-
+    private void initAdapter() {
         mFavAdapter = new RecyclerFavouriteAdapter(Favourite.this.getContext(),mFavDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(FavouriteModel.DataBean favModel) {
-                //homeCallBack.HomeFrag(favModel.getId());
+
             }
 
             @Override
             public void onFavButtonClick(View v, int position, boolean isFav) {
                 if (isFav){
-                    serverAddToFav();
-                }else {
-                    serverRemoveFromFav();
+                    serverAddToFav(position);
+                    //Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    //Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                    serverRemoveFromFav(position);
                 }
             }
         });
-        recyclerView.setAdapter(mFavAdapter);
     }
 
-    private void serverRemoveFromFav() {
-        progressDialog.show();
-        mFavDataList = new ArrayList<>();
+    private void serverRemoveFromFav(int position) {
+
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUId(),getLang_key());
-        categoriesCall.enqueue(new Callback<FavouriteModel>() {
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(),false);
+
+        productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
-            public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
+            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
 
                 if (response.isSuccessful()) {
-                    mFavDataList.addAll(response.body().getData());
-                    pullRefreshLayout.setRefreshing(false);
-                    progressDialog.dismiss();
-                    mFavAdapter.notifyDataSetChanged();
-                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
-                    Log.v( "titler" ," "+response.body().getData().size());
+
+                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                   serverFavourites();
 
                 } else {
-                    progressDialog.dismiss();
-                    pullRefreshLayout.setRefreshing(false);
-                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<FavouriteModel> call, Throwable t) {
-                progressDialog.dismiss();
+            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
                 pullRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void serverAddToFav() {
+    private void serverAddToFav(int position) {
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(),true);
+
+        productsCall.enqueue(new Callback<AddToFavModel>() {
+            @Override
+            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    serverFavourites();
+                } else {
+                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                Log.v("tagy", t.getMessage());
+                pullRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void initPullRefreshLayout(final View rootView) {
@@ -222,8 +236,8 @@ public class Favourite extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                serverCategories();
-                Toast.makeText(Favourite.this.getContext(), "Updated...", Toast.LENGTH_SHORT).show();
+                serverFavourites();
+                initAdapter();
             }
         });
     }
