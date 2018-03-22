@@ -84,6 +84,7 @@ public class ProfileProductDetail extends Fragment
         uMobile_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + uMobile));
                 startActivity(dialIntent);

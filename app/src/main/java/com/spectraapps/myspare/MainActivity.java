@@ -43,6 +43,7 @@ import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.navdrawer.AboutActivity;
 import com.spectraapps.myspare.navdrawer.ProfileActivity;
 import com.spectraapps.myspare.navdrawer.ResetPassword;
+import com.spectraapps.myspare.navdrawer.UpdatePasswordApproval;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.utility.ListSharedPreference;
@@ -417,20 +418,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 4:
                  if (mIsLogged){
-                     Bundle bundle = new Bundle();
-                     bundle.putString("puid", mId);
-                     bundle.putString("plang",langhere);
-                     Profile profileFrag = new Profile();
-                     profileFrag.setArguments(bundle);
-
-                     CachePot.getInstance().push("puid",mId);
-                     CachePot.getInstance().push("langh",langhere);
-
                      android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                      fm.beginTransaction()
-                             .replace(R.id.main_frameLayout, profileFrag).commit();
+                             .replace(R.id.main_frameLayout,new Profile()).commit();
                  }
-
                   else {
                      Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                  }
@@ -467,7 +458,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.updatePass_nav) {
-            startActivity(new Intent(MainActivity.this, ResetPassword.class));
+            startActivity(new Intent(MainActivity.this, UpdatePasswordApproval.class));
         } else if (id == R.id.updateAccount_nav) {
             if (mIsLogged) {
                 Intent i = new Intent(MainActivity.this, ProfileActivity.class);
@@ -569,12 +560,13 @@ public class MainActivity extends AppCompatActivity
     public void ProudctSFrag(String year) {
         Bundle bundle = new Bundle();
         bundle.putString("yearpop", year);
-        ProductsFragment fragment = new ProductsFragment();
-        fragment.setArguments(bundle);
+
+        ProductsFragment productsFragment = new ProductsFragment();
+        productsFragment.setArguments(bundle);
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.main_frameLayout, fragment).commit();
+                .replace(R.id.main_frameLayout, productsFragment).commit();
     }
 
 //    @Override

@@ -7,15 +7,10 @@ import java.util.List;
  */
 
 public class FavouriteModel {
+
     /**
-     * status : {"type":"success","title":"Successfull request"}
-     *  data : [{"pid":"96","productName":"3","productPrice":"23","productNumber":"23332",
-     * "currency":"Qatar Riyal","mobile":"123456789",
-     * "image1":"http://myspare.net/public/upload/1520423164onejpg",
-     * "image2":"http://myspare.net/public/upload/1520423164twojpg",
-     * "image3":"http://myspare.net/public/upload/1520423164threejpg",
-     * "date":"1990","country":"australia","category":"External Body","brand":"audi",
-     * "model":"100","user_name":"Mahmoyd Ayman ","isFavorite":"true"}]
+     * status : {"type":"Failed","title":"error occured"}
+     * data : [{"pid":"195","productName":"كرسي","productPrice":"1000","productNumber":"1234","currency":"Qatar Riyal","mobile":"01118031092","image1":"http://myspare.net/public/upload/1521474723.images.jpg","image2":"http://myspare.net/public/upload/1521474723.Cerato 2009-2013 Rear Bumper-800x800.jpg","image3":"","date":"1994","country":"china","category":"Internal Body","brand":"BMW","model":"503","name":"Ali Gaber","id":"74","image":"http://myspare.net/public/upload/default.jpg","isFavorite":"true"}]
      */
 
     private StatusBean status;
@@ -39,8 +34,8 @@ public class FavouriteModel {
 
     public static class StatusBean {
         /**
-         * type : success
-         * title : Successfull request
+         * type : Failed
+         * title : error occured
          */
 
         private String type;
@@ -65,21 +60,23 @@ public class FavouriteModel {
 
     public static class DataBean {
         /**
-         * pid : 96
-         * productName : 3
-         * productPrice : 23
-         * productNumber : 23332
+         * pid : 195
+         * productName : كرسي
+         * productPrice : 1000
+         * productNumber : 1234
          * currency : Qatar Riyal
-         * mobile : 123456789
-         * image1 : http://myspare.net/public/upload/1520423164onejpg
-         * image2 : http://myspare.net/public/upload/1520423164twojpg
-         * image3 : http://myspare.net/public/upload/1520423164threejpg
-         * date : 1990
-         * country : australia
-         * category : External Body
-         * brand : audi
-         * model : 100
-         * user_name : Mahmoyd Ayman
+         * mobile : 01118031092
+         * image1 : http://myspare.net/public/upload/1521474723.images.jpg
+         * image2 : http://myspare.net/public/upload/1521474723.Cerato 2009-2013 Rear Bumper-800x800.jpg
+         * image3 :
+         * date : 1994
+         * country : china
+         * category : Internal Body
+         * brand : BMW
+         * model : 503
+         * name : Ali Gaber
+         * id : 74
+         * image : http://myspare.net/public/upload/default.jpg
          * isFavorite : true
          */
 
@@ -97,7 +94,9 @@ public class FavouriteModel {
         private String category;
         private String brand;
         private String model;
-        private String user_name;
+        private String name;
+        private String id;
+        private String image;
         private String isFavorite;
 
         public String getPid() {
@@ -212,12 +211,28 @@ public class FavouriteModel {
             this.model = model;
         }
 
-        public String getUser_name() {
-            return user_name;
+        public String getName() {
+            return name;
         }
 
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         public String getIsFavorite() {

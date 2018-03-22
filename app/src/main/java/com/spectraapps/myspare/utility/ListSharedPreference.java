@@ -76,6 +76,11 @@ public class ListSharedPreference {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             prefEditor.putString(key, val).apply();
         }
+        public void setKeyFilter(int keyFilter)
+        {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putInt("keyFilter", keyFilter).apply();
+        }
     }//end Set
 
 
@@ -87,10 +92,16 @@ public class ListSharedPreference {
             this.context = context;
         }
 
-        public String getFav(String a7a )
+        public int getKeyFilter()
         {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString(a7a, "false");
+            return prefs.getInt("keyFilter", 0);
+        }
+
+        public String getFav(String favKey )
+        {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString(favKey, "false");
         }
         public boolean getFirstRun()
         {
@@ -100,7 +111,7 @@ public class ListSharedPreference {
 
         public String getLanguage() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("lang", "en");
+            return prefs.getString("lang", "ar");
         }
 
         public boolean getLoginStatus() {

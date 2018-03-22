@@ -37,7 +37,6 @@ public class ProfileActivity extends AppCompatActivity{
 
     EditText nameET, emailET, mobileET;
 
-    ListSharedPreference listSharedPreference;
     boolean isNameShown=true, isEmailShown=true, isMobileShown=true;
     FButton updateBtn;
     String userId;

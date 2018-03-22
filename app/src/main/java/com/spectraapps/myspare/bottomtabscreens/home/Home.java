@@ -3,7 +3,6 @@ package com.spectraapps.myspare.bottomtabscreens.home;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.products.ProductsFragment;
-import com.spectraapps.myspare.products.productdetail.ProductDetail;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.adapters.adpHome.HomeAdapter;
@@ -180,9 +177,11 @@ public class Home extends Fragment {
             @Override
             public void onCardViewClick(CategoriesModel.DataBean categoriesModel) {
                 setSharedPreference.setCategory(categoriesModel.getId());
-
+                setSharedPreference.setKeyFilter(0);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
+
+
             }
         });
         recyclerView.setAdapter(homeAdapter);

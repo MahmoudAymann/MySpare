@@ -72,7 +72,6 @@ public class Profile extends Fragment {
 
         try {
             uId = getSharedPreference.getUId();
-            //Toast.makeText(getContext(), ""+uId, Toast.LENGTH_SHORT).show();
             language = getSharedPreference.getLanguage();
         } catch (Exception e) {
             Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -123,9 +122,9 @@ public class Profile extends Fragment {
                         CachePot.getInstance().push("pImage1", profileProdData.getImage1());
                         CachePot.getInstance().push("pImage2", profileProdData.getImage2());
                         CachePot.getInstance().push("pDate", profileProdData.getDate());
-                        CachePot.getInstance().push("pCountry", profileProdData.getCountry());
-                        CachePot.getInstance().push("pBrand", profileProdData.getBrand());
-                        CachePot.getInstance().push("pModel", profileProdData.getModel());
+                        CachePot.getInstance().push("pCountry",profileProdData.getCountry());
+                        CachePot.getInstance().push("pBrand",  profileProdData.getBrand());
+                        CachePot.getInstance().push("pModel",  profileProdData.getModel());
 
                         CachePot.getInstance().push("uId", profileProdData.getId());
                         CachePot.getInstance().push("uMobile", profileProdData.getMobile());
@@ -134,7 +133,6 @@ public class Profile extends Fragment {
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
-
 
                        Log.v("jkjkl", profileProdData.getImage() + " push ");
                        Log.v("jkjkl", profileProdData.getName() + profileProdData.getMobile() + "push");

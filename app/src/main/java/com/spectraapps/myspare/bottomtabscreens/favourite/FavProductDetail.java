@@ -138,7 +138,7 @@ public class FavProductDetail extends Fragment
             @Override
             public void onBackPressed() {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.main_frameLayout, new ProductsFragment())
+                        .replace(R.id.main_frameLayout, new Favourite())
                         .commit();
             }
         });
