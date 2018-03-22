@@ -106,11 +106,11 @@ public class ProductsFragment extends Fragment {
         MainActivity.mToolbarText.setText("Products");
 
         try {
-            if (getArguments().containsKey("yearpop")) {
-               // Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
+            if (getArguments() != null) {
+                Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            //Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         getUserInfo();
@@ -118,7 +118,6 @@ public class ProductsFragment extends Fragment {
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
-
 
         return rootView;
     }//end onCreateView()
@@ -186,7 +185,6 @@ public class ProductsFragment extends Fragment {
 
         final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
         new EasyDialog(getActivity())
-                //.setLayoutResourceId(R.layout.popup_filter_layout)//layout resource id
                 .setLayout(popupView)
                 .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.app_background_color))
                 .setLocationByAttachedView(fabButton)
@@ -212,13 +210,11 @@ public class ProductsFragment extends Fragment {
         fButton.setShadowEnabled(true);
         fButton.setShadowHeight(7);
 
-
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 spin = spinner_year.getSelectedItem().toString();
-                Log.v("DeX", spinner_year.getSelectedItem().toString());
-                myCall_back.ProudctSFrag(spinner_year.getSelectedItem().toString());
+                myCall_back.ProudctSFrag(spin);
             }
         });
 

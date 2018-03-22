@@ -12,6 +12,7 @@ import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.model.NotificationModel;
 import com.spectraapps.myspare.model.ProfileProdModel;
+import com.spectraapps.myspare.model.UpdatePasswordModel;
 import com.spectraapps.myspare.model.UpdateProfileImageModel;
 import com.spectraapps.myspare.model.UpdateProfileModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
@@ -53,6 +54,12 @@ public interface Api {
                                            @Field("name") String name,
                                            @Field("mail") String mail,
                                            @Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST("updatePassword")
+    Call<UpdatePasswordModel> updatePassword(@Field("id") String id,
+                                             @Field("oldPassword") String oldPassword,
+                                             @Field("newPassword") String newPassword);
 
     @FormUrlEncoded
     @POST("favorites")
@@ -145,6 +152,13 @@ public interface Api {
                                             @Field("category") String category,
                                             @Field("language") String language,
                                             @Field("country") String country);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithYear(@Field("id") String id,
+                                            @Field("category") String category,
+                                            @Field("language") String language,
+                                            @Field("date") String year);
 
     @FormUrlEncoded
     @POST("products")
