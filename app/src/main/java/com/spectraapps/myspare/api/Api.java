@@ -142,9 +142,9 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsWithMail(@Field("language") String language,
-                                         @Field("category") String category,
-                                         @Field("id") String email);
+    Call<ProductsModel> productsWithMail(@Field("id") String email,
+                                            @Field("language") String language,
+                                            @Field("category") String category);
 
     @FormUrlEncoded
     @POST("products")
@@ -152,6 +152,8 @@ public interface Api {
                                             @Field("category") String category,
                                             @Field("language") String language,
                                             @Field("country") String country);
+
+
 
     @FormUrlEncoded
     @POST("products")

@@ -63,6 +63,7 @@ public class ProfileProdModel {
     }
 
     public static class DataBean {
+
         /**
          * pid : 182
          * productName : golden tires

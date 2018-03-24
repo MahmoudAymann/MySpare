@@ -40,7 +40,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".bottomtabscreens.additem.AddItemActivity" />
         <activity android:name=".navdrawer.ResetPassword" />
-        <activity android:name=".login.UpdatePasswordApproval" />
+        <activity android:name=".navdrawer.UpdatePasswordApproval" />
         <activity
             android:name=".navdrawer.AboutActivity"
             android:label="@string/title_activity_about"
