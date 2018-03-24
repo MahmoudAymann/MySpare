@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,6 +23,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
+import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
 import com.spectraapps.myspare.model.AddToFavModel;
@@ -61,7 +63,7 @@ public class ProductsFragment extends Fragment {
 
     Spinner spinner_brand, spinner_country, spinner_year, spinner_model;
 
-    ArrayList<Integer> year_array = new ArrayList<>();
+    ArrayList<String> year_array = new ArrayList<>();
 
     RecyclerView recyclerView;
 
@@ -82,13 +84,18 @@ public class ProductsFragment extends Fragment {
 
     FButton fButton;
 
-    String mUEmail,mCategory,lang,spin;
+    String mUEmail, mCategory, lang;
 
     ListSharedPreference.Set setSharedPref;
 
+    RoundKornerLinearLayout roundKornerModelsText, roundKornerSpinner;
+
     ListSharedPreference.Get getSharedPref;
-    private ArrayList<String> countries_array,brand_array,models_array;
-    private ArrayList<String> countriesId_array,modelsId_array,brandId_array;
+    private ArrayList<String> countries_array, brand_array, models_array;
+    private ArrayList<String> countriesId_array, modelsId_array, brandId_array;
+
+    String mSerialNumber, mManfactureCountry_Id,
+            mBrand_Id, mModel_Id, mCountry_Id;
 
     public ProductsFragment() {
 
@@ -105,13 +112,6 @@ public class ProductsFragment extends Fragment {
 
         MainActivity.mToolbarText.setText("Products");
 
-        try {
-            if (getArguments() != null) {
-                Toast.makeText(getActivity(), getArguments().getString("yearpop"), Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
         getUserInfo();
         setAlertDialog();
@@ -198,10 +198,61 @@ public class ProductsFragment extends Fragment {
                 .setMarginLeftAndRight(30, 30)
                 .show();
 
+        roundKornerModelsText = popupView.findViewById(R.id.textBack2);
+        roundKornerSpinner = popupView.findViewById(R.id.roundKornerLinearLayout2);
+        editText = popupView.findViewById(R.id.editText1_pop);
+
         spinner_brand = popupView.findViewById(R.id.spinner_brand_popup);
         spinner_country = popupView.findViewById(R.id.spinner_country_popup);
         spinner_year = popupView.findViewById(R.id.spinner_year_popup);
         spinner_model = popupView.findViewById(R.id.spinner_model_popup);
+
+////////////////////////////////////////////////////////////////////////////
+        spinner_brand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                getBrandId(spinner_brand.getSelectedItemPosition());
+                if (spinner_brand.getSelectedItemPosition() > 0) {
+                    roundKornerModelsText.setVisibility(View.VISIBLE);
+                    roundKornerSpinner.setVisibility(View.VISIBLE);
+                    serverModels(popupView.getContext(), spinner_model);
+                } else {
+                    roundKornerModelsText.setVisibility(View.INVISIBLE);
+                    roundKornerSpinner.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+/////////////////////////////////////////////////////////////////////////////////////////
+        spinner_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getManufacturerCountryId(spinner_country.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+/////////////////////////////////////////////////////////////////////////////////////////
+        spinner_model.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getModelsId(spinner_model.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+///////////////////////////////////////////////////////////////////////////////////////
 
         fButton = popupView.findViewById(R.id.flatButton);
         fButton.setButtonColor(getResources().getColor(R.color.dark_yellow));
@@ -213,18 +264,198 @@ public class ProductsFragment extends Fragment {
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spin = spinner_year.getSelectedItem().toString();
-                myCall_back.ProudctSFrag(spin);
+                int spinerCountryPos = spinner_country.getSelectedItemPosition();
+                int spinerBrandPos = spinner_brand.getSelectedItemPosition();
+                int spinerModelPos = spinner_model.getSelectedItemPosition();
+                int spinerYearPos = spinner_year.getSelectedItemPosition();
+                boolean serialNumET_HasText = !editText.getText().toString().equals("");
+
+
+                if (spinerCountryPos > 0 && spinerBrandPos < 1 && spinerModelPos < 1 && spinerYearPos < 1 && !serialNumET_HasText) {
+                    myCall_back.filter(mManfactureCountry_Id, 1);
+                } else if (spinerCountryPos < 1 && spinerBrandPos > 0 && spinerModelPos < 1 && spinerYearPos < 1 && !serialNumET_HasText) {
+                    myCall_back.filter(mBrand_Id, 2);
+                } else if (spinerCountryPos < 1 && spinerBrandPos < 1 && spinerModelPos > 0 && spinerYearPos < 1 && !serialNumET_HasText) {
+                    myCall_back.filter(mModel_Id, 3);
+                } else if (spinerCountryPos < 1 && spinerBrandPos < 1 && spinerModelPos < 1 && spinerYearPos > 0 && !serialNumET_HasText) {
+                    myCall_back.filter(spinner_year.getSelectedItem().toString(), 4);
+                } else if (serialNumET_HasText) {
+                    myCall_back.filter(editText.getText().toString(), 5);
+                } else if (spinerCountryPos > 0 && spinerBrandPos > 0 && spinerModelPos < 1 && spinerYearPos < 1 && !serialNumET_HasText) {
+                    myCall_back.filter(mManfactureCountry_Id, mBrand_Id, 12);
+                } else if (spinerCountryPos > 0 && spinerBrandPos > 0 && spinerModelPos > 0 && spinerYearPos < 1 && !serialNumET_HasText) {
+                    myCall_back.filter(mCountry_Id, mBrand_Id, mModel_Id, 123);
+                } else if (spinerCountryPos > 0 && spinerBrandPos < 1 && spinerModelPos < 1 && spinerYearPos > 0 && !serialNumET_HasText) {
+                    myCall_back.filter(mManfactureCountry_Id, spinner_year.getSelectedItem().toString(), 14);
+                } else if (spinerCountryPos > 0 && spinerBrandPos < 1 && spinerModelPos < 1 && spinerYearPos < 1 && serialNumET_HasText) {
+                    myCall_back.filter(mManfactureCountry_Id, editText.getText().toString(), 15);
+                } else if (spinerCountryPos > 0 && spinerBrandPos > 0 && spinerModelPos > 0 && spinerYearPos > 0 && serialNumET_HasText) {
+                    myCall_back.filter(mManfactureCountry_Id, mBrand_Id,mModel_Id,spinner_year.getSelectedItem().toString(),editText.getText().toString(), 12345);
+                }
             }
         });
 
-        editText = popupView.findViewById(R.id.editText1_pop);
         mCalendar = Calendar.getInstance();
         addYears(popupView);
-
         serverCountries(popupView.getContext(), spinner_country);
-        serverModels(popupView.getContext(), spinner_model);
         serverBrands(popupView.getContext(), spinner_brand);
+    }
+
+    public interface myCall_Back {
+        void filter(String one, String two, String three, String four, String five, int num);
+
+        void filter(String one, int num);
+
+        void filter(String one, String two, int num);
+
+        void filter(String one, String two, String three, int num);
+    }
+
+    private void serverProductsWithMail() {
+        try {
+            if (getArguments() != null) {
+                if (getArguments().containsKey("country")) {
+                    serverFilterWithCountry(getArguments().getString("country"));
+                } else if (getArguments().containsKey("brand")) {
+                    serverFilterWithSerialNum(getArguments().getString("brand"));
+                } else if (getArguments().containsKey("model")) {
+                    serverFilterWithSerialNum(getArguments().getString("model"));
+                } else if (getArguments().containsKey("year")) {
+                    serverFilterWithYear(getArguments().getString("year"));
+                } else if (getArguments().containsKey("serial")) {
+                    serverFilterWithYear(getArguments().getString("serial"));
+                } else if (getArguments().containsKey("country123") && getArguments().containsKey("brand123") && getArguments().containsKey("model123")) {
+                    serverCountryBrandModel(getArguments().getString("country123"), getArguments().getString("brand123"), getArguments().getString("model123"));
+                } else if (getArguments().containsKey("country14") && getArguments().containsKey("year14")) {
+                    serverFilterWithCountryYear(getArguments().getString("country14"), getArguments().getString("year14"));
+                } else if (getArguments().containsKey("country15") && getArguments().containsKey("serial15")) {
+                    serverFilterWithCountrySerial(getArguments().getString("country15"), getArguments().getString("serial15"));
+                }else if (getArguments().containsKey("country12345") && getArguments().containsKey("brand12345")&& getArguments().containsKey("model12345")
+                        && getArguments().containsKey("year12345")&& getArguments().containsKey("serial12345")){
+                    serverFilterWithAll(getArguments().getString("country12345"),getArguments().getString("brand12345"),
+                            getArguments().getString("model12345"),getArguments().getString("year12345"),getArguments().getString("serial12345"));
+                }
+            } else {
+                serverNormal();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }//end serverProductsWithMail
+
+    private void serverFilterWithAll(String country12345, String brand12345, String model12345, String year12345, String serial12345) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithAll(mUEmail, mCategory, getLang(), brand12345, model12345,serial12345,year12345,country12345);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverFilterWithCountrySerial(String country15, String serial15) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithCountrySerial(mUEmail, mCategory, getLang(), country15, serial15);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverFilterWithCountryYear(String country14, String year14) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithCountryYear(mUEmail, mCategory, getLang(), country14, year14);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void serverCountries(final Context popup, final Spinner spinner) {
@@ -237,7 +468,7 @@ public class ProductsFragment extends Fragment {
             public void onResponse(Call<CountriesModel> call, Response<CountriesModel> response) {
                 if (response.isSuccessful()) {
 
-                    getCountries(response.body().getData(),popup,spinner);
+                    getCountries(response.body().getData(), popup, spinner);
                     getCountriesId(response.body().getData());
                     Log.v("res", response.body().getData() + "");
                 } else
@@ -256,14 +487,15 @@ public class ProductsFragment extends Fragment {
 
     private void getCountriesId(List<CountriesModel.DataBean> data) {
         countriesId_array = new ArrayList<>();
-        countriesId_array.add(0,"addItem");
+        countriesId_array.add(0, "addItem");
         for (int i = 0; i < data.size(); i++) {
             countriesId_array.add(data.get(i).getId());
         }
     }
-    private void getCountries(List<CountriesModel.DataBean> data,Context popupView, Spinner spinner) {
+
+    private void getCountries(List<CountriesModel.DataBean> data, Context popupView, Spinner spinner) {
         countries_array = new ArrayList<>();
-        countries_array.add(0,"Choose Country");
+        countries_array.add(0, getString(R.string.choose_country));
         for (int i = 0; i < data.size(); i++) {
             countries_array.add(data.get(i).getName());
         }
@@ -285,7 +517,7 @@ public class ProductsFragment extends Fragment {
             public void onResponse(Call<BrandsModel> call, Response<BrandsModel> response) {
                 if (response.isSuccessful()) {
 
-                    getBrands(response.body().getData(),context,spinner);
+                    getBrands(response.body().getData(), context, spinner);
                     getBrandsId(response.body().getData());
 
                 } else
@@ -303,7 +535,7 @@ public class ProductsFragment extends Fragment {
 
     private void getBrands(List<BrandsModel.DataBean> data, Context context, Spinner spinner) {
         brand_array = new ArrayList<>();
-        brand_array.add(0,"Choose Brand");
+        brand_array.add(0, getString(R.string.choose_brand));
         for (int i = 0; i < data.size(); i++) {
             brand_array.add(data.get(i).getName());
         }
@@ -319,7 +551,7 @@ public class ProductsFragment extends Fragment {
 
     private void getBrandsId(List<BrandsModel.DataBean> data) {
         brandId_array = new ArrayList<>();
-        brandId_array.add(0,"addItem");
+        brandId_array.add(0, "addItem");
         for (int i = 0; i < data.size(); i++) {
             brandId_array.add(data.get(i).getId());
         }
@@ -328,9 +560,7 @@ public class ProductsFragment extends Fragment {
     private void serverModels(final Context context, final Spinner spinner) {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-
-        Call<ModelsModel> modelsCall = retrofit.models("2");
-
+        Call<ModelsModel> modelsCall = retrofit.models(mBrand_Id);
         modelsCall.enqueue(new Callback<ModelsModel>() {
             @Override
             public void onResponse(Call<ModelsModel> call, Response<ModelsModel> response) {
@@ -348,11 +578,11 @@ public class ProductsFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
-    }//end serverModels()
+    }//end
 
     private void getModels(List<ModelsModel.DataBean> data, Context context, Spinner spinner) {
         models_array = new ArrayList<>();
-        models_array.add(0,"Choose Model");
+        models_array.add(0, getString(R.string.choose_model));
         for (int i = 0; i < data.size(); i++) {
             models_array.add(data.get(i).getName());
         }
@@ -367,7 +597,7 @@ public class ProductsFragment extends Fragment {
 
     private void getModelsId(List<ModelsModel.DataBean> data) {
         modelsId_array = new ArrayList<>();
-        modelsId_array.add(0,"addItem");
+        modelsId_array.add(0, "addItem");
         for (int i = 0; i < data.size(); i++) {
             modelsId_array.add(data.get(i).getId());
         }
@@ -375,15 +605,15 @@ public class ProductsFragment extends Fragment {
 
     private void addYears(View view) {
         int current_year = mCalendar.get(Calendar.YEAR);
-
+        year_array.add(0,getString(R.string.choose_year));
         for (int i = current_year; i >= 1990; i--) {
-            year_array.add(i);
+            year_array.add(String.valueOf(i));
         }
-
-        ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 view.getContext(), android.R.layout.simple_spinner_item, year_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_year.setAdapter(spinnerArrayAdapter);
+
     }//end addYears();
 
     private void serverProductsAll() {
@@ -431,6 +661,31 @@ public class ProductsFragment extends Fragment {
         return getSharedPref.getLanguage();
     }
 
+    ///////////////#get IDS//////////////////////
+    private void getBrandId(Integer pos) {
+        for (int i = 0; i < brandId_array.size(); i++) {
+            if (pos == i) {
+                mBrand_Id = brandId_array.get(i);
+            }
+        }
+    }
+
+    private void getModelsId(Integer spinnerPos) {
+        for (int i = 0; i < modelsId_array.size(); i++) {
+            if (spinnerPos == i) {
+                mModel_Id = modelsId_array.get(i);
+            }
+        }
+    }//end
+
+    private void getManufacturerCountryId(Integer spinnerPos) {
+        for (int i = 0; i < countriesId_array.size(); i++) {
+            if (spinnerPos == i) {
+                mManfactureCountry_Id = countriesId_array.get(i);
+            }
+        }
+    }//end
+
     @Override
     public void onStart() {
         super.onStart();
@@ -441,36 +696,194 @@ public class ProductsFragment extends Fragment {
         }
     }
 
-    private void serverProductsWithMail() {
+    private void serverCountryBrandModel(String country123, String brand123, String model123) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        mProductDataList = new ArrayList<>();
-        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+            final Call<ProductsModel> productsCall = retrofit.productsWithCountryBrandModel(mUEmail, mCategory, getLang(), country123, brand123, model123);
 
-        final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLang(), mCategory, mUEmail);
-
-        productsCall.enqueue(new Callback<ProductsModel>() {
-            @Override
-            public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
-
-                if (response.isSuccessful()) {
-                    mProductDataList.addAll(response.body().getData());
-                    pullRefreshLayout.setRefreshing(false);
-                    recyclerView.setAdapter(productsAdapter);
-                    productsAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ProductsModel> call, Throwable t) {
-                Log.v("tagy", t.getMessage());
-                pullRefreshLayout.setRefreshing(false);
-                alertDialogBuilder.setMessage(t.getMessage());
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverFilterWithCountry(String country) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithCountry(mUEmail, mCategory, getLang(), country);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverFilterWithSerialNum(String serial) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithSerialNum(mUEmail, mCategory, getLang(), serial);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverFilterWithYear(String year) {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithYear(mUEmail, mCategory, getLang(), year);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void serverNormal() {
+        try {
+            mProductDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<ProductsModel> productsCall = retrofit.productsWithMail(getLang(), mCategory, mUEmail);
+
+            productsCall.enqueue(new Callback<ProductsModel>() {
+                @Override
+                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mProductDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            recyclerView.setAdapter(productsAdapter);
+                            productsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception exc) {
+                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                    Log.v("tagy", t.getMessage());
+                    pullRefreshLayout.setRefreshing(false);
+                    alertDialogBuilder.setMessage(t.getMessage());
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        } catch (Exception exc) {
+            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void turnOnServers(Integer key) {
@@ -482,7 +895,6 @@ public class ProductsFragment extends Fragment {
             case 3:
                 serverProductsAll();
                 initAdapterAllProducts();
-
                 break;
             default:
                 Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
@@ -522,14 +934,12 @@ public class ProductsFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFavButtonClick (View v, int position, boolean isFav) {
-                        if (isFav){
+                    public void onFavButtonClick(View v, int position, boolean isFav) {
+                        if (isFav) {
                             serverAddToFav(position);
-                            Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "" + isFav, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "" + isFav, Toast.LENGTH_SHORT).show();
                             serverRemoveFromFav(position);
                         }
                     }
@@ -540,7 +950,7 @@ public class ProductsFragment extends Fragment {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(),false);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(), false);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
@@ -548,7 +958,7 @@ public class ProductsFragment extends Fragment {
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     if (getSharedPref.getLoginStatus()) {
                         turnOnServers(1);
                     } else if (!getSharedPref.getLoginStatus()) {
@@ -574,7 +984,7 @@ public class ProductsFragment extends Fragment {
     private void serverAddToFav(int position) {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(),true);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(), true);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
@@ -582,7 +992,7 @@ public class ProductsFragment extends Fragment {
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     if (getSharedPref.getLoginStatus()) {
                         turnOnServers(1);
                     } else if (!getSharedPref.getLoginStatus()) {
@@ -653,7 +1063,5 @@ public class ProductsFragment extends Fragment {
         mCategory = getSharedPref.getCategory();
     }
 
-    public interface myCall_Back {
-        void ProudctSFrag(String year);
-    }
+
 }

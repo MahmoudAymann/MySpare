@@ -22,7 +22,6 @@
             android:background="@color/colorPrimary"
             android:visibility="visible"
             app:corner_radius="10dp">
-
             <TextView
                 android:id="@+id/text_static5_pop"
                 android:layout_width="match_parent"
@@ -32,7 +31,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
@@ -227,7 +225,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/roundKornerLinearLayout3"
             app:layout_constraintTop_toBottomOf="@+id/textBack2">
-
             <TextView
                 android:id="@+id/text_static4_pop"
                 android:layout_width="match_parent"
@@ -255,7 +252,6 @@
             app:layout_constraintEnd_toStartOf="@+id/textBack3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/roundKornerLinearLayout2">
-
             <EditText
                 android:id="@+id/editText1_pop"
                 android:layout_width="match_parent"
@@ -263,8 +259,8 @@
                 android:gravity="center"
                 android:hint="@string/enter_num"
                 android:inputType="number"
-                android:textAlignment="center" />
-
+                android:textAlignment="center"
+                android:background="@drawable/rounded_yellow_background"/>
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
     </LinearLayout>

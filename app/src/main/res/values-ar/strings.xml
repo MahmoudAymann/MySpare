@@ -72,5 +72,10 @@
     <string name="serial_number">السيريال:</string>
     <string name="please_wait">الرجاء الانتظار</string>
     <string name="loading">تحميل...</string>
+    <string name="errorFav">لا يوجد</string>
+    <string name="choose_year">اختر السنة</string>
+    <string name="choose_country">اختر البلد</string>
+    <string name="choose_brand">اختر البراند</string>
+    <string name="choose_model">اختر الموديل</string>
 
 </resources>

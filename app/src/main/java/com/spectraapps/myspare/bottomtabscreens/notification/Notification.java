@@ -98,9 +98,9 @@ public class Notification extends Fragment {
     }
 
     private void serverNotifi() {
+        try {
         progressDialog.show();
         notificationDataList = new ArrayList<>();
-//        try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
             final Call<NotificationModel> notificationCall = retrofit.notification("1");
@@ -108,7 +108,7 @@ public class Notification extends Fragment {
             notificationCall.enqueue(new Callback<NotificationModel>() {
                 @Override
                 public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
-                   ///// try {
+
                         if (response.isSuccessful()) {
                             notificationDataList.addAll(response.body().getData());
                             pullRefreshLayout.setRefreshing(false);
@@ -122,9 +122,7 @@ public class Notification extends Fragment {
                             progressDialog.dismiss();
                             Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
-//                    } catch (Exception e) {
-//                        Toast.makeText(getContext(), "NO DATA", Toast.LENGTH_LONG).show();
-//                    }
+
                 }
 
                 @Override
@@ -135,11 +133,11 @@ public class Notification extends Fragment {
                     Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-//        } catch (Exception e) {
-//            pullRefreshLayout.setRefreshing(false);
-//            progressDialog.dismiss();
-//            Toast.makeText(getContext(), "Erorr:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
+        } catch (Exception e) {
+            pullRefreshLayout.setRefreshing(false);
+            progressDialog.dismiss();
+            Toast.makeText(getContext(), "Erorr:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fireBackButtonEvent() {

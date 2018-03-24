@@ -154,7 +154,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/rounded_yellow_background"
                         android:gravity="center"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="LabelFor" />
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
@@ -420,48 +420,6 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp">
-
-                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:background="@color/colorPrimary"
-                    android:visibility="visible"
-                    app:corner_radius="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/currency"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorAccent"
-                    android:visibility="visible"
-                    app:corner_radius="10dp">
-
-                    <Spinner
-                        android:id="@+id/currency_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -506,6 +464,48 @@
                         android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="LabelFor" />
+                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@color/colorPrimary"
+                    android:visibility="visible"
+                    app:corner_radius="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/currency"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+                <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:visibility="visible"
+                    app:corner_radius="10dp">
+
+                    <Spinner
+                        android:id="@+id/currency_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
             </LinearLayout>

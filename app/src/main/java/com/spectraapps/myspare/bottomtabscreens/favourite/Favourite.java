@@ -74,39 +74,39 @@ public class Favourite extends Fragment {
     }
 
     private void serverFavourites() {
-        progressDialog.show();
-        mFavDataList = new ArrayList<>();
-        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+        try {
+            progressDialog.show();
+            mFavDataList = new ArrayList<>();
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<FavouriteModel> categoriesCall = retrofit.favourite(getUEmail(),getLang_key());
-        categoriesCall.enqueue(new Callback<FavouriteModel>() {
-            @Override
-            public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
+            Call<FavouriteModel> categoriesCall = retrofit.favourite(getUEmail(), getLang_key());
+            categoriesCall.enqueue(new Callback<FavouriteModel>() {
+                @Override
+                public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
 
-                if (response.isSuccessful()) {
-                    mFavDataList.addAll(response.body().getData());
-                    pullRefreshLayout.setRefreshing(false);
-                    progressDialog.dismiss();
-                    recyclerView.setAdapter(mFavAdapter);
-                    mFavAdapter.notifyDataSetChanged();
-                } else {
-                    progressDialog.dismiss();
-                    pullRefreshLayout.setRefreshing(false);
-                    Log.v( "titler" ," "+response.body().getStatus().getTitle());
-                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful()) {
+                        mFavDataList.addAll(response.body().getData());
+                        pullRefreshLayout.setRefreshing(false);
+                        progressDialog.dismiss();
+                        recyclerView.setAdapter(mFavAdapter);
+                        mFavAdapter.notifyDataSetChanged();
+                    } else {
+                        progressDialog.dismiss();
+                        pullRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-
-            @Override
-            public void onFailure(Call<FavouriteModel> call, Throwable t) {
-                progressDialog.dismiss();
-                pullRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
+                @Override
+                public void onFailure(Call<FavouriteModel> call, Throwable t) {
+                    progressDialog.dismiss();
+                    pullRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception exc){
+            Toast.makeText(getContext(), getString(R.string.errorFav), Toast.LENGTH_SHORT).show();
+        }
     }//end serverCategories
-
 
     private String getUEmail() {
         Log.v("tagLang",getSharedPreference.getEmail());

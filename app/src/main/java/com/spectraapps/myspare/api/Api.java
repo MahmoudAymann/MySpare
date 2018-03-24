@@ -148,26 +148,58 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsWithCountry(@Field("id") String id,
+    Call<ProductsModel> productsWithCountry(@Field("id") String email,
                                             @Field("category") String category,
                                             @Field("language") String language,
                                             @Field("country") String country);
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsWithYear(@Field("id") String id,
+    Call<ProductsModel> productsWithCountryYear(@Field("id") String email,
+                                            @Field("category") String category,
+                                            @Field("language") String language,
+                                            @Field("country") String country,
+                                            @Field("date") String year);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithCountrySerial(@Field("id") String email,
+                                                @Field("category") String category,
+                                                @Field("language") String language,
+                                                @Field("country") String country,
+                                                @Field("productNumber") String serial);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithYear(@Field("id") String email,
                                             @Field("category") String category,
                                             @Field("language") String language,
                                             @Field("date") String year);
 
     @FormUrlEncoded
     @POST("products")
-    Call<ProductsModel> productsWithAll(@Field("id") String id,
+    Call<ProductsModel> productsWithSerialNum(@Field("id") String email,
+                                         @Field("category") String category,
+                                         @Field("language") String language,
+                                         @Field("productNumber") String serialNum);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithCountryBrandModel(@Field("id") String email,
+                                            @Field("category") String category,
+                                            @Field("language") String language,
+                                            @Field("country") String country,
+                                            @Field("brand") String brand,
+                                            @Field("model") String model);
+
+    @FormUrlEncoded
+    @POST("products")
+    Call<ProductsModel> productsWithAll(@Field("id") String email,
                                         @Field("category") String category,
                                         @Field("language") String language,
                                         @Field("brand") String brand,
                                         @Field("model") String model,
-                                        @Field("number") String number,
+                                        @Field("number") String serial,
                                         @Field("date") String date,
                                         @Field("country") String country);
 

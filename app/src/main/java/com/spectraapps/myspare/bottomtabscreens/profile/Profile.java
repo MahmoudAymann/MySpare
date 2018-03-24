@@ -196,9 +196,9 @@ public class Profile extends Fragment {
     }
 
     private void serverAddToFav(String pId) {
+        try {
         progressDialog.show();
         mProfileDataList = new ArrayList<>();
-        try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
             final Call<AddToFavModel> addCall = retrofit.addToFavourite(uId,pId ,false);
@@ -210,7 +210,7 @@ public class Profile extends Fragment {
                         if (response.isSuccessful()) {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), " "+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getContext(), " "+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();

@@ -84,5 +84,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="errorFav">no favourite</string>
+    <string name="choose_year">Choose Year</string>
+    <string name="choose_country">Choose Country</string>
+    <string name="choose_brand">Choose Brand</string>
+    <string name="choose_model">Choose Model</string>
 
 </resources>
