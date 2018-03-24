@@ -41,7 +41,6 @@ import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
-import com.spectraapps.myspare.products.productdetail.ProductDetail;
 
 
 import java.util.ArrayList;

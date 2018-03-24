@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-       getUserInfo();
+        getUserInfo();
     }
 
     @Override
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
         MultipartBody.Part image1 = MultipartBody.Part.createFormData("image", file1.getName(), mFile1);
 
         Call<UpdateProfileImageModel> updateProfileImageCall = retrofit.uploadProfileImage(id, image1);
-        Toast.makeText(MainActivity.this, ""+image1.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "" + image1.toString(), Toast.LENGTH_SHORT).show();
 
         updateProfileImageCall.enqueue(new Callback<UpdateProfileImageModel>() {
             @Override
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity
                 .into(mNavCircleImageView);
 
         setSharedPreference.setImage(image);
-        Toast.makeText(MainActivity.this, "tst2: "+image, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "tst2: " + image, Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkPermissions() {
@@ -417,6 +417,22 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
+                if (mIsLogged) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("puid", mId);
+                    bundle.putString("plang", langhere);
+                    Profile profileFrag = new Profile();
+                    profileFrag.setArguments(bundle);
+
+                    CachePot.getInstance().push("puid", mId);
+                    CachePot.getInstance().push("langh", langhere);
+
+                    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                    fm.beginTransaction()
+                            .replace(R.id.main_frameLayout, profileFrag).commit();
+                } else {
+                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                }
                  if (mIsLogged){
                      android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                      fm.beginTransaction()
@@ -477,10 +493,6 @@ public class MainActivity extends AppCompatActivity
             setLogout();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        } else if (id == R.id.nav_privacy) {
-            Uri uriUrl = Uri.parse("http://myspare.net");
-            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-            startActivity(launchBrowser);
         } else if (id == R.id.nav_contactus) {
             Uri uriUrl = Uri.parse("http://myspare.net/contact-us");
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -557,29 +569,105 @@ public class MainActivity extends AppCompatActivity
     }//end getUserInfo
 
     @Override
-    public void ProudctSFrag(String year) {
-        Bundle bundle = new Bundle();
-        bundle.putString("yearpop", year);
+    public void filter(String one, String two, String three, String four, String five, int num) {
+        ProductsFragment fragment = new ProductsFragment();
+        switch (num) {
+            case 12345:
+                Bundle bundle = new Bundle();
+                bundle.putString("country12345",one);
+                bundle.putString("brand12345",  two);
+                bundle.putString("model12345",  three);
+                bundle.putString("year12345",   four);
+                bundle.putString("serial12345", five);
+                fragment.setArguments(bundle);
+                break;
+        }
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_frameLayout, fragment).commit();
+    }
 
-        ProductsFragment productsFragment = new ProductsFragment();
-        productsFragment.setArguments(bundle);
+    @Override
+    public void filter(String one, int num) {
+        ProductsFragment fragment = new ProductsFragment();
+        switch (num) {
+            case 1:
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("country", one);
+                fragment.setArguments(bundle1);
+                break;
+            case 2:
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("brand", one);
+                fragment.setArguments(bundle2);
+                break;
+            case 3:
+                Bundle bundle3 = new Bundle();
+                bundle3.putString("model", one);
+                fragment.setArguments(bundle3);
+                break;
+            case 4:
+                Bundle bundle4 = new Bundle();
+                bundle4.putString("year", one);
+                fragment.setArguments(bundle4);
+                break;
+            case 5:
+                Bundle bundle5 = new Bundle();
+                bundle5.putString("serial", one);
+                fragment.setArguments(bundle5);
+                break;
+        }
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.main_frameLayout, productsFragment).commit();
+                .replace(R.id.main_frameLayout, fragment).commit();
     }
 
-//    @Override
-//    public void HomeFrag(String categ) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("home", categ);
-//        bundle.putString("lang", langhere);
-//        ProductsFragment fragment = new ProductsFragment();
-//        fragment.setArguments(bundle);
-//
-//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-//        fm.beginTransaction()
-//                .replace(R.id.main_frameLayout, fragment).commit();
-//    }
+    @Override
+    public void filter(String one, String two, int num) {
+        ProductsFragment fragment = new ProductsFragment();
+        switch (num) {
+            case 12:
+            Bundle bundle12 = new Bundle();
+            bundle12.putString("country12", one);
+            bundle12.putString("brand12", two);
+            fragment.setArguments(bundle12);
+            break;
+            case 14:
+                Bundle bundle14 = new Bundle();
+                bundle14.putString("country14", one);
+                bundle14.putString("year14", two);
+                fragment.setArguments(bundle14);
+                break;
+            case 15:
+                Bundle bundle15 = new Bundle();
+                bundle15.putString("country15", one);
+                bundle15.putString("serial15", two);
+                fragment.setArguments(bundle15);
+                break;
+        }//end switch
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_frameLayout, fragment).commit();
+    }
+
+    @Override
+    public void filter(String one, String two, String three, int num) {
+        ProductsFragment fragment = new ProductsFragment();
+        switch (num) {
+            case 123:
+                Bundle bundle = new Bundle();
+                bundle.putString("country123", one);
+                bundle.putString("brand123", two);
+                bundle.putString("model123", three);
+                fragment.setArguments(bundle);
+                break;
+        }
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_frameLayout, fragment).commit();
+    }
 
 }//end class main
