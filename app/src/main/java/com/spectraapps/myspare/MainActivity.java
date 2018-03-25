@@ -158,6 +158,9 @@ public class MainActivity extends AppCompatActivity
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
         }
+        this.setContentView(R.layout.activity_main);
+        NavigationView navigationView = this.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
     }
 
     private void initNavigationDrawer() {
@@ -369,6 +372,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        /*
         navigationTabBar.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -381,13 +385,14 @@ public class MainActivity extends AppCompatActivity
                 }, 100);
             }
         }, 500);
+        */
 
         //background Color
         navigationTabBar.setBgColor(Color.parseColor(colors[1]));
         navigationTabBar.setBackgroundColor(Color.parseColor(colors[2]));
         //badgetColor
-        navigationTabBar.setBadgeBgColor(Color.RED);
-        navigationTabBar.setBadgeSize(15);
+        //navigationTabBar.setBadgeBgColor(Color.RED);
+        //navigationTabBar.setBadgeSize(15);
     }//end initUi
 
     private void beginFragmentTransactions(int index) {
@@ -508,12 +513,11 @@ public class MainActivity extends AppCompatActivity
 
     private void setAlertDialog() {
         alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Are you sure, you will change the language Now!");
+        alertDialogBuilder.setMessage(getString(R.string.change_language_prompt));
 
-        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
                 if (getSharedPreference.getLanguage().equals("en")) {
                     setSharedPreference.setLanguage("ar");
                     restartActivity(MainActivity.this);
@@ -524,7 +528,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();

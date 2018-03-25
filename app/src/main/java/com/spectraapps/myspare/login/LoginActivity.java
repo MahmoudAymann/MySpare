@@ -5,11 +5,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -17,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +50,10 @@ public class LoginActivity extends AppCompatActivity {
     boolean isPasswordShown;
     ImageButton mImagePasswrdVisible;
     TextView textViewForgetPassword;
+
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+
     Locale locale;
     boolean mIsLogged;
     private AutoCompleteTextView mEmailEditText;
@@ -57,7 +64,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     ImageView imageView;
-
+    LinearLayout mainLayout;
+    boolean inputTypeChanged;
+    String langStr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +74,10 @@ public class LoginActivity extends AppCompatActivity {
 
         setSharedPreference = new ListSharedPreference.Set(LoginActivity.this.getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(LoginActivity.this.getApplicationContext());
-
+        langStr = getSharedPreference.getLanguage();
+        initUI();
         setLAyoutLanguage();
 
-        initUI();
         initClickListener();
         setAlertDialog();
 
@@ -78,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setAlertDialog() {
         alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setNegativeButton("Done", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -87,21 +96,24 @@ public class LoginActivity extends AppCompatActivity {
     }//end setAlertDialog
 
     private void setLAyoutLanguage() {
-        String langStr = getSharedPreference.getLanguage();
         if (langStr.equals("en")) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             locale = new Locale("en");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
-        } else if (langStr.equals("ar")) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            this.setContentView(R.layout.activity_login);
+            initUI();
+        } else  {
             locale = new Locale("ar");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
             config.locale = locale;
             this.getApplicationContext().getResources().updateConfiguration(config, null);
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            this.setContentView(R.layout.activity_login);
+            initUI();
         }
     }
 
@@ -119,7 +131,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (response.isSuccessful()) {
 
-                        Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,getString(R.string.logged_success), Toast.LENGTH_LONG).show();
+
                         if (response.body().getData() != null) {
                             String id = response.body().getData().getId();
                             String name = response.body().getData().getName();
@@ -176,9 +189,50 @@ public class LoginActivity extends AppCompatActivity {
     private void initUI() {
         imageView = findViewById(R.id.loginImageView);
         imageView.setBackgroundResource(R.drawable.app_logo);
-
+        mainLayout = findViewById(R.id.login_resource);
+        mainLayout.setBackgroundResource(R.drawable.app_background);
         mEmailEditText = findViewById(R.id.emailET);
         mPasswordEditText = findViewById(R.id.passwordET);
+        mPasswordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isPasswordShown) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && getSharedPreference.getLanguage().equals("ar")) {
+                        if (s.length() > 0) {
+                            if (!inputTypeChanged) {
+
+                                // When a character is typed, dynamically change the EditText's
+                                // InputType to PASSWORD, to show the dots and conceal the typed characters.
+                                mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                        InputType.TYPE_TEXT_VARIATION_PASSWORD |
+                                        InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+                                // Move the cursor to the correct place (after the typed character)
+                                mPasswordEditText.setSelection(s.length());
+
+                                inputTypeChanged = true;
+                            }
+                        } else {
+                            // Reset EditText: Make the "Enter password" hint display on the right
+                            mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+                            inputTypeChanged = false;
+                        }
+                    }
+                }
+            }
+        });
 
         mSignInButton = findViewById(R.id.email_sign_in_button);
         mSignInButton.setText(R.string.action_sign_in);
@@ -271,7 +325,6 @@ public class LoginActivity extends AppCompatActivity {
             mEmailEditText.setError(getString(R.string.error_invalid_email));
             YoYo.with(Techniques.Shake)
                     .duration(700)
-                    .repeat(1)
                     .playOn(mEmailEditText);
             return false;
         }
@@ -285,7 +338,6 @@ public class LoginActivity extends AppCompatActivity {
             mPasswordEditText.setError(getString(R.string.error_invalid_password));
             YoYo.with(Techniques.Shake)
                     .duration(700)
-                    .repeat(1)
                     .playOn(mPasswordEditText);
             return false;
         }

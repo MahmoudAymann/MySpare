@@ -3,6 +3,7 @@ package com.spectraapps.myspare.bottomtabscreens.profile;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,7 +48,6 @@ public class Profile extends Fragment {
     public Profile() {
         // Required empty public constructo
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -161,7 +161,7 @@ public class Profile extends Fragment {
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
-                public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             pullRefreshLayout.setRefreshing(false);
@@ -178,7 +178,7 @@ public class Profile extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
@@ -203,7 +203,7 @@ public class Profile extends Fragment {
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
-                public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             pullRefreshLayout.setRefreshing(false);
@@ -220,7 +220,7 @@ public class Profile extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<AddToFavModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
@@ -253,7 +253,7 @@ public class Profile extends Fragment {
 
             productsCall.enqueue(new Callback<ProfileProdModel>() {
                 @Override
-                public void onResponse(Call<ProfileProdModel> call, Response<ProfileProdModel> response) {
+                public void onResponse(@NonNull Call<ProfileProdModel> call, @NonNull Response<ProfileProdModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProfileDataList.addAll(response.body().getData());
@@ -263,20 +263,17 @@ public class Profile extends Fragment {
                             mRecyclerProfileAdapter.notifyDataSetChanged();
                             Log.e("jkjk", response.body().getData().size() + "");
                             Log.e("jkjk", mProfileDataList.size() + "ss");
-                            Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
-
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
                             Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(getContext(), "NO DATA"+e, Toast.LENGTH_LONG).show();
+                    } catch (Exception ignored) {
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ProfileProdModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProfileProdModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
@@ -294,6 +291,7 @@ public class Profile extends Fragment {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
             @Override
             public void onBackPressed() {
+
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new Home())
                         .commit();

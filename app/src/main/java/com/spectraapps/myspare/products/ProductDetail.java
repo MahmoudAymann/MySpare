@@ -115,13 +115,16 @@ public class ProductDetail extends Fragment
 
     private void getProductData() {
         try {
+
             pName = CachePot.getInstance().pop("pName");
             pId = CachePot.getInstance().pop("pId");
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
+
             pImage1 = CachePot.getInstance().pop("pImage1");
             pImage2 = CachePot.getInstance().pop("pImage2");
+
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");

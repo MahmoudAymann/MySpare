@@ -4,6 +4,7 @@ package com.spectraapps.myspare.bottomtabscreens.favourite;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpFav.RecyclerFavouriteAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
+import com.spectraapps.myspare.bottomtabscreens.profile.ProfileProductDetail;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.FavouriteModel;
@@ -82,40 +85,43 @@ public class Favourite extends Fragment {
             Call<FavouriteModel> categoriesCall = retrofit.favourite(getUEmail(), getLang_key());
             categoriesCall.enqueue(new Callback<FavouriteModel>() {
                 @Override
-                public void onResponse(Call<FavouriteModel> call, Response<FavouriteModel> response) {
-
-                    if (response.isSuccessful()) {
-                        mFavDataList.addAll(response.body().getData());
-                        pullRefreshLayout.setRefreshing(false);
-                        progressDialog.dismiss();
-                        recyclerView.setAdapter(mFavAdapter);
-                        mFavAdapter.notifyDataSetChanged();
-                    } else {
-                        progressDialog.dismiss();
-                        pullRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                public void onResponse(@NonNull Call<FavouriteModel> call, @NonNull Response<FavouriteModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            mFavDataList.addAll(response.body().getData());
+                            pullRefreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
+                            recyclerView.setAdapter(mFavAdapter);
+                            mFavAdapter.notifyDataSetChanged();
+                        } else {
+                            progressDialog.dismiss();
+                            pullRefreshLayout.setRefreshing(false);
+                            Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception ignored) {
                     }
                 }
+
                 @Override
-                public void onFailure(Call<FavouriteModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<FavouriteModel> call, @NonNull Throwable t) {
                     progressDialog.dismiss();
                     pullRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        }catch (Exception exc){
+        } catch (Exception exc) {
             Toast.makeText(getContext(), getString(R.string.errorFav), Toast.LENGTH_SHORT).show();
         }
     }//end serverCategories
 
     private String getUEmail() {
-        Log.v("tagLang",getSharedPreference.getEmail());
+        Log.v("tagLang", getSharedPreference.getEmail());
         return getSharedPreference.getEmail();
     }
 
     private String getLang_key() {
-        Log.v("tagLang",getSharedPreference.getLanguage());
-       return getSharedPreference.getLanguage();
+        Log.v("tagLang", getSharedPreference.getLanguage());
+        return getSharedPreference.getLanguage();
     }
 
     private void fireBackButtonEvent() {
@@ -153,21 +159,39 @@ public class Favourite extends Fragment {
     }//end initRecyclerView()
 
     private void initAdapter() {
-        mFavAdapter = new RecyclerFavouriteAdapter(Favourite.this.getContext(),mFavDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
+        mFavAdapter = new RecyclerFavouriteAdapter(Favourite.this.getContext(), mFavDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(FavouriteModel.DataBean favModel) {
 
+                CachePot.getInstance().push("pName", favModel.getProductName());
+                CachePot.getInstance().push("pId", favModel.getProductNumber());
+                CachePot.getInstance().push("pPrice", favModel.getProductPrice());
+                CachePot.getInstance().push("pNumber", favModel.getProductNumber());
+                CachePot.getInstance().push("pCurrency", favModel.getCurrency());
+                CachePot.getInstance().push("pImage1", favModel.getImage1());
+                CachePot.getInstance().push("pImage2", favModel.getImage2());
+                CachePot.getInstance().push("pDate", favModel.getDate());
+                CachePot.getInstance().push("pCountry",favModel.getCountry());
+                CachePot.getInstance().push("pBrand",  favModel.getBrand());
+                CachePot.getInstance().push("pModel",  favModel.getModel());
+
+                CachePot.getInstance().push("uId", favModel.getId());
+                CachePot.getInstance().push("uMobile", favModel.getMobile());
+                CachePot.getInstance().push("uName", favModel.getName());
+                CachePot.getInstance().push("uImage", favModel.getImage());
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new FavProductDetail()).commit();
+
+                Log.v("jkjkl", favModel.getImage() + " push ");
+                Log.v("jkjkl", favModel.getName() + favModel.getMobile() + "push");
             }
 
             @Override
             public void onFavButtonClick(View v, int position, boolean isFav) {
-                if (isFav){
+                if (isFav) {
                     serverAddToFav(position);
-                    //Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    //Toast.makeText(getContext(), ""+isFav, Toast.LENGTH_SHORT).show();
+                } else {
                     serverRemoveFromFav(position);
                 }
             }
@@ -178,7 +202,7 @@ public class Favourite extends Fragment {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(),false);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(), false);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
@@ -186,8 +210,8 @@ public class Favourite extends Fragment {
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
-                   serverFavourites();
+                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    serverFavourites();
 
                 } else {
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
@@ -205,15 +229,14 @@ public class Favourite extends Fragment {
     private void serverAddToFav(int position) {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(),true);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(getUEmail(), mFavDataList.get(position).getPid(), true);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
-            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+            public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
 
                 if (response.isSuccessful()) {
-
-                    Toast.makeText(getContext(), ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     serverFavourites();
                 } else {
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();

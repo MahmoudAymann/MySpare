@@ -81,6 +81,11 @@ public class ListSharedPreference {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             prefEditor.putInt("keyFilter", keyFilter).apply();
         }
+
+        public void setCategoryName(String categoryName) {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putString("categname", categoryName).apply();
+        }
     }//end Set
 
 
@@ -98,10 +103,16 @@ public class ListSharedPreference {
             return prefs.getInt("keyFilter", 0);
         }
 
-        public String getFav(String favKey )
+        public String getFav(String fav)
         {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString(favKey, "false");
+            return prefs.getString(fav, "null");
+        }
+
+        public String getCategoryName()
+        {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString("categname", "Category");
         }
         public boolean getFirstRun()
         {

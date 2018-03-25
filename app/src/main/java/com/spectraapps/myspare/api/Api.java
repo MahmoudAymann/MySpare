@@ -120,7 +120,23 @@ public interface Api {
 
     @Multipart
     @POST("add.php")
-    Call<AddModel> uploadFile(@Part("id") RequestBody id,
+    Call<AddModel> uploadFileOne(@Part("id") RequestBody id,
+                              @Part("name") RequestBody name,
+                              @Part("number") RequestBody number,
+                              @Part("manufacturingCountry") RequestBody manufacturingCountry,
+                              @Part("date") RequestBody date,
+                              @Part("brand") RequestBody brand,
+                              @Part("model") RequestBody model,
+                              @Part("category") RequestBody category,
+                              @Part("country") RequestBody country,
+                              @Part("currency") RequestBody currency,
+                              @Part("price") RequestBody price,
+                              @Part MultipartBody.Part file2,
+                              @Part("image3") RequestBody image3);
+
+    @Multipart
+    @POST("add.php")
+    Call<AddModel> uploadFileTwo(@Part("id") RequestBody id,
                               @Part("name") RequestBody name,
                               @Part("number") RequestBody number,
                               @Part("manufacturingCountry") RequestBody manufacturingCountry,
@@ -132,8 +148,24 @@ public interface Api {
                               @Part("currency") RequestBody currency,
                               @Part("price") RequestBody price,
                               @Part MultipartBody.Part file1,
-                              @Part MultipartBody.Part file2,
                               @Part("image3") RequestBody image3);
+
+    @Multipart
+    @POST("add.php")
+    Call<AddModel> uploadFileBoth(@Part("id") RequestBody id,
+                                 @Part("name") RequestBody name,
+                                 @Part("number") RequestBody number,
+                                 @Part("manufacturingCountry") RequestBody manufacturingCountry,
+                                 @Part("date") RequestBody date,
+                                 @Part("brand") RequestBody brand,
+                                 @Part("model") RequestBody model,
+                                 @Part("category") RequestBody category,
+                                 @Part("country") RequestBody country,
+                                 @Part("currency") RequestBody currency,
+                                 @Part("price") RequestBody price,
+                                 @Part MultipartBody.Part file1,
+                                 @Part MultipartBody.Part file2,
+                                 @Part("image3") RequestBody image3);
 
     @FormUrlEncoded
     @POST("products")

@@ -80,14 +80,19 @@
     <string name="model_PD">Model:</string>
     <string name="splash_btn_ar" translatable="false">عربى</string>
     <string name="splash_btn_en" translatable="false">English</string>
-    <string name="title_activity_profile_product_detail" translatable="false">ProfileProductDetail</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="errorFav">no favourite</string>
     <string name="choose_year">Choose Year</string>
     <string name="choose_country">Choose Country</string>
     <string name="choose_brand">Choose Brand</string>
     <string name="choose_model">Choose Model</string>
+    <string name="logged_success">Successfully Logged In</string>
+    <string name="change_language_prompt">Are you sure, you will change the language Now!</string>
+    <string name="title_activity_profile_product_detail">ProductDetail</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="done">Done</string>
+    <string name="no_products_found">No Products Found!</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="choose_currency">Choose Currency</string>
 
 </resources>

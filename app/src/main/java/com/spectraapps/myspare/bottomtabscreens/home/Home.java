@@ -3,8 +3,10 @@ package com.spectraapps.myspare.bottomtabscreens.home;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,14 +54,10 @@ public class Home extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        serverCategories();
         setData();
     }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        homeCallBack = (HomeCallBack) context;
-//    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,18 +71,14 @@ public class Home extends Fragment {
 
         onTouchEvent(rootView, true);
 
-
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
-        serverCategories();
-
         return rootView;
     }
 
-    public boolean onTouchEvent(View view, boolean isTouchable) {
-
+    public void onTouchEvent(View view, boolean isTouchable) {
         if (!isTouchable) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 @SuppressLint("ClickableViewAccessibility")
@@ -94,7 +88,6 @@ public class Home extends Fragment {
                 }
             });
         }
-        return false;
     }
 
     private void serverCategories() {
@@ -105,7 +98,7 @@ public class Home extends Fragment {
         Call<CategoriesModel> categoriesCall = retrofit.categories(getLang_key());
         categoriesCall.enqueue(new Callback<CategoriesModel>() {
             @Override
-            public void onResponse(Call<CategoriesModel> call, Response<CategoriesModel> response) {
+            public void onResponse(@NonNull Call<CategoriesModel> call, @NonNull Response<CategoriesModel> response) {
 
                 if (response.isSuccessful()) {
                     dataBeanArrayList.addAll(response.body().getData());
@@ -116,36 +109,29 @@ public class Home extends Fragment {
                     progressDialog.dismiss();
                     pullRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-
                 }
             }
-
             @Override
-            public void onFailure(Call<CategoriesModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<CategoriesModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 pullRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }//end serverCategories
 
     private String getLang_key() {
-        switch (getSharedPreference.getLanguage()) {
-            case "en":
-                return "en";
-            case "ar":
-                return "ar";
-            default:
-                return "ar";
-        }
+        return getSharedPreference.getLanguage();
     }
 
     private void fireBackButtonEvent() {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
             @Override
             public void onBackPressed() {
-                getActivity().finish();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }//end back pressed
@@ -177,7 +163,9 @@ public class Home extends Fragment {
             @Override
             public void onCardViewClick(CategoriesModel.DataBean categoriesModel) {
                 setSharedPreference.setCategory(categoriesModel.getId());
+                setSharedPreference.setCategoryName(categoriesModel.getName());
                 setSharedPreference.setKeyFilter(0);
+
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new ProductsFragment()).commit();
 
@@ -201,9 +189,5 @@ public class Home extends Fragment {
         });
     }
 
-
-//    public interface HomeCallBack {
-//        void HomeFrag(String categ);
-//    }
 
 }//end Home

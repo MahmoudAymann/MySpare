@@ -255,10 +255,15 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void submitAddItem() {
         progressDialog.show();
-        serverAddItem();
+        if (image_path1 != null && image_path2 != null)
+        serverAddItemBoth();
+        else if (image_path2 == null)
+            serverAddItemOne();
+        else
+            serverAddItemTwo();
     }
 
-    private void serverAddItem() {
+    private void serverAddItemTwo() {
 
         mItemName = nameET.getText().toString();
         mSerialNumber = serialNumberET.getText().toString();
@@ -266,10 +271,9 @@ public class AddItemActivity extends AppCompatActivity {
         mCurrency = currency_spinner.getSelectedItem().toString();
         mPrice = priceET.getText().toString();
 
-        File file1 = new File(image_path1);
-        RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
+        File file2;
+        file2 = new File(image_path2);
 
-        File file2 = new File(image_path2);
         RequestBody mFile2 = RequestBody.create(MediaType.parse("image/*"), file2);
 
         RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mUserID);
@@ -281,21 +285,20 @@ public class AddItemActivity extends AppCompatActivity {
         RequestBody model = RequestBody.create(MediaType.parse("text/plain"), mModel_Id);
         RequestBody category = RequestBody.create(MediaType.parse("text/plain"), mCategory_Id);
         RequestBody country = RequestBody.create(MediaType.parse("text/plain"), mCountry_Id);
-        RequestBody currency = RequestBody.create(MediaType.parse("text/plain"), mCurrency);
+        RequestBody currency = RequestBody.create(MediaType.parse("text/plain"), mCurrencyId);
         RequestBody price = RequestBody.create(MediaType.parse("text/plain"), mPrice);
         RequestBody image3 = RequestBody.create(MediaType.parse("text/plain"), "NULL");
 
-
-        MultipartBody.Part image1 = MultipartBody.Part.createFormData("image1", file1.getName(), mFile1);
         MultipartBody.Part image2 = MultipartBody.Part.createFormData("image2", file2.getName(), mFile2);
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-        Call<AddModel> call = retrofit.uploadFile(id, name, number, manufacturingCountry, date, brand,
-                model, category, country, currency, price, image1, image2, image3);
+
+        Call<AddModel> call = retrofit.uploadFileTwo(id, name, number, manufacturingCountry, date, brand,
+                model, category, country, currency, price, image2, image3);
 
         call.enqueue(new Callback<AddModel>() {
             @Override
-            public void onResponse(Call<AddModel> call, Response<AddModel> response) {
+            public void onResponse(@NonNull Call<AddModel> call, @NonNull Response<AddModel> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
@@ -309,15 +312,146 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<AddModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 Log.v("esddd", t.getMessage());
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                //serverAddItem();
+                //serverAddItemBoth();
+            }
+        });
+    }
+
+    private void serverAddItemOne() {
+
+        mItemName = nameET.getText().toString();
+        mSerialNumber = serialNumberET.getText().toString();
+        mDate = year_spinner.getSelectedItem().toString();
+        mCurrency = currency_spinner.getSelectedItem().toString();
+        mPrice = priceET.getText().toString();
+
+        File file1;
+        file1 = new File(image_path1);
+
+        RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
+
+        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mUserID);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), mItemName);
+        RequestBody number = RequestBody.create(MediaType.parse("text/plain"), mSerialNumber);
+        RequestBody manufacturingCountry = RequestBody.create(MediaType.parse("text/plain"), mManfactureCountry_Id);
+        RequestBody date = RequestBody.create(MediaType.parse("text/plain"), mDate);
+        RequestBody brand = RequestBody.create(MediaType.parse("text/plain"), mBrand_Id);
+        RequestBody model = RequestBody.create(MediaType.parse("text/plain"), mModel_Id);
+        RequestBody category = RequestBody.create(MediaType.parse("text/plain"), mCategory_Id);
+        RequestBody country = RequestBody.create(MediaType.parse("text/plain"), mCountry_Id);
+        RequestBody currency = RequestBody.create(MediaType.parse("text/plain"), mCurrencyId);
+        RequestBody price = RequestBody.create(MediaType.parse("text/plain"), mPrice);
+        RequestBody image3 = RequestBody.create(MediaType.parse("text/plain"), "NULL");
+
+        MultipartBody.Part image1 = MultipartBody.Part.createFormData("image1", file1.getName(), mFile1);
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<AddModel> call = retrofit.uploadFileOne(id, name, number, manufacturingCountry, date, brand,
+                model, category, country, currency, price, image1, image3);
+
+        call.enqueue(new Callback<AddModel>() {
+            @Override
+            public void onResponse(@NonNull Call<AddModel> call, @NonNull Response<AddModel> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(AddItemActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AddModel> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                Log.v("esddd", t.getMessage());
+                Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                //serverAddItemBoth();
+            }
+        });
+    }//end serverAddItemOne
+
+    private void serverAddItemBoth() {
+
+        mItemName = nameET.getText().toString();
+        mSerialNumber = serialNumberET.getText().toString();
+        mDate = year_spinner.getSelectedItem().toString();
+        mCurrency = currency_spinner.getSelectedItem().toString();
+        mPrice = priceET.getText().toString();
+
+        File file1,file2;
+//        if (image_path1 != null) {
+            file1 = new File(image_path1);
+//        }
+//        else {
+//            file1 = new File("null");
+//        }
+
+//        if (image_path2 != null) {
+            file2 = new File(image_path2);
+//        }
+//        else {
+//            file2 = new File("null");
+//        }
+
+        RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
+        RequestBody mFile2 = RequestBody.create(MediaType.parse("image/*"), file2);
+
+        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), mUserID);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), mItemName);
+        RequestBody number = RequestBody.create(MediaType.parse("text/plain"), mSerialNumber);
+        RequestBody manufacturingCountry = RequestBody.create(MediaType.parse("text/plain"), mManfactureCountry_Id);
+        RequestBody date = RequestBody.create(MediaType.parse("text/plain"), mDate);
+        RequestBody brand = RequestBody.create(MediaType.parse("text/plain"), mBrand_Id);
+        RequestBody model = RequestBody.create(MediaType.parse("text/plain"), mModel_Id);
+        RequestBody category = RequestBody.create(MediaType.parse("text/plain"), mCategory_Id);
+        RequestBody country = RequestBody.create(MediaType.parse("text/plain"), mCountry_Id);
+        RequestBody currency = RequestBody.create(MediaType.parse("text/plain"), mCurrencyId);
+        RequestBody price = RequestBody.create(MediaType.parse("text/plain"), mPrice);
+        RequestBody image3 = RequestBody.create(MediaType.parse("text/plain"), "NULL");
+
+
+        MultipartBody.Part image1 = MultipartBody.Part.createFormData("image1", file1.getName(), mFile1);
+        MultipartBody.Part image2 = MultipartBody.Part.createFormData("image2", file2.getName(), mFile2);
+
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+        Call<AddModel> call = retrofit.uploadFileBoth(id, name, number, manufacturingCountry, date, brand,
+                model, category, country, currency, price, image1, image2, image3);
+
+        call.enqueue(new Callback<AddModel>() {
+            @Override
+            public void onResponse(@NonNull Call<AddModel> call, @NonNull Response<AddModel> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(AddItemActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AddModel> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                Log.v("esddd", t.getMessage());
+                Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                //serverAddItemBoth();
             }
         });
 
-    }//end serverAddItem
+    }//end serverAddItemBoth
 
     ///////////////#get IDS//////////////////////
     private void getBrandId(Integer pos) {
@@ -559,7 +693,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCategory(List<CategoriesModel.DataBean> data) {
         category_array = new ArrayList<>();
-        category_array.add(0, "Choose Category");
+        category_array.add(0, getString(R.string.choose_category));
 
         for (int i = 0; i < data.size(); i++) {
             category_array.add(data.get(i).getName());
@@ -583,7 +717,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCountries(List<CountriesModel.DataBean> data) {
         countries_array = new ArrayList<>();
-        countries_array.add(0, "Choose Country");
+        countries_array.add(0, getString(R.string.choose_country));
         for (int i = 0; i < data.size(); i++) {
             countries_array.add(data.get(i).getName());
         }
@@ -606,7 +740,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getBrands(List<BrandsModel.DataBean> data) {
         brand_array = new ArrayList<>();
-        brand_array.add(0, "Choose Brand");
+        brand_array.add(0, getString(R.string.choose_brand));
         for (int i = 0; i < data.size(); i++) {
             brand_array.add(data.get(i).getName());
         }
@@ -630,7 +764,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getCurrency(List<CurrencyModel.DataBean> data) {
         currency_array = new ArrayList<>();
-        currency_array.add(0, "Choose Currency");
+        currency_array.add(0, getString(R.string.choose_currency));
         for (int i = 0; i < data.size(); i++) {
             currency_array.add(data.get(i).getName());
         }
@@ -654,7 +788,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getManufacturerCountries(List<ManufacturerCountriesModel.DataBean> data) {
         manufactureCountry_array = new ArrayList<>();
-        manufactureCountry_array.add(0, "Choose Country");
+        manufactureCountry_array.add(0, getString(R.string.choose_country));
         for (int i = 0; i < data.size(); i++) {
             manufactureCountry_array.add(data.get(i).getName());
         }
@@ -678,7 +812,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void getModels(List<ModelsModel.DataBean> data) {
         models_array = new ArrayList<>();
-        models_array.add(0, "Choose Model");
+        models_array.add(0, getString(R.string.choose_model));
         for (int i = 0; i < data.size(); i++) {
             models_array.add(data.get(i).getName());
         }

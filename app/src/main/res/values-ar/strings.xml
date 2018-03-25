@@ -7,8 +7,8 @@
     <string name="add_title">إضافة عنصر</string>
     <string name="action_settings">الضبط</string>
     <string name="title_activity_login">تسجيل الدخول</string>
-    <string name="prompt_email">الإيميل</string>
-    <string name="prompt_password">الباسوورد</string>
+    <string name="prompt_email">البريد الإلكترونى</string>
+    <string name="prompt_password">كلمة المرور</string>
     <string name="action_sign_in_short">تسجيل الدخول</string>
     <string name="error_invalid_email">ايميل غير صالح</string>
     <string name="error_invalid_password">يجب ان يكون اكبر من 4</string>
@@ -77,5 +77,13 @@
     <string name="choose_country">اختر البلد</string>
     <string name="choose_brand">اختر البراند</string>
     <string name="choose_model">اختر الموديل</string>
+    <string name="logged_success">تم تسجيل الدخول بنجاح</string>
+    <string name="change_language_prompt">هل انت متأكد من تغيير اللغة!</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="done">تم</string>
+    <string name="no_products_found">لا يوجد منتجات</string>
+    <string name="choose_category">اختر الفئة</string>
+    <string name="choose_currency">اختر العملة</string>
 
 </resources>

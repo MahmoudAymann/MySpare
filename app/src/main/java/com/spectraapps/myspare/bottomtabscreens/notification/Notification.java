@@ -3,6 +3,7 @@ package com.spectraapps.myspare.bottomtabscreens.notification;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorCompletionService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,7 +64,6 @@ public class Notification extends Fragment {
         recyclerView.setLayoutManager(llm);
 
 
-
         //recyclerView.setAdapter(notificationAdapter);
         serverNotifi();
         notificationAdapter = new NotificationAdapter(notificationDataList, new NotificationAdapter.OnItemClickListener() {
@@ -75,15 +76,6 @@ public class Notification extends Fragment {
 
     }//end onCreateView
 
-//    private void initAdapter() {
-//
-//        notificationAdapter = new NotificationAdapter(notificationDataList, new NotificationAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(NotificationModel.DataBean notificationData) {
-//                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
     private void initPullRefreshLayout(View rootView) {
         pullRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayoutProfile);
@@ -99,34 +91,36 @@ public class Notification extends Fragment {
 
     private void serverNotifi() {
         try {
-        progressDialog.show();
-        notificationDataList = new ArrayList<>();
+            progressDialog.show();
+            notificationDataList = new ArrayList<>();
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<NotificationModel> notificationCall = retrofit.notification("1");
+            final Call<NotificationModel> notificationCall = retrofit.notification(getSharedPreference.getUId());
 
             notificationCall.enqueue(new Callback<NotificationModel>() {
                 @Override
-                public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+                public void onResponse(@NonNull Call<NotificationModel> call, @NonNull Response<NotificationModel> response) {
 
+                    try {
                         if (response.isSuccessful()) {
                             notificationDataList.addAll(response.body().getData());
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
                             notificationAdapter.notifyDataSetChanged();
                             recyclerView.setAdapter(notificationAdapter);
-                            //Toast.makeText(getContext(), "sssss" + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
 
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
                             Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
+                    } catch (Exception ignored) {
 
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<NotificationModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<NotificationModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
@@ -144,6 +138,7 @@ public class Notification extends Fragment {
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()) {
             @Override
             public void onBackPressed() {
+
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new Home())
                         .commit();
