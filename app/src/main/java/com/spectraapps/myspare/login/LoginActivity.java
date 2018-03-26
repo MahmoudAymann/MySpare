@@ -144,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                             setSharedPreference.setLoginStatus(true);
 
                             saveUserInfo(id, name, email, mobile, token, image);
+                            Toast.makeText(LoginActivity.this, "id in log"+response.body().getData().getId(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
 

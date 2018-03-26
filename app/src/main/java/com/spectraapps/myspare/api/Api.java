@@ -131,7 +131,7 @@ public interface Api {
                               @Part("country") RequestBody country,
                               @Part("currency") RequestBody currency,
                               @Part("price") RequestBody price,
-                              @Part MultipartBody.Part file2,
+                              @Part MultipartBody.Part file1,
                               @Part("image3") RequestBody image3);
 
     @Multipart
@@ -147,7 +147,7 @@ public interface Api {
                               @Part("country") RequestBody country,
                               @Part("currency") RequestBody currency,
                               @Part("price") RequestBody price,
-                              @Part MultipartBody.Part file1,
+                              @Part MultipartBody.Part file2,
                               @Part("image3") RequestBody image3);
 
     @Multipart

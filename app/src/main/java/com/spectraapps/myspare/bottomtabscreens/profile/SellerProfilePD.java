@@ -3,6 +3,7 @@ package com.spectraapps.myspare.bottomtabscreens.profile;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,8 +40,9 @@ public class SellerProfilePD extends Fragment {
 
     String uId;
     private ProgressDialog progressDialog;
-ListSharedPreference.Set setSharedPreference;
-ListSharedPreference.Get getSharedPreference;
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
     public SellerProfilePD() {
         // Required empty public constructo
     }
@@ -63,7 +65,6 @@ ListSharedPreference.Get getSharedPreference;
 
         try {
             uId = CachePot.getInstance().pop("suid");
-            Toast.makeText(getContext(), " "+uId, Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -80,9 +81,10 @@ ListSharedPreference.Get getSharedPreference;
         initAdapterProfileProducts();
         recyclerView.setAdapter(mRecyclerProfileAdapter);
     }
-private String getLang(){
+
+    private String getLang() {
         return getSharedPreference.getLanguage();
-}
+    }
 
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
@@ -183,7 +185,7 @@ private String getLang(){
 
             productsCall.enqueue(new Callback<ProfileProdModel>() {
                 @Override
-                public void onResponse(Call<ProfileProdModel> call, Response<ProfileProdModel> response) {
+                public void onResponse(@NonNull Call<ProfileProdModel> call, @NonNull Response<ProfileProdModel> response) {
 
                     if (response.isSuccessful()) {
                         mProfileDataList.addAll(response.body().getData());

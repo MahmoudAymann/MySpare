@@ -80,14 +80,14 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getId()).equals("true")) {
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getId(), "false");
+                if (new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "false");
                     listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
 
                 } else {
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getId(), "true");
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "true");
                     listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
             }

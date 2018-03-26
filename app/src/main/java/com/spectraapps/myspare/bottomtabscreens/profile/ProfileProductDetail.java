@@ -27,6 +27,7 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.products.ProductsFragment;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -43,6 +44,10 @@ public class ProfileProductDetail extends Fragment
 
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
+
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
 
     CircleImageView profileImageView;
 
@@ -170,7 +175,7 @@ public class ProfileProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-            file_maps.put(pName, pImage1);
+            file_maps.put(pName, getSharedPreference.getImg1());
         if (pImage2 != null)
             file_maps.put(pName, pImage2);
 

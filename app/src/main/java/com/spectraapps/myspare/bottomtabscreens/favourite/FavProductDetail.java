@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,11 @@ import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.utility.ListSharedPreference;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavProductDetail extends Fragment
         implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener{
@@ -34,6 +38,7 @@ public class FavProductDetail extends Fragment
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
 
+    CircleImageView userImageView;
     String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, pDate, pCountry, pBrand, pModel;
 
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
@@ -46,6 +51,7 @@ public class FavProductDetail extends Fragment
 
 
     String langhere;
+    private String uImage;
 
     public FavProductDetail() {
         // Required empty public constructor
@@ -65,7 +71,6 @@ public class FavProductDetail extends Fragment
 
         getProductData();
 
-        imageSliderInitilaize();
         fireBackButtonEvent();
         langhere = getSharedPreference.getLanguage();
 
@@ -91,13 +96,20 @@ public class FavProductDetail extends Fragment
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
         uMobile_tv.setOnClickListener(this);
+        userImageView = rootView.findViewById(R.id.user_image_PD);
     }
 
     private void setData() {
 
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
-
+        if (uImage!=null) {
+            Picasso.with(getContext()).load(uImage)
+                    .error(R.drawable.place_holder)
+                    .placeholder(R.drawable.place_holder)
+                    .into(userImageView);
+        }else
+            Toast.makeText(getContext(), "null", Toast.LENGTH_SHORT).show();
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
         pNumber_tv.setText(pNumber);
@@ -106,8 +118,7 @@ public class FavProductDetail extends Fragment
         pCountry_tv.setText(pCountry);
         pBrand_tv.setText(pBrand);
         pModel_tv.setText(pModel);
-
-
+imageSliderInitilaize();
     }
 
     private void getProductData() {
@@ -117,17 +128,25 @@ public class FavProductDetail extends Fragment
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
+
             pImage1 = CachePot.getInstance().pop("pImage1");
             pImage2 = CachePot.getInstance().pop("pImage2");
+
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
+            MainActivity.mToolbarText.setText(pName);
+
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
+            uImage = CachePot.getInstance().pop("uImage");
 
+            Log.v("productinfo",pName + "/" +pId+ "/" +pPrice+ "/" +pNumber+ "/" + pCurrency+ "/ " +pImage1+ "/ " +pImage2+ " /" +pDate+ "/" +pCountry
+                    + "/" +pBrand+ "/" +pModel+ "/" +uId+ "/" +uMobile+ "/" +uName+ "/ " + uImage);
+            setData();
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -147,7 +166,7 @@ public class FavProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        setData();
+        imageSliderInitilaize();
     }
 
     @Override
@@ -159,9 +178,11 @@ public class FavProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-            file_maps.put(pName, pImage1);
+            Toast.makeText(getContext(), ""+pImage1, Toast.LENGTH_SHORT).show();
+            file_maps.put(pName, getSharedPreference.getimg());
         if (pImage2 != null)
-            file_maps.put(pName, pImage2);
+            Toast.makeText(getContext(), ""+pImage2, Toast.LENGTH_SHORT).show();
+            file_maps.put(pName, getSharedPreference.getimg());
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());

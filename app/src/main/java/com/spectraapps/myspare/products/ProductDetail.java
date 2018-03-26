@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,9 @@ public class ProductDetail extends Fragment
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
 
-    String pName, pId, pPrice, pNumber, pCurrency, uMobile, pImage1, pImage2, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
-
+    String pName, pId, pPrice, pNumber, pCurrency, uMobile, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
+    String pImage1 = "http://myspare.net/api/images/pp_placeholder_400400.png";
+    String pImage2 = "http://myspare.net/api/images/pp_placeholder_400400.png";
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
 
@@ -99,10 +101,11 @@ public class ProductDetail extends Fragment
 
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
-        Picasso.with(getContext()).load(uImage)
-                .error(R.drawable.place_holder)
-                .placeholder(R.drawable.place_holder)
-                .into(imageView);
+        if (uImage != null)
+            Picasso.with(getContext()).load(uImage)
+                    .error(R.drawable.place_holder)
+                    .placeholder(R.drawable.place_holder)
+                    .into(imageView);
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
         pNumber_tv.setText(pNumber);
@@ -136,6 +139,11 @@ public class ProductDetail extends Fragment
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
+
+            Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/" + pImage1 + "/" + pImage2 + "/" + pDate + "/" + pCountry
+                    + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/" + uImage);
+
+            setData();
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -155,7 +163,7 @@ public class ProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        setData();
+
     }
 
     @Override

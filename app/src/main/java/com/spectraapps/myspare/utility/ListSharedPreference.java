@@ -86,6 +86,14 @@ public class ListSharedPreference {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             prefEditor.putString("categname", categoryName).apply();
         }
+        public void setimg1(String img1) {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putString("getImg1", img1).apply();
+        }
+        public void setimg2(String img2) {
+            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            prefEditor.putString("getImg2", img2).apply();
+        }
     }//end Set
 
 
@@ -157,7 +165,17 @@ public class ListSharedPreference {
 
         public String getImage() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("image", "http://myspare.net/api/images/pp_placeholder_400400.png");
+            return prefs.getString("image", "http://myspare.net/public/upload/default.jpg");
+        }
+
+        public String getImg1() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString("getImg1", "http://myspare.net/public/upload/default.jpg");
+        }
+
+        public String getImg2() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return prefs.getString("getImg2", "http://myspare.net/public/upload/default.jpg");
         }
 
         public String getCategory() {

@@ -942,9 +942,7 @@ public class ProductsFragment extends Fragment {
                     public void onFavButtonClick(View v, int position, boolean isFav) {
                         if (isFav) {
                             serverAddToFav(position);
-                            Toast.makeText(getContext(), "" + isFav, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "" + isFav, Toast.LENGTH_SHORT).show();
                             serverRemoveFromFav(position);
                         }
                     }

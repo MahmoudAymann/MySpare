@@ -67,6 +67,7 @@ public class Favourite extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         MainActivity.mToolbarText.setText(R.string.favourite);
+
         setSharedPreference = new ListSharedPreference.Set(Favourite.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(Favourite.this.getContext().getApplicationContext());
 
@@ -170,6 +171,7 @@ public class Favourite extends Fragment {
                 CachePot.getInstance().push("pCurrency", favModel.getCurrency());
                 CachePot.getInstance().push("pImage1", favModel.getImage1());
                 CachePot.getInstance().push("pImage2", favModel.getImage2());
+                setSharedPreference.setimg(favModel.getImage1());
                 CachePot.getInstance().push("pDate", favModel.getDate());
                 CachePot.getInstance().push("pCountry",favModel.getCountry());
                 CachePot.getInstance().push("pBrand",  favModel.getBrand());
@@ -183,6 +185,7 @@ public class Favourite extends Fragment {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new FavProductDetail()).commit();
 
+                Log.v("jkjkl", favModel.getImage1() + " push ");
                 Log.v("jkjkl", favModel.getImage() + " push ");
                 Log.v("jkjkl", favModel.getName() + favModel.getMobile() + "push");
             }

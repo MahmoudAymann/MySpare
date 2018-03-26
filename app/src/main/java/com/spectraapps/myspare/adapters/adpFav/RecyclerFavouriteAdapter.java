@@ -80,15 +80,15 @@ public class RecyclerFavouriteAdapter extends RecyclerView.Adapter<RecyclerFavou
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new ListSharedPreference.Get(context).getFav(mFavArrayList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
+                if (new ListSharedPreference.Get(context).getFav(mFavArrayList.get(holder.getAdapterPosition()).getPid()).equals("false")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "false");
-                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
+                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "true");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
 
                 } else {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "true");
-                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
+                    new ListSharedPreference.Set(context).setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
                 }
             }
         });

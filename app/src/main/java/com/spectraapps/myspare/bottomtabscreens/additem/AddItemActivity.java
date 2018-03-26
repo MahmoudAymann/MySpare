@@ -256,8 +256,8 @@ public class AddItemActivity extends AppCompatActivity {
     private void submitAddItem() {
         progressDialog.show();
         if (image_path1 != null && image_path2 != null)
-        serverAddItemBoth();
-        else if (image_path2 == null)
+            serverAddItemBoth();
+        else if (image_path1 != null)
             serverAddItemOne();
         else
             serverAddItemTwo();
@@ -289,7 +289,7 @@ public class AddItemActivity extends AppCompatActivity {
         RequestBody price = RequestBody.create(MediaType.parse("text/plain"), mPrice);
         RequestBody image3 = RequestBody.create(MediaType.parse("text/plain"), "NULL");
 
-        MultipartBody.Part image2 = MultipartBody.Part.createFormData("image2", file2.getName(), mFile2);
+        MultipartBody.Part image2 = MultipartBody.Part.createFormData("image1", file2.getName(), mFile2);
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
@@ -314,14 +314,13 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<AddModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Log.v("esddd", t.getMessage());
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                //serverAddItemBoth();
             }
         });
     }
 
-    private void serverAddItemOne() {
+    private void serverAddItemOne()
+    {
 
         mItemName = nameET.getText().toString();
         mSerialNumber = serialNumberET.getText().toString();
@@ -372,7 +371,7 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<AddModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Log.v("esddd", t.getMessage());
+                t.printStackTrace();
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                 //serverAddItemBoth();
             }
@@ -387,20 +386,9 @@ public class AddItemActivity extends AppCompatActivity {
         mCurrency = currency_spinner.getSelectedItem().toString();
         mPrice = priceET.getText().toString();
 
-        File file1,file2;
-//        if (image_path1 != null) {
-            file1 = new File(image_path1);
-//        }
-//        else {
-//            file1 = new File("null");
-//        }
-
-//        if (image_path2 != null) {
-            file2 = new File(image_path2);
-//        }
-//        else {
-//            file2 = new File("null");
-//        }
+        File file1, file2;
+        file1 = new File(image_path1);
+        file2 = new File(image_path2);
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse("image/*"), file1);
         RequestBody mFile2 = RequestBody.create(MediaType.parse("image/*"), file2);
@@ -881,7 +869,6 @@ public class AddItemActivity extends AppCompatActivity {
                     }
                 }
         );
-
     }
 
     private void pickImage(int keyImg) {
@@ -940,8 +927,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUserID = prefs.getString("id", "0");
+        mUserID = getSharedPreference.getUId();
     }
 
 }

@@ -26,7 +26,6 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     private ListAllListeners listAllListeners;
     private ArrayList<ProductsAllModel.DataBean> mProductsAllModelList;
     private Context mContext;
-    private boolean isFav = false;
 
     public AllProductsAdapter(Context mContext, ArrayList<ProductsAllModel.DataBean> productsAllModelList,
                               ListAllListeners listAllListeners) {
