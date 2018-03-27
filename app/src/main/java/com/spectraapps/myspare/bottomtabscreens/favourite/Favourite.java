@@ -133,7 +133,6 @@ public class Favourite extends Fragment {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new Home())
                         .commit();
-
             }
         });
     }//end back pressed
@@ -171,7 +170,8 @@ public class Favourite extends Fragment {
                 CachePot.getInstance().push("pCurrency", favModel.getCurrency());
                 CachePot.getInstance().push("pImage1", favModel.getImage1());
                 CachePot.getInstance().push("pImage2", favModel.getImage2());
-                setSharedPreference.setimg(favModel.getImage1());
+                setSharedPreference.setimg1(favModel.getImage1());
+                setSharedPreference.setimg1(favModel.getImage2());
                 CachePot.getInstance().push("pDate", favModel.getDate());
                 CachePot.getInstance().push("pCountry",favModel.getCountry());
                 CachePot.getInstance().push("pBrand",  favModel.getBrand());

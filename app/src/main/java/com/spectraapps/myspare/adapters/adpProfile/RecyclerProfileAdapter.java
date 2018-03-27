@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.model.ProfileProdModel;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
     private ArrayList<ProfileProdModel.DataBean> mProfileArrayList;
     private Context mContext;
     private boolean isFav = false;
+    private ListSharedPreference.Set setSharedPreference ;
+    private ListSharedPreference.Get getSharedPreference ;
 
 
     public RecyclerProfileAdapter(Context mContext, ArrayList<ProfileProdModel.DataBean> productsAllModelList,
@@ -53,6 +56,9 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
+        setSharedPreference = new ListSharedPreference.Set(mContext);
+        getSharedPreference = new ListSharedPreference.Get(mContext);
+
         holder.nameTV.setText(mProfileArrayList.get(position).getProductName());
         holder.priceTV.setText(mProfileArrayList.get(position).getProductPrice());
         holder.currencyTV.setText(mProfileArrayList.get(position).getCurrency());
@@ -63,7 +69,9 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (mProfileArrayList.get(position).getIsFavorite().equals("true"))
+        if (!getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getId()).equals("true"))
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+        else
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,14 +84,15 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isFav) {
+                if (getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    isFav = false;
+                    setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
                 } else {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    isFav = true;
+                    setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "true");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
-                listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), isFav);
             }
         });
     }//end onBindViewHolder()

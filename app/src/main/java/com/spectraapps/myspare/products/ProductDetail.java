@@ -38,8 +38,8 @@ public class ProductDetail extends Fragment
     PagerIndicator pagerIndicator;
 
     String pName, pId, pPrice, pNumber, pCurrency, uMobile, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
-    String pImage1 = "http://myspare.net/api/images/pp_placeholder_400400.png";
-    String pImage2 = "http://myspare.net/api/images/pp_placeholder_400400.png";
+    String pImage1;
+    String pImage2 ;
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
 
@@ -118,7 +118,6 @@ public class ProductDetail extends Fragment
 
     private void getProductData() {
         try {
-
             pName = CachePot.getInstance().pop("pName");
             pId = CachePot.getInstance().pop("pId");
             pPrice = CachePot.getInstance().pop("pPrice");
@@ -127,7 +126,6 @@ public class ProductDetail extends Fragment
 
             pImage1 = CachePot.getInstance().pop("pImage1");
             pImage2 = CachePot.getInstance().pop("pImage2");
-
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
@@ -163,7 +161,6 @@ public class ProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -178,6 +175,7 @@ public class ProductDetail extends Fragment
             file_maps.put(pName, pImage1);
         if (pImage2 != null)
             file_maps.put(pName, pImage2);
+
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -238,7 +236,6 @@ public class ProductDetail extends Fragment
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
-
                 break;
         }
     }

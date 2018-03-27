@@ -71,7 +71,7 @@ dependencies {
     //passing data
     compile 'com.github.kimkevin:cachepot:1.2.0'
     //cropProfileImage
-    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    //compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     //restart
     //compile 'com.jakewharton:process-phoenix:2.0.0'
 }

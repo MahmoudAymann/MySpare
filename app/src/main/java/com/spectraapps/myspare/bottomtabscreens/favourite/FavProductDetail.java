@@ -33,7 +33,7 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener,View.OnClickListener{
+        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
@@ -61,7 +61,7 @@ public class FavProductDetail extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_fav_product_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_fav_product_detail, container, false);
 
         MainActivity.mToolbarText.setText(pName);
         setSharedPreference = new ListSharedPreference.Set(FavProductDetail.this.getContext().getApplicationContext());
@@ -103,12 +103,12 @@ public class FavProductDetail extends Fragment
 
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
-        if (uImage!=null) {
+        if (uImage != null) {
             Picasso.with(getContext()).load(uImage)
                     .error(R.drawable.place_holder)
                     .placeholder(R.drawable.place_holder)
                     .into(userImageView);
-        }else
+        } else
             Toast.makeText(getContext(), "null", Toast.LENGTH_SHORT).show();
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
@@ -118,7 +118,7 @@ public class FavProductDetail extends Fragment
         pCountry_tv.setText(pCountry);
         pBrand_tv.setText(pBrand);
         pModel_tv.setText(pModel);
-imageSliderInitilaize();
+        imageSliderInitilaize();
     }
 
     private void getProductData() {
@@ -144,8 +144,8 @@ imageSliderInitilaize();
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
 
-            Log.v("productinfo",pName + "/" +pId+ "/" +pPrice+ "/" +pNumber+ "/" + pCurrency+ "/ " +pImage1+ "/ " +pImage2+ " /" +pDate+ "/" +pCountry
-                    + "/" +pBrand+ "/" +pModel+ "/" +uId+ "/" +uMobile+ "/" +uName+ "/ " + uImage);
+            Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/ " + pImage1 + "/ " + pImage2 + " /" + pDate + "/" + pCountry
+                    + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/ " + uImage);
             setData();
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -178,11 +178,9 @@ imageSliderInitilaize();
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-            Toast.makeText(getContext(), ""+pImage1, Toast.LENGTH_SHORT).show();
-            file_maps.put(pName, getSharedPreference.getimg());
-        if (pImage2 != null)
-            Toast.makeText(getContext(), ""+pImage2, Toast.LENGTH_SHORT).show();
-            file_maps.put(pName, getSharedPreference.getimg());
+        file_maps.put(pName, getSharedPreference.getImg1());
+        if (pImage2 != null || pImage2.equals(""))
+        file_maps.put(pName, getSharedPreference.getImg2());
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -231,7 +229,7 @@ imageSliderInitilaize();
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.textView_phone_PD:
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + uMobile));
@@ -239,8 +237,8 @@ imageSliderInitilaize();
                 break;
             case R.id.relative_user_info:
 
-                CachePot.getInstance().push("suid",uId);
-                CachePot.getInstance().push("slangh",langhere);
+                CachePot.getInstance().push("suid", uId);
+                CachePot.getInstance().push("slangh", langhere);
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();

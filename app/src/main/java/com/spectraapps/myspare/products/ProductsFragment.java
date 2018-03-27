@@ -27,6 +27,7 @@ import com.github.kimkevin.cachepot.CachePot;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
 import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
+import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.BrandsModel;
 import com.spectraapps.myspare.model.CountriesModel;
@@ -84,7 +85,7 @@ public class ProductsFragment extends Fragment {
 
     FButton fButton;
 
-    String mUEmail, mCategory, lang;
+    String mUEmail, mCategory;
 
     ListSharedPreference.Set setSharedPref;
 
@@ -96,6 +97,8 @@ public class ProductsFragment extends Fragment {
 
     String mSerialNumber, mManfactureCountry_Id,
             mBrand_Id, mModel_Id, mCountry_Id;
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
 
     public ProductsFragment() {
 
@@ -111,6 +114,8 @@ public class ProductsFragment extends Fragment {
         getSharedPref = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
 
         MainActivity.mToolbarText.setText(getSharedPref.getCategoryName());
+        setSharedPreference = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
 
 
         getUserInfo();
@@ -171,7 +176,6 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 if (getSharedPref.getLoginStatus())
                     turnOnServers(1);
                 else if (!getSharedPref.getLoginStatus()) {
@@ -920,9 +924,10 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("pNumber", produtsModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsModel.getCurrency());
                         if (produtsModel.getImage1() != null)
-                        CachePot.getInstance().push("pImage1", produtsModel.getImage1());
+                            CachePot.getInstance().push("pImage1", produtsModel.getImage1());
+
                         if (produtsModel.getImage2() != null)
-                        CachePot.getInstance().push("pImage2", produtsModel.getImage2());
+                            CachePot.getInstance().push("pImage2", produtsModel.getImage2());
                         CachePot.getInstance().push("pDate", produtsModel.getDate());
                         CachePot.getInstance().push("pCountry", produtsModel.getCountry());
                         CachePot.getInstance().push("pBrand", produtsModel.getBrand());
@@ -932,7 +937,7 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uMobile", produtsModel.getMobile());
                         CachePot.getInstance().push("uName", produtsModel.getName());
                         CachePot.getInstance().push("uImage", produtsModel.getImage());
-                        CachePot.getInstance().push("langy", lang);
+                        CachePot.getInstance().push("langy", getLang());
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();
@@ -978,7 +983,6 @@ public class ProductsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<AddToFavModel> call, Throwable t) {
-                Log.v("tagy", t.getMessage());
                 pullRefreshLayout.setRefreshing(false);
                 alertDialogBuilder.setMessage(t.getMessage());
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -995,24 +999,26 @@ public class ProductsFragment extends Fragment {
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
             public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+                try {
 
-                if (response.isSuccessful()) {
 
-                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
-                    if (getSharedPref.getLoginStatus()) {
-                        turnOnServers(1);
-                    } else if (!getSharedPref.getLoginStatus()) {
-                        turnOnServers(3);
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
+                        if (getSharedPref.getLoginStatus()) {
+                            turnOnServers(1);
+                        } else if (!getSharedPref.getLoginStatus()) {
+                            turnOnServers(3);
+                        }
+
+                    } else {
+                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                } catch (Exception ignored) {
                 }
             }
 
             @Override
             public void onFailure(Call<AddToFavModel> call, Throwable t) {
-                Log.v("tagy", t.getMessage());
                 pullRefreshLayout.setRefreshing(false);
                 alertDialogBuilder.setMessage(t.getMessage());
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -1044,7 +1050,7 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
-                        CachePot.getInstance().push("langy", lang);
+                        CachePot.getInstance().push("langy", getLang());
 
 
                         getFragmentManager().beginTransaction()

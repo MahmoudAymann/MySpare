@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
@@ -131,8 +132,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (response.isSuccessful()) {
 
-                        Toast.makeText(LoginActivity.this,getString(R.string.logged_success), Toast.LENGTH_LONG).show();
-
                         if (response.body().getData() != null) {
                             String id = response.body().getData().getId();
                             String name = response.body().getData().getName();
@@ -142,9 +141,9 @@ public class LoginActivity extends AppCompatActivity {
                             String image = response.body().getData().getImage();
 
                             setSharedPreference.setLoginStatus(true);
+                            Toast.makeText(LoginActivity.this,getString(R.string.logged_success), Toast.LENGTH_LONG).show();
 
                             saveUserInfo(id, name, email, mobile, token, image);
-                            Toast.makeText(LoginActivity.this, "id in log"+response.body().getData().getId(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
 
@@ -165,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginModel> call, @NonNull Throwable t) {
                 try {
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
@@ -207,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isPasswordShown) {
+                if (!isPasswordShown) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && getSharedPreference.getLanguage().equals("ar")) {
                         if (s.length() > 0) {
                             if (!inputTypeChanged) {

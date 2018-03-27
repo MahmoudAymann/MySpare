@@ -45,7 +45,7 @@ public interface Api {
     @Multipart
     @POST("updateProfileImage.php")
     Call<UpdateProfileImageModel> uploadProfileImage(@Part("id") RequestBody id,
-                                                     @Part MultipartBody.Part file1);
+                                                     @Part MultipartBody.Part image);
 
 
     @FormUrlEncoded

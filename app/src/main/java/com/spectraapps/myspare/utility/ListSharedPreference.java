@@ -76,6 +76,7 @@ public class ListSharedPreference {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             prefEditor.putString(key, val).apply();
         }
+
         public void setKeyFilter(int keyFilter)
         {
             SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
@@ -114,7 +115,7 @@ public class ListSharedPreference {
         public String getFav(String fav)
         {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString(fav, "null");
+            return prefs.getString(fav, "false");
         }
 
         public String getCategoryName()
@@ -170,12 +171,12 @@ public class ListSharedPreference {
 
         public String getImg1() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg1", "http://myspare.net/public/upload/default.jpg");
+            return prefs.getString("getImg1", null);
         }
 
         public String getImg2() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg2", "http://myspare.net/public/upload/default.jpg");
+            return prefs.getString("getImg2", null);
         }
 
         public String getCategory() {

@@ -94,5 +94,6 @@
     <string name="no_products_found">No Products Found!</string>
     <string name="choose_category">Choose Category</string>
     <string name="choose_currency">Choose Currency</string>
-
+    <string name="error">Error!</string>
+    <string name="fail_load_image">Something went wrong while picking image</string>
 </resources>

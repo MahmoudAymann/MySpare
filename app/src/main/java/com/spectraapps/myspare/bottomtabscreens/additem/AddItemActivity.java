@@ -4,6 +4,7 @@ package com.spectraapps.myspare.bottomtabscreens.additem;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -47,6 +48,7 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -875,7 +877,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_PICK);
         startActivityForResult(intent, keyImg);
     }
 
@@ -885,44 +887,49 @@ public class AddItemActivity extends AppCompatActivity {
 
         if (requestCode == IMG_CODE1 && resultCode == RESULT_OK && data != null) {
             try {
-                Uri path = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(path);
-                image_path1 = getRealPathFromURIPath(path, AddItemActivity.this);
-                Log.d("plzx", image_path1 + "");
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView1.setImageBitmap(selectedImage);
 
-            } catch (FileNotFoundException e) {
+                Uri uri = data.getData();
+                image_path1 = getRealPathFromUri(uri, AddItemActivity.this);
+                showImageInView(uri, IMG_CODE1);
+
+            } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(AddItemActivity.this, "Something went wrong while picking image", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddItemActivity.this, getString(R.string.fail_load_image), Toast.LENGTH_LONG).show();
             }
-
         }
         if (requestCode == IMG_CODE2 && resultCode == RESULT_OK && data != null) {
             try {
-                Uri path = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(path);
-                image_path2 = getRealPathFromURIPath(path, AddItemActivity.this);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView2.setImageBitmap(selectedImage);
-
-            } catch (FileNotFoundException e) {
+                Uri uri = data.getData();
+                image_path2 = getRealPathFromUri(uri, AddItemActivity.this);
+                showImageInView(uri, IMG_CODE2);
+            } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(AddItemActivity.this, "Something went wrong while picking image", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddItemActivity.this, getString(R.string.fail_load_image), Toast.LENGTH_LONG).show();
             }
 
         }
     }//end onActivityResult
 
-    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(
-                contentURI, null, null, null, null);
-        if (cursor == null) {
-            return contentURI.getPath();
-        } else {
+    private void showImageInView(Uri image_path, int imgCode) {
+          if (imgCode == IMG_CODE1)
+              Picasso.with(AddItemActivity.this).load(image_path).resize(100,100).into(imageView1);
+     else if (imgCode == IMG_CODE2)
+              Picasso.with(AddItemActivity.this).load(image_path).into(imageView2);
+    }
+
+    public static String getRealPathFromUri(Uri contentURI, Context context) {
+        try {
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(contentURI, filePathColumn, null, null, null);
+            assert cursor != null;
             cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(idx);
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
+        } catch (Exception ignored){
+            return null;
         }
     }
 

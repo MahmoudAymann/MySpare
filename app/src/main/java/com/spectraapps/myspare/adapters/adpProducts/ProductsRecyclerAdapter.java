@@ -29,6 +29,8 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     private ListAllListeners listAllListeners;
     private ArrayList<ProductsModel.DataBean> mProductsModelList;
     private Context mContext;
+    private ListSharedPreference.Set setSharedPreference ;
+    private ListSharedPreference.Get getSharedPreference ;
 
 
     public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, ListAllListeners listener) {
@@ -55,6 +57,9 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
 
+        setSharedPreference = new ListSharedPreference.Set(mContext);
+        getSharedPreference = new ListSharedPreference.Get(mContext);
+
         holder.nameTV.setText(mProductsModelList.get(position).getProductName());
         holder.priceTV.setText(mProductsModelList.get(position).getProductPrice());
         holder.currencyTV.setText(mProductsModelList.get(position).getCurrency());
@@ -64,11 +69,10 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
                 .placeholder(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (!new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getId()).equals("true"))
+        if (!getSharedPreference.getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true"))
             holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
         else
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,14 +84,13 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new ListSharedPreference.Get(mContext).getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "false");
-                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
-
-                } else {
+                if (getSharedPreference.getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    new ListSharedPreference.Set(mContext).setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "true");
+                    setSharedPreference.setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "false");
+                    listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
+                } else {
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    setSharedPreference.setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "true");
                     listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
             }

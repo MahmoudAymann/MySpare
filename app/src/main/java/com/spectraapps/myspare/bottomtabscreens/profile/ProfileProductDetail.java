@@ -127,9 +127,9 @@ public class ProfileProductDetail extends Fragment
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
-            pImage1 = CachePot.getInstance().pop("pImage1");
-            pImage2 = CachePot.getInstance().pop("pImage2");
+
             pDate = CachePot.getInstance().pop("pDate");
+            Toast.makeText(getContext(), ""+pDate, Toast.LENGTH_SHORT).show();
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
@@ -138,6 +138,7 @@ public class ProfileProductDetail extends Fragment
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
+
 
             Log.v("jkjkl", uId + "  "+uMobile+ " pop ");
             Log.v("jkjkl", uName + "  "+uImage + "pop");
@@ -175,7 +176,7 @@ public class ProfileProductDetail extends Fragment
 
         HashMap<String, String> file_maps = new HashMap<>();
         if (pImage1 != null)
-            file_maps.put(pName, getSharedPreference.getImg1());
+            file_maps.put(pName, pImage1);
         if (pImage2 != null)
             file_maps.put(pName, pImage2);
 
@@ -215,7 +216,7 @@ public class ProfileProductDetail extends Fragment
 
     @Override
     public void onPageSelected(int position) {
-        //Log.d("Slider Demo", "Page Changed: " + position);
+
     }
 
     @Override

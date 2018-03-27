@@ -126,8 +126,12 @@ public class SellerProfilePD extends Fragment {
                         CachePot.getInstance().push("pPrice", produtsAllModel.getProductPrice());
                         CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
-                        CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
-                        CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+
+                        if (produtsAllModel.getImage1() != null)
+                            CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
+                        if (produtsAllModel.getImage2() != null)
+                            CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+
                         CachePot.getInstance().push("pDate", produtsAllModel.getDate());
                         CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
                         CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());

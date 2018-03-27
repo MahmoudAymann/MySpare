@@ -119,8 +119,13 @@ public class Profile extends Fragment {
                         CachePot.getInstance().push("pPrice", profileProdData.getProductPrice());
                         CachePot.getInstance().push("pNumber", profileProdData.getProductNumber());
                         CachePot.getInstance().push("pCurrency", profileProdData.getCurrency());
-                        CachePot.getInstance().push("pImage1", profileProdData.getImage1());
-                        CachePot.getInstance().push("pImage2", profileProdData.getImage2());
+                        if (profileProdData.getImage1() != null)
+                            CachePot.getInstance().push("pImage1", profileProdData.getImage1());
+
+                        if (profileProdData.getImage2() != null)
+                            CachePot.getInstance().push("pImage2", profileProdData.getImage2());
+                        setSharedPreference.setimg1(profileProdData.getImage1());
+                        setSharedPreference.setimg2(profileProdData.getImage2());
                         CachePot.getInstance().push("pDate", profileProdData.getDate());
                         CachePot.getInstance().push("pCountry",profileProdData.getCountry());
                         CachePot.getInstance().push("pBrand",  profileProdData.getBrand());
