@@ -120,7 +120,6 @@ public class AddItemActivity extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // do something
-                Toast.makeText(this, "done perm", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -302,7 +301,7 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<AddModel> call, @NonNull Response<AddModel> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(AddItemActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddItemActivity.this,getString(R.string.itemAddedSuccefully), Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                     Intent intent = new Intent(AddItemActivity.this, MainActivity.class);
                     startActivity(intent);

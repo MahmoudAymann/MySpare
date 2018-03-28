@@ -51,7 +51,6 @@ public class ProfileActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         toolbar.setTitle(" ");
 
-
         initUI();
 
         initClickListener();

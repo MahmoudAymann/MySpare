@@ -57,14 +57,14 @@
     <string name="action_update">تحديث</string>
     <string name="title_activity_about">من نحن</string>
     <string name="forgot_password"><u>نسيت كلمة السر؟</u></string>
-    <string name="manufacturer_company">صنع فى</string>
+    <string name="manufacturer_company">صنع فى:</string>
     <string name="enter_year">السنة</string>
     <string name="hintET_cost">التكلفة</string>
     <string name="category">الفئة</string>
     <string name="model_PD">موديل:</string>
     <string name="brand_PD">براند:</string>
     <string name="country_PD">البلد:</string>
-    <string name="pdate_PD">بلد الصنع:</string>
+    <string name="pdate_PD">سنة الصنع:</string>
     <string name="currency_PD">العملة:</string>
     <string name="price_PD">السعر:</string>
     <string name="serialNumber_PD">السيريال:</string>

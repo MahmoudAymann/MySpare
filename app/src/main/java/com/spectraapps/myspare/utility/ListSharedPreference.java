@@ -171,12 +171,12 @@ public class ListSharedPreference {
 
         public String getImg1() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg1", null);
+            return prefs.getString("getImg1", "");
         }
 
         public String getImg2() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg2", null);
+            return prefs.getString("getImg2", "");
         }
 
         public String getCategory() {

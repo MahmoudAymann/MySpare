@@ -87,11 +87,8 @@ public class ProductsFragment extends Fragment {
 
     String mUEmail, mCategory;
 
-    ListSharedPreference.Set setSharedPref;
-
     RoundKornerLinearLayout roundKornerModelsText, roundKornerSpinner;
 
-    ListSharedPreference.Get getSharedPref;
     private ArrayList<String> countries_array, brand_array, models_array;
     private ArrayList<String> countriesId_array, modelsId_array, brandId_array;
 
@@ -104,18 +101,14 @@ public class ProductsFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
-        setSharedPref = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
-        getSharedPref = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
-
-        MainActivity.mToolbarText.setText(getSharedPref.getCategoryName());
         setSharedPreference = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
+        MainActivity.mToolbarText.setText(getSharedPreference.getCategoryName());
 
 
         getUserInfo();
@@ -130,7 +123,7 @@ public class ProductsFragment extends Fragment {
     private void setAlertDialog() {
         alertDialogBuilder = new AlertDialog.Builder(ProductsFragment.this.getContext());
 
-        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
             }
@@ -176,9 +169,9 @@ public class ProductsFragment extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (getSharedPref.getLoginStatus())
+                if (getSharedPreference.getLoginStatus())
                     turnOnServers(1);
-                else if (!getSharedPref.getLoginStatus()) {
+                else if (!getSharedPreference.getLoginStatus()) {
                     turnOnServers(3);
                 }
             }
@@ -374,7 +367,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -466,11 +459,11 @@ public class ProductsFragment extends Fragment {
     private void serverCountries(final Context popup, final Spinner spinner) {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        Call<CountriesModel> countriesCall = retrofit.countries(getSharedPref.getLanguage());
+        Call<CountriesModel> countriesCall = retrofit.countries(getSharedPreference.getLanguage());
 
         countriesCall.enqueue(new Callback<CountriesModel>() {
             @Override
-            public void onResponse(Call<CountriesModel> call, Response<CountriesModel> response) {
+            public void onResponse(@NonNull Call<CountriesModel> call, @NonNull Response<CountriesModel> response) {
                 if (response.isSuccessful()) {
 
                     getCountries(response.body().getData(), popup, spinner);
@@ -663,7 +656,7 @@ public class ProductsFragment extends Fragment {
     }
 
     private String getLang() {
-        return getSharedPref.getLanguage();
+        return getSharedPreference.getLanguage();
     }
 
     ///////////////#get IDS//////////////////////
@@ -694,9 +687,9 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getSharedPref.getLoginStatus()) {
+        if (getSharedPreference.getLoginStatus()) {
             turnOnServers(1);
-        } else if (!getSharedPref.getLoginStatus()) {
+        } else if (!getSharedPreference.getLoginStatus()) {
             turnOnServers(3);
         }
     }
@@ -923,11 +916,10 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("pPrice", produtsModel.getProductPrice());
                         CachePot.getInstance().push("pNumber", produtsModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsModel.getCurrency());
-                        if (produtsModel.getImage1() != null)
-                            CachePot.getInstance().push("pImage1", produtsModel.getImage1());
 
-                        if (produtsModel.getImage2() != null)
-                            CachePot.getInstance().push("pImage2", produtsModel.getImage2());
+                        setSharedPreference.setimg1(produtsModel.getImage1());
+                        setSharedPreference.setimg2(produtsModel.getImage2());
+
                         CachePot.getInstance().push("pDate", produtsModel.getDate());
                         CachePot.getInstance().push("pCountry", produtsModel.getCountry());
                         CachePot.getInstance().push("pBrand", produtsModel.getBrand());
@@ -968,9 +960,9 @@ public class ProductsFragment extends Fragment {
                     if (response.isSuccessful()) {
 
                         Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
-                        if (getSharedPref.getLoginStatus()) {
+                        if (getSharedPreference.getLoginStatus()) {
                             turnOnServers(1);
-                        } else if (!getSharedPref.getLoginStatus()) {
+                        } else if (!getSharedPreference.getLoginStatus()) {
                             turnOnServers(3);
                         }
 
@@ -1004,9 +996,9 @@ public class ProductsFragment extends Fragment {
 
                     if (response.isSuccessful()) {
                         Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
-                        if (getSharedPref.getLoginStatus()) {
+                        if (getSharedPreference.getLoginStatus()) {
                             turnOnServers(1);
-                        } else if (!getSharedPref.getLoginStatus()) {
+                        } else if (!getSharedPreference.getLoginStatus()) {
                             turnOnServers(3);
                         }
 
@@ -1071,8 +1063,8 @@ public class ProductsFragment extends Fragment {
     }//end back pressed
 
     private void getUserInfo() {
-        mUEmail = getSharedPref.getEmail();
-        mCategory = getSharedPref.getCategory();
+        mUEmail = getSharedPreference.getEmail();
+        mCategory = getSharedPreference.getCategory();
     }
 
 

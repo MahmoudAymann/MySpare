@@ -42,8 +42,9 @@ public class Profile extends Fragment {
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 
-    String uId, language;
+    String uEmail, language;
     private ProgressDialog progressDialog;
+    private String uId;
 
     public Profile() {
         // Required empty public constructo
@@ -71,6 +72,7 @@ public class Profile extends Fragment {
         super.onStart();
 
         try {
+            uEmail = getSharedPreference.getEmail();
             uId = getSharedPreference.getUId();
             language = getSharedPreference.getLanguage();
         } catch (Exception e) {
@@ -109,8 +111,10 @@ public class Profile extends Fragment {
     }
 
     private void initAdapterProfileProducts() {
+
         mRecyclerProfileAdapter = new RecyclerProfileAdapter(getContext(), mProfileDataList,
                 new RecyclerProfileAdapter.ListAllListeners() {
+
                     @Override
                     public void onCardViewClick(ProfileProdModel.DataBean profileProdData) {
 
@@ -119,19 +123,16 @@ public class Profile extends Fragment {
                         CachePot.getInstance().push("pPrice", profileProdData.getProductPrice());
                         CachePot.getInstance().push("pNumber", profileProdData.getProductNumber());
                         CachePot.getInstance().push("pCurrency", profileProdData.getCurrency());
-                        if (profileProdData.getImage1() != null)
-                            CachePot.getInstance().push("pImage1", profileProdData.getImage1());
 
-                        if (profileProdData.getImage2() != null)
-                            CachePot.getInstance().push("pImage2", profileProdData.getImage2());
                         setSharedPreference.setimg1(profileProdData.getImage1());
                         setSharedPreference.setimg2(profileProdData.getImage2());
+
                         CachePot.getInstance().push("pDate", profileProdData.getDate());
                         CachePot.getInstance().push("pCountry",profileProdData.getCountry());
                         CachePot.getInstance().push("pBrand",  profileProdData.getBrand());
                         CachePot.getInstance().push("pModel",  profileProdData.getModel());
 
-                        CachePot.getInstance().push("uId", profileProdData.getId());
+                        CachePot.getInstance().push("uEmail", profileProdData.getId());
                         CachePot.getInstance().push("uMobile", profileProdData.getMobile());
                         CachePot.getInstance().push("uName", profileProdData.getName());
                         CachePot.getInstance().push("uImage", profileProdData.getImage());
@@ -147,7 +148,6 @@ public class Profile extends Fragment {
                     public void onFavButtonClick(View v, int position, boolean isFav) {
                         if (isFav) {
                             serverAddToFav(mProfileDataList.get(position).getPid());
-                            //Toast.makeText(getContext(), ""+mProfileDataList.get(position).getPid(), Toast.LENGTH_SHORT).show();
                         } else {
                             serverRemoveFromFav(mProfileDataList.get(position).getPid());
                         }
@@ -162,7 +162,7 @@ public class Profile extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uId,pId ,false);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail,pId ,false);
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
@@ -204,7 +204,7 @@ public class Profile extends Fragment {
         mProfileDataList = new ArrayList<>();
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uId,pId ,false);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail,pId ,false);
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
@@ -213,7 +213,6 @@ public class Profile extends Fragment {
                         if (response.isSuccessful()) {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
-                            //Toast.makeText(getContext(), " "+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
@@ -260,7 +259,8 @@ public class Profile extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<ProfileProdModel> call, @NonNull Response<ProfileProdModel> response) {
                     try {
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful())
+                        {
                             mProfileDataList.addAll(response.body().getData());
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();

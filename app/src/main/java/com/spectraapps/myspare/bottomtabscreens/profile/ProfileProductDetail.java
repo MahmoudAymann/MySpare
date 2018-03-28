@@ -1,5 +1,6 @@
 package com.spectraapps.myspare.bottomtabscreens.profile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,11 +27,13 @@ import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.products.ProductDetail;
 import com.spectraapps.myspare.products.ProductsFragment;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,10 +65,12 @@ public class ProfileProductDetail extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
         fireBackButtonEvent();
 
+        setSharedPreference = new ListSharedPreference.Set(ProfileProductDetail.this.getContext().getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(ProfileProductDetail.this.getContext().getApplicationContext());
+
         initUI(rootView);
         getProductData();
-
-        imageSliderInitilaize();
+        setData();
 
         return rootView;
     }
@@ -122,26 +127,28 @@ public class ProfileProductDetail extends Fragment
 
     private void getProductData() {
         try {
+
             pName = CachePot.getInstance().pop("pName");
             pId = CachePot.getInstance().pop("pId");
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
 
+            pImage1 = getSharedPreference.getImg1();
+            pImage2 = getSharedPreference.getImg2();
+
             pDate = CachePot.getInstance().pop("pDate");
-            Toast.makeText(getContext(), ""+pDate, Toast.LENGTH_SHORT).show();
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
-            uId = CachePot.getInstance().pop("uId");
+            uId = CachePot.getInstance().pop("uEmail");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
 
-
-            Log.v("jkjkl", uId + "  "+uMobile+ " pop ");
-            Log.v("jkjkl", uName + "  "+uImage + "pop");
+            Log.v("jkjkl", uId + " "+uMobile+ " pop ");
+            Log.v("jkjkl", uName + " "+uImage + "pop");
 
             MainActivity.mToolbarText.setText(pName);
 
@@ -164,7 +171,7 @@ public class ProfileProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        setData();
+        imageSliderInitilaize();
     }
 
     @Override
@@ -175,9 +182,10 @@ public class ProfileProductDetail extends Fragment
     private void imageSliderInitilaize() {
 
         HashMap<String, String> file_maps = new HashMap<>();
-        if (pImage1 != null)
+
+        if (!pImage1.equals(""))
             file_maps.put(pName, pImage1);
-        if (pImage2 != null)
+        if (!pImage2.equals(""))
             file_maps.put(pName, pImage2);
 
         for (String name : file_maps.keySet()) {

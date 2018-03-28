@@ -32,7 +32,6 @@ public class UpdatePasswordApproval extends AppCompatActivity {
     ImageButton mImagePasswrdVisible,mImagePasswrdVisible2;
     EditText mEditTextPassOld,mEditTextPassNew;
 
-
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 

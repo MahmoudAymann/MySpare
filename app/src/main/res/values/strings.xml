@@ -50,7 +50,7 @@
     <string name="update">Update</string>
     <string name="addItem_name">Name</string>
     <string name="hintET_name">enter the name</string>
-    <string name="manufacturer_company">Made In</string>
+    <string name="manufacturer_company">Made In:</string>
     <string name="manufacturer_year">Year</string>
     <string name="enter_year">enter year</string>
     <string name="category">Category</string>
@@ -96,4 +96,7 @@
     <string name="choose_currency">Choose Currency</string>
     <string name="error">Error!</string>
     <string name="fail_load_image">Something went wrong while picking image</string>
+    <string name="prompt_oldpassword">Old Password</string>
+    <string name="prompt_newpassword">New Password</string>
+    <string name="itemAddedSuccefully">Item Added Succefully</string>
 </resources>

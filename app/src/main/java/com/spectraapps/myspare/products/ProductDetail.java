@@ -32,7 +32,7 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
+        implements View.OnClickListener {
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
@@ -124,22 +124,23 @@ public class ProductDetail extends Fragment
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
 
-            pImage1 = CachePot.getInstance().pop("pImage1");
-            pImage2 = CachePot.getInstance().pop("pImage2");
+            pImage1 = getSharedPreference.getImg1();
+            pImage2 = getSharedPreference.getImg2();
+
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
-            MainActivity.mToolbarText.setText(getSharedPreference.getCategory());
+            MainActivity.mToolbarText.setText(pName);
 
             uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
 
-            Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/" + pImage1 + "/" + pImage2 + "/" + pDate + "/" + pCountry
-                    + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/" + uImage);
+            Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/" + pImage1 + "/ " + pImage2 + " /" + pDate + "/" + pCountry
+                    + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/ " + uImage);
 
             setData();
         } catch (Exception e) {
@@ -189,8 +190,7 @@ public class ProductDetail extends Fragment
             textSliderView
                     .description(name)
                     .image(file_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
 
             mDemoSlider.addSlider(textSliderView);
         }//end for
@@ -199,28 +199,8 @@ public class ProductDetail extends Fragment
         mDemoSlider.setCustomIndicator(pagerIndicator);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
-        mDemoSlider.addOnPageChangeListener(this);
     }
 
-
-    @Override
-    public void onSliderClick(BaseSliderView slider) {
-
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        //Log.d("Slider Demo", "Page Changed: " + position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
 
     @Override
     public void onClick(View view) {

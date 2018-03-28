@@ -137,7 +137,7 @@ public class SellerProfilePD extends Fragment {
                         CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
                         CachePot.getInstance().push("pModel", produtsAllModel.getModel());
 
-                        CachePot.getInstance().push("uId", produtsAllModel.getId());
+                        CachePot.getInstance().push("uEmail", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
                         CachePot.getInstance().push("uImage", produtsAllModel.getImage());
