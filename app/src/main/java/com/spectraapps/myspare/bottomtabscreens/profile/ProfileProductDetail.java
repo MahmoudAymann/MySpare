@@ -204,6 +204,7 @@ public class ProfileProductDetail extends Fragment
                     .setOnSliderClickListener(this);
 
             mDemoSlider.addSlider(textSliderView);
+
         }//end for
 
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Stack);

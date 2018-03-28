@@ -172,9 +172,9 @@ public class ProductDetail extends Fragment
     private void imageSliderInitilaize() {
 
         HashMap<String, String> file_maps = new HashMap<>();
-        if (pImage1 != null)
+        if (!pImage1.equals(""))
             file_maps.put(pName, pImage1);
-        if (pImage2 != null)
+        if (!pImage2.equals(""))
             file_maps.put(pName, pImage2);
 
 
