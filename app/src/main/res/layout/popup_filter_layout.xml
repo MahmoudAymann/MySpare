@@ -8,14 +8,12 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/linearLayout5"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/textBack5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -23,7 +21,6 @@
             android:visibility="visible"
             app:corner_radius="10dp">
             <TextView
-                android:id="@+id/text_static5_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -34,7 +31,6 @@
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -55,12 +51,11 @@
         android:id="@+id/linearLayout1"
         android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_marginTop="8dp"
         android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:orientation="horizontal">
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/textBack1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -69,7 +64,6 @@
             app:corner_radius="10dp">
 
             <TextView
-                android:id="@+id/text_static1_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -81,7 +75,6 @@
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -121,7 +114,6 @@
             app:corner_radius="10dp">
 
             <TextView
-                android:id="@+id/text_static2_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -173,7 +165,6 @@
             app:corner_radius="10dp">
 
             <TextView
-                android:id="@+id/text_static3_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -215,7 +206,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/textBack4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -226,7 +216,6 @@
             app:layout_constraintStart_toEndOf="@+id/roundKornerLinearLayout3"
             app:layout_constraintTop_toBottomOf="@+id/textBack2">
             <TextView
-                android:id="@+id/text_static4_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -242,7 +231,6 @@
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
         <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-            android:id="@+id/roundKornerLinearLayout4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -256,19 +244,19 @@
                 android:id="@+id/editText1_pop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/rounded_yellow_background"
                 android:gravity="center"
                 android:hint="@string/enter_num"
                 android:inputType="number"
-                android:textAlignment="center"
-                android:background="@drawable/rounded_yellow_background"/>
+                android:textAlignment="center"/>
         </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
     </LinearLayout>
 
     <info.hoang8f.widget.FButton
         android:id="@+id/flatButton"
-        android:text="@string/update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:text="@string/update"/>
 </LinearLayout>

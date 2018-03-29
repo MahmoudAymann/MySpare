@@ -1,13 +1,14 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.spectraapps.myspare.bottomtabscreens.favourite.FavProductDetail">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -15,7 +16,6 @@
             android:layout_margin="10dp">
 
             <RelativeLayout
-                android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -58,26 +58,25 @@
                         android:id="@+id/textView_phone_PD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:visibility="visible"
-                        android:textColor="@android:color/holo_blue_dark"
-                        android:layout_below="@id/user_image_PD"
-                        android:layout_toEndOf="@id/user_image_PD"
                         android:layout_alignParentBottom="true"
-                        android:textSize="18sp"/>
+                        android:layout_below="@id/user_image_PD"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/user_image_PD"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="18sp"
+                        android:visibility="visible"/>
 
                     <TextView
-                        android:id="@+id/static_mobile_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mobile:"
-                        android:layout_below="@id/user_image_PD"
+                        android:layout_alignParentBottom="true"
                         android:layout_alignParentStart="true"
+                        android:layout_below="@id/user_image_PD"
                         android:layout_marginStart="20dp"
+                        android:text="@string/mobile_in_productdetail"
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_alignParentBottom="true"/>
+                        android:textStyle="bold"/>
 
                 </RelativeLayout>
 
@@ -132,7 +131,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -157,7 +155,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -182,7 +179,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -207,7 +203,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -232,7 +227,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -257,7 +251,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -282,7 +275,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -307,7 +299,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/static_text8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
@@ -332,6 +323,5 @@
 
         </android.support.v7.widget.CardView>
 
-    </ScrollView>
-
-</FrameLayout>
+    </FrameLayout>
+</ScrollView>

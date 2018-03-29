@@ -1,11 +1,8 @@
 package com.spectraapps.myspare.utility;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.spectraapps.myspare.login.LoginActivity;
 
 /**
  * Created by mahmo on 3/2/2018.

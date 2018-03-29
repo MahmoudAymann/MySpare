@@ -1,7 +1,5 @@
 package com.spectraapps.myspare.model;
 
-import java.io.Serializable;
-
 /**
  * Created by MahmoudAyman on 31/01/2018.
  */

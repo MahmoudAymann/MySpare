@@ -28,27 +28,27 @@ public class MenueHelper {
     private final Context mContext;
     private final MenuBuilder mMenu;
     private final View mAnchor;
-    final MenuPopupHelper mPopup;
+    private final MenuPopupHelper mPopup;
 
-    MenueHelper.OnMenuItemClickListener mMenuItemClickListener;
-    MenueHelper.OnDismissListener mOnDismissListener;
+    private MenueHelper.OnMenuItemClickListener mMenuItemClickListener;
+    private MenueHelper.OnDismissListener mOnDismissListener;
     private View.OnTouchListener mDragListener;
 
     @SuppressLint("RestrictedApi")
     public MenueHelper(@NonNull Context context, @NonNull View anchor) {
-        this(context, anchor, Gravity.LEFT);
+        this(context, anchor, Gravity.START);
         mPopup.setForceShowIcon(true);
     }
 
     @SuppressLint("RestrictedApi")
-    public MenueHelper(@NonNull Context context, @NonNull View anchor, int gravity) {
+    private MenueHelper(@NonNull Context context, @NonNull View anchor, int gravity) {
         this(context, anchor, gravity, android.support.v7.appcompat.R.attr.popupMenuStyle, 0);
         mPopup.setForceShowIcon(true);
     }
 
     @SuppressLint("RestrictedApi")
-    public MenueHelper(@NonNull Context context, @NonNull View anchor, int gravity,
-                       @AttrRes int popupStyleAttr, @StyleRes int popupStyleRes) {
+    private MenueHelper(@NonNull Context context, @NonNull View anchor, int gravity,
+                        @AttrRes int popupStyleAttr, @StyleRes int popupStyleRes) {
         mContext = context;
         mAnchor = anchor;
 
@@ -56,10 +56,7 @@ public class MenueHelper {
         mMenu.setCallback(new MenuBuilder.Callback() {
             @Override
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
-                if (mMenuItemClickListener != null) {
-                    return mMenuItemClickListener.onMenuItemClick(item);
-                }
-                return false;
+                return mMenuItemClickListener != null && mMenuItemClickListener.onMenuItemClick(item);
             }
 
             @Override
@@ -79,12 +76,6 @@ public class MenueHelper {
         });
 
         mPopup.setForceShowIcon(true);
-
-    }
-
-    @SuppressLint("RestrictedApi")
-    private void setGravity(int gravity) {
-        mPopup.setGravity(gravity);
     }
 
     /**
@@ -94,6 +85,11 @@ public class MenueHelper {
     @SuppressLint("RestrictedApi")
     public int getGravity() {
         return mPopup.getGravity();
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void setGravity(int gravity) {
+        mPopup.setGravity(gravity);
     }
 
     @NonNull
@@ -131,7 +127,7 @@ public class MenueHelper {
 
     @SuppressLint("RestrictedApi")
     @NonNull
-    public MenuInflater getMenuInflater() {
+    private MenuInflater getMenuInflater() {
         return new SupportMenuInflater(mContext);
     }
 

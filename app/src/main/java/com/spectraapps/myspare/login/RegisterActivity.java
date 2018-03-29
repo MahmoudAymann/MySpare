@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -85,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
         Call<RegisterModel> registerCall = retrofit.register(name, mail, mobile, password, "123");
         registerCall.enqueue(new Callback<RegisterModel>() {
             @Override
-            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
+            public void onResponse(@NonNull Call<RegisterModel> call, @NonNull Response<RegisterModel> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
@@ -106,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegisterModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<RegisterModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(RegisterActivity.this, "" + t.getMessage(), Toast.LENGTH_LONG).show();
             }

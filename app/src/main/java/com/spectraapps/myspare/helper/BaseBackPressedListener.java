@@ -1,7 +1,5 @@
 package com.spectraapps.myspare.helper;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
 

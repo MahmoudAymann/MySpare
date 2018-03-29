@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">MySpare</string>
-    <string name="title_notifications">Notifications</string>
     <string name="logoscreen">logoScreen</string>
-
-    <string name="action_settings">Settings</string>
 
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
@@ -11,16 +8,12 @@
     <string name="action_sign_in">Sign in</string>
     <string name="error_invalid_email">invalid email address</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="button_more_text">More</string>
     <string name="model">Model:</string>
-    <string name="kind_model">Kind:</string>
     <string name="brand">Brand:</string>
     <string name="home_title">Home</string>
     <string name="favourite">Favourite</string>
     <string name="product_num">Product Num:</string>
     <string name="enter_num">enter the number</string>
-    <string name="action_sign_in_short">Sign in</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="skip_now_butoon">skip now</string>
@@ -30,38 +23,26 @@
     <string name="action_sign_up">sign up</string>
     <string name="account">Account</string>
     <string name="logout">Logout</string>
-    <string name="product_detail">ProductDetail</string>
     <string name="update_accountInfo">Update Account</string>
     <string name="update_password">Update Password</string>
     <string name="contactwithus">Contacts</string>
-    <string name="privacy_statements">Privacy Policy</string>
     <string name="contact_us">Contact us</string>
     <string name="about">About</string>
     <string name="profile_title">Profile</string>
     <string name="notifications_title">Notifications</string>
     <string name="add_title">Add Item</string>
 
-    <string name="main_outside">Outside Body</string>
-    <string name="main_inside">Inside Body</string>
-    <string name="main_electricity">Electrisity</string>
-    <string name="main_mechanic">Mechanic</string>
-    <string name="main_tires">Tires</string>
-    <string name="main_accessories">Accessories</string>
     <string name="update">Update</string>
     <string name="addItem_name">Name</string>
-    <string name="hintET_name">enter the name</string>
     <string name="manufacturer_company">Made In:</string>
     <string name="manufacturer_year">Year</string>
-    <string name="enter_year">enter year</string>
     <string name="category">Category</string>
     <string name="cost">Cost</string>
-    <string name="hintET_cost">enter cost</string>
     <string name="currency">Currency</string>
     <string name="send">send</string>
     <string name="update_pass_text">the password will be sent to the email entered below</string>
     <string name="action_update">update</string>
     <string name="title_activity_about">AboutActivity</string>
-    <string name="title_activity_scrolling" translatable="false">ScrollingActivity</string>
 
     <string name="about_text" translatable="false">My Sapre, has been satisfying customers\' needs by providing them with the parts they need at the lowest prices. We house the most comprehensive collection of parts and accessories in the world. If your parts-shopping experience is a hit-or-miss or simply unsatisfactory, switch over to us. You won\'t regret it!</string>
     <string name="change_language">Change Language</string>
@@ -87,7 +68,6 @@
     <string name="choose_model">Choose Model</string>
     <string name="logged_success">Successfully Logged In</string>
     <string name="change_language_prompt">Are you sure, you will change the language Now!</string>
-    <string name="title_activity_profile_product_detail">ProductDetail</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="done">Done</string>
@@ -99,4 +79,10 @@
     <string name="prompt_oldpassword">Old Password</string>
     <string name="prompt_newpassword">New Password</string>
     <string name="itemAddedSuccefully">Item Added Succefully</string>
+    <string name="mobile">Mobile</string>
+    <string name="example_mail_com">example@mail.com</string>
+    <string name="email">Email</string>
+    <string name="address">address</string>
+    <string name="headquarter">Headquarter</string>
+    <string name="mobile_in_productdetail">Mobile:</string>
 </resources>

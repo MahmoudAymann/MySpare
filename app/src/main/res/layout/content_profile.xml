@@ -65,8 +65,9 @@
                 android:layout_toEndOf="@id/ivContactItem1"
                 android:layout_toStartOf="@id/edit_profileName"
                 android:inputType="textPersonName"
+                android:labelFor="@id/etName_profile"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
 
             <ImageButton
                 android:id="@+id/edit_profileName"
@@ -114,8 +115,9 @@
                 android:layout_toEndOf="@id/ivContactItem3"
                 android:layout_toStartOf="@id/edit_profileEmail"
                 android:inputType="textEmailAddress"
+                android:labelFor="@id/etEmail_profile"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
 
             <ImageButton
                 android:id="@+id/edit_profileEmail"
@@ -164,9 +166,10 @@
                 android:layout_toEndOf="@id/ivContactItem5"
                 android:layout_toStartOf="@id/edit_profileMobile"
                 android:ellipsize="end"
-                android:inputType="number"
+                android:inputType="phone"
+                android:labelFor="@id/etMobile_profile"
                 android:maxLines="1"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
 
             <ImageButton
                 android:id="@+id/edit_profileMobile"

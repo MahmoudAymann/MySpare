@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VideoActivity"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    tools:context="com.spectraapps.myspare.VideoActivity">
 
     <VideoView
         android:id="@+id/videoView1"

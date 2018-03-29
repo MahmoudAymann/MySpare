@@ -21,7 +21,6 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpFav.RecyclerFavouriteAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
-import com.spectraapps.myspare.bottomtabscreens.profile.ProfileProductDetail;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.FavouriteModel;
@@ -209,7 +208,7 @@ public class Favourite extends Fragment {
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
-            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+            public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
 
                 if (response.isSuccessful()) {
 
@@ -222,7 +221,7 @@ public class Favourite extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                 Log.v("tagy", t.getMessage());
                 pullRefreshLayout.setRefreshing(false);
             }
@@ -247,7 +246,7 @@ public class Favourite extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                 Log.v("tagy", t.getMessage());
                 pullRefreshLayout.setRefreshing(false);
             }

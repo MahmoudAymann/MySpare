@@ -62,7 +62,6 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <LinearLayout
-            android:id="@+id/linearInScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -109,7 +108,8 @@
                         android:background="@drawable/rounded_yellow_background"
                         android:gravity="center"
                         android:inputType="text"
-                        android:textAlignment="center" />
+                        android:labelFor="@id/name_editText_addItem"
+                        android:textAlignment="center"/>
                 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
             </LinearLayout>

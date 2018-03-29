@@ -2,17 +2,12 @@ package com.spectraapps.myspare.bottomtabscreens.additem;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -36,7 +31,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.spectraapps.myspare.MainActivity;
-import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
@@ -51,8 +45,6 @@ import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -97,6 +89,21 @@ public class AddItemActivity extends AppCompatActivity {
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 
+    public static String getRealPathFromUri(Uri contentURI, Context context) {
+        try {
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(contentURI, filePathColumn, null, null, null);
+            assert cursor != null;
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
+        } catch (Exception ignored){
+            return null;
+        }
+    }
 
     private boolean checkPermissions() {
         int result;
@@ -112,16 +119,6 @@ public class AddItemActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        if (requestCode == 100) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // do something
-            }
-        }
     }
 
     @Override
@@ -491,7 +488,6 @@ public class AddItemActivity extends AppCompatActivity {
         }
     }//end
 
-
     private void addYears() {
         int current_year = mCalendar.get(Calendar.YEAR);
         //Toast.makeText(this, ""+current_year, Toast.LENGTH_SHORT).show();
@@ -501,7 +497,7 @@ public class AddItemActivity extends AppCompatActivity {
             year_array.add(String.valueOf(i));
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 AddItemActivity.this, android.R.layout.simple_spinner_item,
                 year_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -537,7 +533,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         manufacturerCountriesCall.enqueue(new Callback<ManufacturerCountriesModel>() {
             @Override
-            public void onResponse(Call<ManufacturerCountriesModel> call, Response<ManufacturerCountriesModel> response) {
+            public void onResponse(@NonNull Call<ManufacturerCountriesModel> call, @NonNull Response<ManufacturerCountriesModel> response) {
                 if (response.isSuccessful()) {
                     getManufacturerCountries(response.body().getData());
                     getManufacturerCountriesId(response.body().getData());
@@ -546,7 +542,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ManufacturerCountriesModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<ManufacturerCountriesModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -559,7 +555,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         countriesCall.enqueue(new Callback<CountriesModel>() {
             @Override
-            public void onResponse(Call<CountriesModel> call, Response<CountriesModel> response) {
+            public void onResponse(@NonNull Call<CountriesModel> call, @NonNull Response<CountriesModel> response) {
                 if (response.isSuccessful()) {
 
                     getCountries(response.body().getData());
@@ -572,7 +568,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CountriesModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<CountriesModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -586,7 +582,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         brandsCall.enqueue(new Callback<BrandsModel>() {
             @Override
-            public void onResponse(Call<BrandsModel> call, Response<BrandsModel> response) {
+            public void onResponse(@NonNull Call<BrandsModel> call, @NonNull Response<BrandsModel> response) {
                 if (response.isSuccessful()) {
 
                     getBrands(response.body().getData());
@@ -598,7 +594,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<BrandsModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<BrandsModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -612,7 +608,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         currencyCall.enqueue(new Callback<CurrencyModel>() {
             @Override
-            public void onResponse(Call<CurrencyModel> call, Response<CurrencyModel> response) {
+            public void onResponse(@NonNull Call<CurrencyModel> call, @NonNull Response<CurrencyModel> response) {
                 if (response.isSuccessful()) {
                     getCurrency(response.body().getData());
                     getCurrencyId(response.body().getData());
@@ -622,7 +618,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CurrencyModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<CurrencyModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -636,7 +632,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         modelsCall.enqueue(new Callback<ModelsModel>() {
             @Override
-            public void onResponse(Call<ModelsModel> call, Response<ModelsModel> response) {
+            public void onResponse(@NonNull Call<ModelsModel> call, @NonNull Response<ModelsModel> response) {
                 if (response.isSuccessful()) {
                     getModels(response.body().getData());
                     getModelsId(response.body().getData());
@@ -648,7 +644,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ModelsModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<ModelsModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(),
                         Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
@@ -663,7 +659,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         categoriesCall.enqueue(new Callback<CategoriesModel>() {
             @Override
-            public void onResponse(Call<CategoriesModel> call, Response<CategoriesModel> response) {
+            public void onResponse(@NonNull Call<CategoriesModel> call, @NonNull Response<CategoriesModel> response) {
                 if (response.isSuccessful()) {
                     getCategory(response.body().getData());
                     getCategoryId(response.body().getData());
@@ -673,7 +669,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CategoriesModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<CategoriesModel> call, @NonNull Throwable t) {
                 Toast.makeText(AddItemActivity.this, t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -688,7 +684,7 @@ public class AddItemActivity extends AppCompatActivity {
             category_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         category_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -711,7 +707,7 @@ public class AddItemActivity extends AppCompatActivity {
             countries_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         countries_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -734,7 +730,7 @@ public class AddItemActivity extends AppCompatActivity {
             brand_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         brand_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -758,7 +754,7 @@ public class AddItemActivity extends AppCompatActivity {
             currency_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         currency_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -782,7 +778,7 @@ public class AddItemActivity extends AppCompatActivity {
             manufactureCountry_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item,
                         manufactureCountry_array); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -914,22 +910,6 @@ public class AddItemActivity extends AppCompatActivity {
               Picasso.with(AddItemActivity.this).load(image_path).resize(100,100).into(imageView1);
      else if (imgCode == IMG_CODE2)
               Picasso.with(AddItemActivity.this).load(image_path).into(imageView2);
-    }
-
-    public static String getRealPathFromUri(Uri contentURI, Context context) {
-        try {
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(contentURI, filePathColumn, null, null, null);
-            assert cursor != null;
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imagePath = cursor.getString(columnIndex);
-            cursor.close();
-            return imagePath;
-        } catch (Exception ignored){
-            return null;
-        }
     }
 
     private void getUserInfo() {

@@ -8,12 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.adapters.adpProfile.RecyclerProfileAdapter;
-import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
@@ -37,13 +34,6 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         this.mProductsModelList = productsModelArrayList;
         this.listAllListeners = listener;
         this.mContext = mContext;
-    }
-
-    public interface ListAllListeners {
-
-        void onCardViewClick(ProductsModel.DataBean produtsAllModel);
-
-        void onFavButtonClick(View v, int position, boolean isFav);
     }
 
     @Override
@@ -97,13 +87,20 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         });
     }
 
-
     @Override
     public int getItemCount() {
         if (mProductsModelList != null)
             return mProductsModelList.size();
         else
             return 0;
+    }
+
+
+    public interface ListAllListeners {
+
+        void onCardViewClick(ProductsModel.DataBean produtsAllModel);
+
+        void onFavButtonClick(View v, int position, boolean isFav);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

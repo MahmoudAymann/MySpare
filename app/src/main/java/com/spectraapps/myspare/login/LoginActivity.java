@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -23,14 +22,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
-import com.github.kimkevin.cachepot.CachePot;
-import com.spectraapps.myspare.SplashScreen;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
@@ -57,17 +55,15 @@ public class LoginActivity extends AppCompatActivity {
 
     Locale locale;
     boolean mIsLogged;
+    AlertDialog.Builder alertDialogBuilder;
+    ImageView imageView;
+    ScrollView mainLayout;
+    boolean inputTypeChanged;
+    String langStr;
     private AutoCompleteTextView mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
 
-    AlertDialog.Builder alertDialogBuilder;
-
-
-    ImageView imageView;
-    LinearLayout mainLayout;
-    boolean inputTypeChanged;
-    String langStr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<LoginModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+            public void onResponse(@NonNull Call<LoginModel> call, @NonNull Response<LoginModel> response) {
 
                 try {
 

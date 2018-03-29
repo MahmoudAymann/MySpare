@@ -19,14 +19,12 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.NotificationAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
-import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.NotificationModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorCompletionService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,11 +35,10 @@ public class Notification extends Fragment {
     RecyclerView recyclerView;
     NotificationAdapter notificationAdapter;
     ArrayList<NotificationModel.DataBean> notificationDataList;
-    private ProgressDialog progressDialog;
-    private PullRefreshLayout pullRefreshLayout;
-
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+    private ProgressDialog progressDialog;
+    private PullRefreshLayout pullRefreshLayout;
 
     public Notification() {
         // Required empty public constructor

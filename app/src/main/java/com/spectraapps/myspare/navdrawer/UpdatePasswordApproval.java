@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.login.LoginActivity;
 import com.spectraapps.myspare.model.UpdatePasswordModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
@@ -36,8 +36,8 @@ public class UpdatePasswordApproval extends AppCompatActivity {
     ListSharedPreference.Get getSharedPreference;
 
     Button mButton;
-    private ProgressDialog progressDialog;
     AlertDialog.Builder alertDialogBuilder;
+    private ProgressDialog progressDialog;
     private boolean isPasswordShown2;
 
     @Override
@@ -124,7 +124,7 @@ public class UpdatePasswordApproval extends AppCompatActivity {
 
         call.enqueue(new Callback<UpdatePasswordModel>() {
             @Override
-            public void onResponse(Call<UpdatePasswordModel> call, Response<UpdatePasswordModel> response) {
+            public void onResponse(@NonNull Call<UpdatePasswordModel> call, @NonNull Response<UpdatePasswordModel> response) {
 
                 try {
 
@@ -152,7 +152,7 @@ public class UpdatePasswordApproval extends AppCompatActivity {
             }//edn onResponse
 
             @Override
-            public void onFailure(Call<UpdatePasswordModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<UpdatePasswordModel> call, @NonNull Throwable t) {
                 try {
                     progressDialog.dismiss();
                     Toast.makeText(UpdatePasswordApproval.this, "exc:" + t.getMessage(),

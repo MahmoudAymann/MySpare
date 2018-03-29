@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home_title">القائمة الرئيسية</string>
-    <string name="title_notifications">إشعارات</string>
     <string name="logoscreen">لوجو</string>
     <string name="favourite">المفضلة</string>
     <string name="add_title">إضافة عنصر</string>
-    <string name="action_settings">الضبط</string>
     <string name="title_activity_login">تسجيل الدخول</string>
     <string name="prompt_email">البريد الإلكترونى</string>
     <string name="prompt_password">كلمة المرور</string>
-    <string name="action_sign_in_short">تسجيل الدخول</string>
     <string name="error_invalid_email">ايميل غير صالح</string>
     <string name="error_invalid_password">يجب ان يكون اكبر من 4</string>
-    <string name="error_incorrect_password">الباسوورد غير صحيح</string>
-    <string name="button_more_text">المزيد</string>
     <string name="model">الموديل:</string>
-    <string name="kind_model">النوع:</string>
     <string name="product_num">رقم المنتج:</string>
     <string name="enter_num">أدخل الرقم</string>
     <string name="brand">الماركة:</string>
@@ -25,12 +19,10 @@
     <string name="action_sign_up">تسجيل جديد</string>
     <string name="name">الاسم</string>
     <string name="enter_phone_number">رقم الهاتف</string>
-    <string name="product_detail">بيانات المنتج</string>
     <string name="account">الحساب</string>
     <string name="update_accountInfo">تحديث معلومات الحساب</string>
     <string name="update_password">تحديث كلمة المرور</string>
     <string name="contactwithus">التواصل معنا</string>
-    <string name="privacy_statements">سياسة الخصوصية والإستخدام</string>
     <string name="contact_us">إتصل بنا</string>
     <string name="about">عن التطبيق</string>
     <string name="logout">تسجيل الخروج</string>
@@ -38,15 +30,8 @@
     <string name="navigation_drawer_close">غلق</string>
     <string name="profile_title">الملف الشخصى</string>
     <string name="notifications_title">الإشعارات</string>
-    <string name="main_inside">الهيكل الداخلى</string>
-    <string name="main_outside">الهيكل الخارجى</string>
-    <string name="main_electricity">الكهرباء</string>
-    <string name="main_mechanic">الميكانيكا</string>
-    <string name="main_tires">الإطارات</string>
-    <string name="main_accessories">الاكسسوارات</string>
     <string name="update">تحديث</string>
     <string name="addItem_name">الاسم</string>
-    <string name="hintET_name">ادخل الرقم</string>
     <string name="country">الدولة</string>
     <string name="change_language">تغيير اللغة</string>
     <string name="manufacturer_year">سنة الصنع</string>
@@ -58,8 +43,6 @@
     <string name="title_activity_about">من نحن</string>
     <string name="forgot_password"><u>نسيت كلمة السر؟</u></string>
     <string name="manufacturer_company">صنع فى:</string>
-    <string name="enter_year">السنة</string>
-    <string name="hintET_cost">التكلفة</string>
     <string name="category">الفئة</string>
     <string name="model_PD">موديل:</string>
     <string name="brand_PD">براند:</string>
@@ -71,7 +54,7 @@
     <string name="product_name_PD">الاسم:</string>
     <string name="serial_number">السيريال:</string>
     <string name="please_wait">الرجاء الانتظار</string>
-    <string name="loading">تحميل...</string>
+    <string name="loading">تحميل…</string>
     <string name="errorFav">لا يوجد</string>
     <string name="choose_year">اختر السنة</string>
     <string name="choose_country">اختر البلد</string>
@@ -85,5 +68,15 @@
     <string name="no_products_found">لا يوجد منتجات</string>
     <string name="choose_category">اختر الفئة</string>
     <string name="choose_currency">اختر العملة</string>
-
+    <string name="error">خطأ</string>
+    <string name="fail_load_image">حدث خطأ عند جلب الصورة</string>
+    <string name="prompt_oldpassword">كلمة المرور القديمة</string>
+    <string name="prompt_newpassword">كلمة المرور الجديدة</string>
+    <string name="itemAddedSuccefully">تمت الإضافة بنجاح</string>
+    <string name="mobile">الموبايل</string>
+    <string name="example_mail_com">example@mail.com</string>
+    <string name="email">البريد الإلكترونى</string>
+    <string name="address">address</string>
+    <string name="headquarter">المركز الرئيسى</string>
+    <string name="mobile_in_productdetail">رقم الهاتف:</string>
 </resources>

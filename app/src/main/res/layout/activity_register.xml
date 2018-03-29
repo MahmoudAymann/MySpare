@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/app_background"
     android:orientation="vertical"
-    android:paddingTop="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
-    tools:context="com.spectraapps.myspare.login.RegisterActivity"
-    android:background="@drawable/app_background">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    tools:context="com.spectraapps.myspare.login.RegisterActivity">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -25,11 +19,10 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/app_logo"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:src="@drawable/app_logo"/>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/name_textInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@android:color/white">
@@ -38,11 +31,11 @@
                     android:id="@+id/reg_nameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_person_white_24dp"
                     android:hint="@string/name"
                     android:inputType="textPersonName"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
-                    android:drawableStart="@drawable/ic_person_white_24dp"/>
+                    android:textColor="@android:color/white"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -55,12 +48,12 @@
                     android:id="@+id/reg_phoneET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mobile_24dp"
                     android:hint="@string/enter_phone_number"
                     android:inputType="phone"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:drawableStart="@drawable/ic_mobile_24dp"/>
+                    android:textColorHint="@android:color/white"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -74,11 +67,11 @@
                     android:id="@+id/reg_emailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_email_24dp"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
-                    android:drawableStart="@drawable/ic_email_24dp"/>
+                    android:textColor="@android:color/white"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -92,11 +85,11 @@
                     android:id="@+id/reg_passwordET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_lock_white_nav_24dp"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:singleLine="true"
-                    android:textColor="@android:color/white"
-                    android:drawableStart="@drawable/ic_lock_white_nav_24dp"/>
+                    android:textColor="@android:color/white"/>
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -105,10 +98,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/colorAccent"
                 android:text="@string/action_sign_up"
-                android:textStyle="bold"
-                android:background="@color/colorAccent"/>
+                android:textStyle="bold"/>
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>

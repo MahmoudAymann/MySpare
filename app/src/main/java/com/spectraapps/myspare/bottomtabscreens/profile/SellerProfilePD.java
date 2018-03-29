@@ -19,7 +19,6 @@ import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpProfile.RecyclerProfileAdapter;
 import com.spectraapps.myspare.api.Api;
-import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.ProfileProdModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
@@ -39,9 +38,9 @@ public class SellerProfilePD extends Fragment {
     PullRefreshLayout pullRefreshLayout;
 
     String uId;
-    private ProgressDialog progressDialog;
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+    private ProgressDialog progressDialog;
 
     public SellerProfilePD() {
         // Required empty public constructo
@@ -204,7 +203,7 @@ public class SellerProfilePD extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProfileProdModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProfileProdModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();

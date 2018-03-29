@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity{
+public class ProfileActivity extends AppCompatActivity {
 
     ImageButton editNameBtn, editEmailBtn, editMobileBtn;
 
@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity{
 
     EditText nameET, emailET, mobileET;
 
-    boolean isNameShown=true, isEmailShown=true, isMobileShown=true;
+    boolean isNameShown = true, isEmailShown = true, isMobileShown = true;
     FButton updateBtn;
     String userId;
     private ProgressDialog progressDialog;
@@ -168,11 +168,11 @@ public class ProfileActivity extends AppCompatActivity{
 
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-        Call<UpdateProfileModel> call = retrofit.updateProfile(id,name,email,mobile);
+        Call<UpdateProfileModel> call = retrofit.updateProfile(id, name, email, mobile);
 
         call.enqueue(new Callback<UpdateProfileModel>() {
             @Override
-            public void onResponse(Call<UpdateProfileModel> call, Response<UpdateProfileModel> response) {
+            public void onResponse(@NonNull Call<UpdateProfileModel> call, @NonNull Response<UpdateProfileModel> response) {
                 if (response.isSuccessful()) {
 
                     Toast.makeText(ProfileActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
@@ -194,7 +194,7 @@ public class ProfileActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<UpdateProfileModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<UpdateProfileModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(ProfileActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -206,10 +206,10 @@ public class ProfileActivity extends AppCompatActivity{
 //        listSharedPreference.setEmail(getApplicationContext(),email);
 //        listSharedPreference.setMobile(getApplicationContext(),mobile);
 
-        Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
-        intent.putExtra("name",name);
-        intent.putExtra("email",email);
-        intent.putExtra("mobile",mobile);
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        intent.putExtra("name", name);
+        intent.putExtra("email", email);
+        intent.putExtra("mobile", mobile);
 
     }
 

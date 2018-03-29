@@ -1,6 +1,7 @@
 package com.spectraapps.myspare.navdrawer;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,7 +50,7 @@ public class ResetPassword extends AppCompatActivity {
         resetPasswordCall.enqueue(new Callback<ResetPasswordModel>()
         {
             @Override
-            public void onResponse(Call<ResetPasswordModel> call, Response<ResetPasswordModel> response)
+            public void onResponse(@NonNull Call<ResetPasswordModel> call, @NonNull Response<ResetPasswordModel> response)
             {
                 if (response.isSuccessful()){
                     Toast.makeText(ResetPassword.this, ""+response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
@@ -62,7 +63,7 @@ public class ResetPassword extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResetPasswordModel> call, Throwable t)
+            public void onFailure(@NonNull Call<ResetPasswordModel> call, @NonNull Throwable t)
             {
                 Toast.makeText(ResetPassword.this,t.getMessage(),Toast.LENGTH_LONG).show();
 

@@ -26,8 +26,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
-import com.spectraapps.myspare.bottomtabscreens.additem.AddItemActivity;
-import com.spectraapps.myspare.bottomtabscreens.favourite.Favourite;
 import com.spectraapps.myspare.model.AddToFavModel;
 import com.spectraapps.myspare.model.BrandsModel;
 import com.spectraapps.myspare.model.CountriesModel;
@@ -88,14 +86,11 @@ public class ProductsFragment extends Fragment {
     String mUEmail, mCategory;
 
     RoundKornerLinearLayout roundKornerModelsText, roundKornerSpinner;
-
-    private ArrayList<String> countries_array, brand_array, models_array;
-    private ArrayList<String> countriesId_array, modelsId_array, brandId_array;
-
     String mSerialNumber, mManfactureCountry_Id,
             mBrand_Id, mModel_Id, mCountry_Id;
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+    private ArrayList<String> countriesId_array, modelsId_array, brandId_array;
 
     public ProductsFragment() {
 
@@ -298,16 +293,6 @@ public class ProductsFragment extends Fragment {
         serverBrands(popupView.getContext(), spinner_brand);
     }
 
-    public interface myCall_Back {
-        void filter(String one, String two, String three, String four, String five, int num);
-
-        void filter(String one, int num);
-
-        void filter(String one, String two, int num);
-
-        void filter(String one, String two, String three, int num);
-    }
-
     private void serverProductsWithMail() {
         try {
             if (getArguments() != null) {
@@ -351,7 +336,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -389,7 +374,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -405,7 +390,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -427,7 +412,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -443,7 +428,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -464,21 +449,20 @@ public class ProductsFragment extends Fragment {
         countriesCall.enqueue(new Callback<CountriesModel>() {
             @Override
             public void onResponse(@NonNull Call<CountriesModel> call, @NonNull Response<CountriesModel> response) {
-                if (response.isSuccessful()) {
+                try {
+                    if (response.isSuccessful()) {
+                        getCountries(response.body().getData(), popup, spinner);
+                        getCountriesId(response.body().getData());
+                        Log.v("res", response.body().getData() + "");
+                    } else {
+                        Log.v("res", response.body().getData() + "");
+                    }
+                } catch (Exception ignored) {
 
-                    getCountries(response.body().getData(), popup, spinner);
-                    getCountriesId(response.body().getData());
-                    Log.v("res", response.body().getData() + "");
-                } else
-                    // Toast.makeText(AddItemActivity.this, response.body().getStatus().getTitle(),
-                    // Toast.LENGTH_SHORT).show();
-                    Log.v("res", response.body().getData() + "");
+                }
             }
-
             @Override
-            public void onFailure(Call<CountriesModel> call, Throwable t) {
-                Toast.makeText(ProductsFragment.this.getContext(), t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<CountriesModel> call, @NonNull Throwable t) {
             }
         });
     }//end serverCountries()
@@ -492,7 +476,7 @@ public class ProductsFragment extends Fragment {
     }
 
     private void getCountries(List<CountriesModel.DataBean> data, Context popupView, Spinner spinner) {
-        countries_array = new ArrayList<>();
+        ArrayList<String> countries_array = new ArrayList<>();
         countries_array.add(0, getString(R.string.choose_country));
         for (int i = 0; i < data.size(); i++) {
             countries_array.add(data.get(i).getName());
@@ -512,7 +496,7 @@ public class ProductsFragment extends Fragment {
 
         brandsCall.enqueue(new Callback<BrandsModel>() {
             @Override
-            public void onResponse(Call<BrandsModel> call, Response<BrandsModel> response) {
+            public void onResponse(@NonNull Call<BrandsModel> call, @NonNull Response<BrandsModel> response) {
                 if (response.isSuccessful()) {
 
                     getBrands(response.body().getData(), context, spinner);
@@ -524,7 +508,7 @@ public class ProductsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<BrandsModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<BrandsModel> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -532,13 +516,13 @@ public class ProductsFragment extends Fragment {
     }//end serverBrands()
 
     private void getBrands(List<BrandsModel.DataBean> data, Context context, Spinner spinner) {
-        brand_array = new ArrayList<>();
+        ArrayList<String> brand_array = new ArrayList<>();
         brand_array.add(0, getString(R.string.choose_brand));
         for (int i = 0; i < data.size(); i++) {
             brand_array.add(data.get(i).getName());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (context, android.R.layout.simple_spinner_item,
                         brand_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
@@ -561,7 +545,7 @@ public class ProductsFragment extends Fragment {
         Call<ModelsModel> modelsCall = retrofit.models(mBrand_Id);
         modelsCall.enqueue(new Callback<ModelsModel>() {
             @Override
-            public void onResponse(Call<ModelsModel> call, Response<ModelsModel> response) {
+            public void onResponse(@NonNull Call<ModelsModel> call, @NonNull Response<ModelsModel> response) {
                 if (response.isSuccessful()) {
                     getModels(response.body().getData(), context, spinner);
                     getModelsId(response.body().getData());
@@ -571,7 +555,7 @@ public class ProductsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ModelsModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<ModelsModel> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
@@ -579,7 +563,7 @@ public class ProductsFragment extends Fragment {
     }//end
 
     private void getModels(List<ModelsModel.DataBean> data, Context context, Spinner spinner) {
-        models_array = new ArrayList<>();
+        ArrayList<String> models_array = new ArrayList<>();
         models_array.add(0, getString(R.string.choose_model));
         for (int i = 0; i < data.size(); i++) {
             models_array.add(data.get(i).getName());
@@ -607,7 +591,7 @@ public class ProductsFragment extends Fragment {
         for (int i = current_year; i >= 1990; i--) {
             year_array.add(String.valueOf(i));
         }
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 view.getContext(), android.R.layout.simple_spinner_item, year_array);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_year.setAdapter(spinnerArrayAdapter);
@@ -622,7 +606,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
-                public void onResponse(Call<ProductsAllModel> call, Response<ProductsAllModel> response) {
+                public void onResponse(@NonNull Call<ProductsAllModel> call, @NonNull Response<ProductsAllModel> response) {
 
                     if (response.isSuccessful()) {
                         Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
@@ -640,7 +624,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsAllModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
 
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
@@ -703,7 +687,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -719,7 +703,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -741,7 +725,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -757,7 +741,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -779,7 +763,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -795,7 +779,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -817,7 +801,7 @@ public class ProductsFragment extends Fragment {
 
             productsCall.enqueue(new Callback<ProductsModel>() {
                 @Override
-                public void onResponse(Call<ProductsModel> call, Response<ProductsModel> response) {
+                public void onResponse(@NonNull Call<ProductsModel> call, @NonNull Response<ProductsModel> response) {
                     try {
                         if (response.isSuccessful()) {
                             mProductDataList.addAll(response.body().getData());
@@ -833,7 +817,7 @@ public class ProductsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ProductsModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<ProductsModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     alertDialogBuilder.setMessage(t.getMessage());
@@ -974,7 +958,7 @@ public class ProductsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                 pullRefreshLayout.setRefreshing(false);
                 alertDialogBuilder.setMessage(t.getMessage());
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -990,7 +974,7 @@ public class ProductsFragment extends Fragment {
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
-            public void onResponse(Call<AddToFavModel> call, Response<AddToFavModel> response) {
+            public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                 try {
 
 
@@ -1010,7 +994,7 @@ public class ProductsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AddToFavModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                 pullRefreshLayout.setRefreshing(false);
                 alertDialogBuilder.setMessage(t.getMessage());
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -1065,6 +1049,16 @@ public class ProductsFragment extends Fragment {
     private void getUserInfo() {
         mUEmail = getSharedPreference.getEmail();
         mCategory = getSharedPreference.getCategory();
+    }
+
+    public interface myCall_Back {
+        void filter(String one, String two, String three, String four, String five, int num);
+
+        void filter(String one, int num);
+
+        void filter(String one, String two, int num);
+
+        void filter(String one, String two, String three, int num);
     }
 
 
