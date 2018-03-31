@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@color/fbutton_color_transparent"
-                app:srcCompat="@drawable/ic_edit_36dp" />
+                app:srcCompat="@drawable/ic_edit_grey_36" />
 
         </RelativeLayout>
 
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@color/fbutton_color_transparent"
-                app:srcCompat="@drawable/ic_edit_36dp" />
+                app:srcCompat="@drawable/ic_edit_grey_36" />
 
         </RelativeLayout>
 
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@color/fbutton_color_transparent"
-                app:srcCompat="@drawable/ic_edit_36dp" />
+                app:srcCompat="@drawable/ic_edit_grey_36" />
 
         </RelativeLayout>
 

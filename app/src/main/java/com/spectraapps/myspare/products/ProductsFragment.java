@@ -68,7 +68,6 @@ public class ProductsFragment extends Fragment {
 
     AlertDialog.Builder alertDialogBuilder;
 
-
     AllProductsAdapter mAllProductsAdapter;
 
     ProductsRecyclerAdapter productsAdapter;
@@ -103,8 +102,8 @@ public class ProductsFragment extends Fragment {
 
         setSharedPreference = new ListSharedPreference.Set(ProductsFragment.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(ProductsFragment.this.getContext().getApplicationContext());
-        MainActivity.mToolbarText.setText(getSharedPreference.getCategoryName());
 
+        MainActivity.mToolbarText.setText(getSharedPreference.getCategoryName());
 
         getUserInfo();
         setAlertDialog();
@@ -149,9 +148,6 @@ public class ProductsFragment extends Fragment {
                 showPopUp();
             }
         });
-        YoYo.with(Techniques.ZoomIn)
-                .duration(700)
-                .playOn(fabButton);
 
         recyclerView = rootView.findViewById(R.id.products_recycler);
 
@@ -176,7 +172,7 @@ public class ProductsFragment extends Fragment {
     private void showPopUp() {
 
         final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
-        new EasyDialog(getActivity())
+       final EasyDialog easyDialog = new EasyDialog(getActivity())
                 .setLayout(popupView)
                 .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.app_background_color))
                 .setLocationByAttachedView(fabButton)
@@ -189,7 +185,6 @@ public class ProductsFragment extends Fragment {
                 .setMatchParent(true)
                 .setMarginLeftAndRight(30, 30)
                 .show();
-
         roundKornerModelsText = popupView.findViewById(R.id.textBack2);
         roundKornerSpinner = popupView.findViewById(R.id.roundKornerLinearLayout2);
         editText = popupView.findViewById(R.id.editText1_pop);
@@ -262,7 +257,6 @@ public class ProductsFragment extends Fragment {
                 int spinerYearPos = spinner_year.getSelectedItemPosition();
                 boolean serialNumET_HasText = !editText.getText().toString().equals("");
 
-
                 if (spinerCountryPos > 0 && spinerBrandPos < 1 && spinerModelPos < 1 && spinerYearPos < 1 && !serialNumET_HasText) {
                     myCall_back.filter(mManfactureCountry_Id, 1);
                 } else if (spinerCountryPos < 1 && spinerBrandPos > 0 && spinerModelPos < 1 && spinerYearPos < 1 && !serialNumET_HasText) {
@@ -284,6 +278,8 @@ public class ProductsFragment extends Fragment {
                 } else if (spinerCountryPos > 0 && spinerBrandPos > 0 && spinerModelPos > 0 && spinerYearPos > 0 && serialNumET_HasText) {
                     myCall_back.filter(mManfactureCountry_Id, mBrand_Id, mModel_Id, spinner_year.getSelectedItem().toString(), editText.getText().toString(), 12345);
                 }
+               // popupView.setVisibility(View.INVISIBLE);
+                easyDialog.dismiss();
             }
         });
 
@@ -599,6 +595,7 @@ public class ProductsFragment extends Fragment {
     }//end addYears();
 
     private void serverProductsAll() {
+        mProductAllDataList = new ArrayList<>();
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
@@ -607,25 +604,27 @@ public class ProductsFragment extends Fragment {
             productsCall.enqueue(new Callback<ProductsAllModel>() {
                 @Override
                 public void onResponse(@NonNull Call<ProductsAllModel> call, @NonNull Response<ProductsAllModel> response) {
+                    try {
 
-                    if (response.isSuccessful()) {
-                        Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_SHORT).show();
-
-                        mProductAllDataList.addAll(response.body().getData());
-                        recyclerView.setAdapter(mAllProductsAdapter);
-                        mAllProductsAdapter.notifyDataSetChanged();
-                        Log.v("jkjk", response.body().getData().size() + "");
-                        pullRefreshLayout.setRefreshing(false);
-
-                    } else {
-                        pullRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        if (response.isSuccessful()) {
+                            mProductAllDataList.addAll(response.body().getData());
+                            recyclerView.setAdapter(mAllProductsAdapter);
+                            mAllProductsAdapter.notifyDataSetChanged();
+                            Log.v("jkjk", response.body().getData().size() + "");
+                            pullRefreshLayout.setRefreshing(false);
+                        } else {
+                            if (response.body() != null) {
+                                pullRefreshLayout.setRefreshing(false);
+                                Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }catch (Exception exc){
+                        exc.printStackTrace();
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
-
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
@@ -921,10 +920,14 @@ public class ProductsFragment extends Fragment {
 
                     @Override
                     public void onFavButtonClick(View v, int position, boolean isFav) {
-                        if (isFav) {
-                            serverAddToFav(position);
-                        } else {
-                            serverRemoveFromFav(position);
+                        if (getSharedPreference.getLoginStatus()) {
+                            if (isFav) {
+                                serverAddToFav(position);
+                            } else {
+                                serverRemoveFromFav(position);
+                            }
+                        }else {
+                            Toast.makeText(getContext(), getString(R.string.signin_first), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -1027,7 +1030,6 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
                         CachePot.getInstance().push("langy", getLang());
-
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();

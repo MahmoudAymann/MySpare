@@ -69,7 +69,7 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (!getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getId()).equals("true"))
+        if (!getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid()).equals("true"))
             holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
         else
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);

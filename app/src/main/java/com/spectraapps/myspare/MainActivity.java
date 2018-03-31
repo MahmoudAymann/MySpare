@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity
 
         setSharedPreference = new ListSharedPreference.Set(MainActivity.this.getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(MainActivity.this.getApplicationContext());
+        mIsLogged = getSharedPreference.getLoginStatus();
 
         setLAyoutLanguage();
 
@@ -117,13 +119,8 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout, new Home()).commit();
-        //mIsLogged = CachePot.getInstance().pop("islogged");
 
-        mIsLogged = getSharedPreference.getLoginStatus();
-        //Toast.makeText(MainActivity.this, ""+mIsLogged, Toast.LENGTH_SHORT).show();
         initBottomTabBar();
-
-        setAlertDialog();
 
         langhere = getSharedPreference.getLanguage();
         progressDialog = new ProgressDialog(this);
@@ -196,6 +193,18 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (!mIsLogged) {
+            Menu menu = navigationView.getMenu();
+            MenuItem nav_logout = menu.findItem(R.id.logout_nav);
+            nav_logout.setTitle(getString(R.string.action_sign_in));
+            nav_logout.setIcon(R.drawable.ic_account_nav_24dp);
+        } else {
+            Menu menu = navigationView.getMenu();
+            MenuItem nav_logout = menu.findItem(R.id.logout_nav);
+            nav_logout.setTitle(getString(R.string.logout));
+            nav_logout.setIcon(R.drawable.ic_power_nav_24dp);
+        }
     }
 
     private void serverUpdateProfileImage(String image_path) {
@@ -231,6 +240,7 @@ public class MainActivity extends AppCompatActivity
                     progressDialog.dismiss();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<UpdateProfileImageModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
@@ -280,7 +290,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     public static String getRealPathFromUri(Uri contentURI, Context context) {
         try {
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -292,7 +301,7 @@ public class MainActivity extends AppCompatActivity
             String imagePath = cursor.getString(columnIndex);
             cursor.close();
             return imagePath;
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             return null;
         }
     }
@@ -309,46 +318,43 @@ public class MainActivity extends AppCompatActivity
             NavigationView navigationView = this.findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(MainActivity.this);
         }
-
     }
 
     private void initBottomTabBar() {
 
-        final String[] colors = getResources().getStringArray(R.array.default_preview);
+        final String[] colors = getResources().getStringArray(R.array.tab_bar_colors);
 
         final NavigationTabBar navigationTabBar = findViewById(R.id.ntb_horizontal);
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_home_black_24dp),
+                        getResources().getDrawable(R.drawable.ic_home_black_36dp),
+                        Color.parseColor(colors[0]))
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_favorite_black_36dp),
                         Color.parseColor(colors[0]))
                         .build()
         );
 
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_favourite_black_24dp),
-                        Color.parseColor(colors[0]))
-                        .build()
-        );
-
-        models.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_add_black_24dp),
+                        getResources().getDrawable(R.drawable.ic_add_black_36dp),
                         Color.parseColor(colors[0]))
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_notifications_black_24dp),
+                        getResources().getDrawable(R.drawable.ic_notifications_black_36),
                         Color.parseColor(colors[0]))
-                        .selectedIcon(getResources().getDrawable(R.drawable.ic_notify_selected_black_24dp))
-                        .badgeTitle("5")
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_notification_on_black_36dp))
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_person_black_24dp),
+                        getResources().getDrawable(R.drawable.ic_person_black_36dp),
                         Color.parseColor(colors[0]))
                         .build()
         );
@@ -400,45 +406,40 @@ public class MainActivity extends AppCompatActivity
                 if (mIsLogged)
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.main_frameLayout, new Favourite()).commit();
-                else
-                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                else {
+                    setAlertDialog(2);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
                 break;
             case 2:
                 if (mIsLogged)
                     startActivity(new Intent(MainActivity.this, AddItemActivity.class));
-                else
-                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                else {
+                    setAlertDialog(2);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
                 break;
             case 3:
                 if (mIsLogged)
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.main_frameLayout, new Notification()).commit();
-                else
-                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                else {
+                    setAlertDialog(2);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
                 break;
             case 4:
-                if (mIsLogged) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("puid", mId);
-                    bundle.putString("plang", langhere);
-                    Profile profileFrag = new Profile();
-                    profileFrag.setArguments(bundle);
-
-                    CachePot.getInstance().push("puid", mId);
-                    CachePot.getInstance().push("langh", langhere);
-
-                    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-                    fm.beginTransaction()
-                            .replace(R.id.main_frameLayout, profileFrag).commit();
-                } else {
-                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
-                }
                 if (mIsLogged) {
                     android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                     fm.beginTransaction()
                             .replace(R.id.main_frameLayout, new Profile()).commit();
-                } else {
-                    Toast.makeText(MainActivity.this, "Login First", Toast.LENGTH_SHORT).show();
+                }else {
+                    setAlertDialog(2);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
         }//end switch
     }
@@ -473,7 +474,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.updatePass_nav) {
-            startActivity(new Intent(MainActivity.this, UpdatePasswordApproval.class));
+            if (mIsLogged) {
+                startActivity(new Intent(MainActivity.this, UpdatePasswordApproval.class));
+            } else {
+                setAlertDialog(2);
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
         } else if (id == R.id.updateAccount_nav) {
             if (mIsLogged) {
                 Intent i = new Intent(MainActivity.this, ProfileActivity.class);
@@ -483,15 +490,23 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("image", mImage);
                 i.putExtra("id", mId);
                 startActivity(i);
-            } else
-                Toast.makeText(this, "please sign in first", Toast.LENGTH_SHORT).show();
+            } else {
+                setAlertDialog(2);
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
         } else if (id == R.id.language_nav) {
+            setAlertDialog(1);
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else if (id == R.id.logout_nav) {
-            setLogout();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
+            if (mIsLogged) {
+                setLogout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
         } else if (id == R.id.nav_contactus) {
             Uri uriUrl = Uri.parse("http://myspare.net/contact-us");
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -505,30 +520,52 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setAlertDialog() {
-        alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(getString(R.string.change_language_prompt));
+    private void setAlertDialog(int key) {
+        switch (key) {
+            case 1:
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.change_language_prompt));
 
-        alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                if (getSharedPreference.getLanguage().equals("en")) {
-                    setSharedPreference.setLanguage("ar");
-                    restartActivity(MainActivity.this);
-                } else {
-                    setSharedPreference.setLanguage("en");
-                    restartActivity(MainActivity.this);
-                }
-            }
-        });
+                alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (getSharedPreference.getLanguage().equals("en")) {
+                            setSharedPreference.setLanguage("ar");
+                            restartActivity(MainActivity.this);
+                        } else {
+                            setSharedPreference.setLanguage("en");
+                            restartActivity(MainActivity.this);
+                        }
+                    }
+                });
 
-        alertDialogBuilder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+                alertDialogBuilder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                break;
+            case 2:
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.signin_first));
 
+                alertDialogBuilder.setPositiveButton(getString(R.string.action_sign_in), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        MainActivity.this.finish();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton(getString(R.string.prompt_continue), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                break;
+        }
     }//end setAlertDialog
 
     public void setOnBackPressedListener(IOnBackPressed onBackPressedListener) {
@@ -546,13 +583,13 @@ public class MainActivity extends AppCompatActivity
 
     private void getUserInfo() {
         if (mIsLogged) {
-
             mId = getSharedPreference.getUId();
             mName = getSharedPreference.getUName();
             mEmail = getSharedPreference.getEmail();
             mToken = getSharedPreference.getToken();
             mMobile = getSharedPreference.getMobile();
             mImage = getSharedPreference.getImage();
+
             mNavNameTextView.setText(mName);
             mNavEmailTextView.setText(mEmail);
             Picasso.with(MainActivity.this)

@@ -128,9 +128,9 @@ public class Profile extends Fragment {
                         setSharedPreference.setimg2(profileProdData.getImage2());
 
                         CachePot.getInstance().push("pDate", profileProdData.getDate());
-                        CachePot.getInstance().push("pCountry",profileProdData.getCountry());
-                        CachePot.getInstance().push("pBrand",  profileProdData.getBrand());
-                        CachePot.getInstance().push("pModel",  profileProdData.getModel());
+                        CachePot.getInstance().push("pCountry", profileProdData.getCountry());
+                        CachePot.getInstance().push("pBrand", profileProdData.getBrand());
+                        CachePot.getInstance().push("pModel", profileProdData.getModel());
 
                         CachePot.getInstance().push("uEmail", profileProdData.getId());
                         CachePot.getInstance().push("uMobile", profileProdData.getMobile());
@@ -140,18 +140,21 @@ public class Profile extends Fragment {
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
 
-                       Log.v("jkjkl", profileProdData.getImage() + " push ");
-                       Log.v("jkjkl", profileProdData.getName() + profileProdData.getMobile() + "push");
+                        Log.v("jkjkl", profileProdData.getImage() + " push ");
+                        Log.v("jkjkl", profileProdData.getName() + profileProdData.getMobile() + "push");
                     }
 
                     @Override
                     public void onFavButtonClick(View v, int position, boolean isFav) {
-                        if (isFav) {
-                            serverAddToFav(mProfileDataList.get(position).getPid());
+                        if (getSharedPreference.getLoginStatus()) {
+                            if (isFav) {
+                                serverAddToFav(mProfileDataList.get(position).getPid());
+                            } else {
+                                serverRemoveFromFav(mProfileDataList.get(position).getPid());
+                            }
                         } else {
-                            serverRemoveFromFav(mProfileDataList.get(position).getPid());
+                            Toast.makeText(getContext(), getString(R.string.signin_first), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
     }
@@ -162,7 +165,7 @@ public class Profile extends Fragment {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail,pId ,false);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail, pId, false);
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
@@ -171,14 +174,16 @@ public class Profile extends Fragment {
                         if (response.isSuccessful()) {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), "" +response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "NO DATA"+e, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "NO DATA" + e, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -200,26 +205,30 @@ public class Profile extends Fragment {
 
     private void serverAddToFav(String pId) {
         try {
-        progressDialog.show();
-        mProfileDataList = new ArrayList<>();
+            progressDialog.show();
+            mProfileDataList = new ArrayList<>();
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail,pId ,false);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(uEmail, pId, true);
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override
                 public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                     try {
                         if (response.isSuccessful()) {
+
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                         } else {
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), " "+response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), " " + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "NO DATA"+e, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "NO DATA" + e, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -228,7 +237,7 @@ public class Profile extends Fragment {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         } catch (Exception e) {
@@ -244,7 +253,6 @@ public class Profile extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         }
-
     }//end initRecyclerView()
 
     private void serverProfile() {
@@ -259,8 +267,7 @@ public class Profile extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<ProfileProdModel> call, @NonNull Response<ProfileProdModel> response) {
                     try {
-                        if (response.isSuccessful())
-                        {
+                        if (response.isSuccessful()) {
                             mProfileDataList.addAll(response.body().getData());
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();

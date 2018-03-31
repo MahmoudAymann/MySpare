@@ -167,11 +167,6 @@ public class FavProductDetail extends Fragment
         imageSliderInitilaize();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private void imageSliderInitilaize() {
 
         HashMap<String, String> file_maps = new HashMap<>();

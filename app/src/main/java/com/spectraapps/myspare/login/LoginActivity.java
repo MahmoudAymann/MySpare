@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     ScrollView mainLayout;
     boolean inputTypeChanged;
     String langStr;
-    private AutoCompleteTextView mEmailEditText;
+    private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private ProgressDialog progressDialog;
 
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             this.setContentView(R.layout.activity_login);
             initUI();
-        } else  {
+        } else {
             locale = new Locale("ar");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             String image = response.body().getData().getImage();
 
                             setSharedPreference.setLoginStatus(true);
-                            Toast.makeText(LoginActivity.this,getString(R.string.logged_success), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, getString(R.string.logged_success), Toast.LENGTH_LONG).show();
 
                             saveUserInfo(id, name, email, mobile, token, image);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Toast.makeText(LoginActivity.this, "error:" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialogBuilder.setMessage("Error: " + e);
                     alertDialog.show();
@@ -164,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
-                }catch (Exception e){
+                } catch (Exception e) {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialogBuilder.setMessage("Error: " + e);
                     alertDialog.show();
@@ -203,15 +203,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!isPasswordShown) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && getSharedPreference.getLanguage().equals("ar")) {
+                    if (getSharedPreference.getLanguage().equals("ar")) {
                         if (s.length() > 0) {
                             if (!inputTypeChanged) {
 
                                 // When a character is typed, dynamically change the EditText's
                                 // InputType to PASSWORD, to show the dots and conceal the typed characters.
                                 mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
-                                        InputType.TYPE_TEXT_VARIATION_PASSWORD |
-                                        InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
                                 // Move the cursor to the correct place (after the typed character)
                                 mPasswordEditText.setSelection(s.length());
@@ -235,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mRegisterButton = findViewById(R.id.button_Register);
         mSkipButton = findViewById(R.id.button_later);
-
+        mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         mImagePasswrdVisible = findViewById(R.id.image_visible);
 
         textViewForgetPassword = findViewById(R.id.forgot_password_text);

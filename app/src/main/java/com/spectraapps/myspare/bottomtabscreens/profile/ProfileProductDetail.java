@@ -55,6 +55,7 @@ public class ProfileProductDetail extends Fragment
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
+
         fireBackButtonEvent();
 
         setSharedPreference = new ListSharedPreference.Set(ProfileProductDetail.this.getContext().getApplicationContext());

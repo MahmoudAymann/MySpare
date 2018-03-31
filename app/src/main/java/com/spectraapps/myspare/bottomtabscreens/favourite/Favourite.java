@@ -89,6 +89,7 @@ public class Favourite extends Fragment {
                     try {
                         if (response.isSuccessful()) {
                             mFavDataList.addAll(response.body().getData());
+                            Toast.makeText(getContext(), "" + mFavDataList.size(), Toast.LENGTH_SHORT).show();
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
                             recyclerView.setAdapter(mFavAdapter);
@@ -172,9 +173,9 @@ public class Favourite extends Fragment {
                 setSharedPreference.setimg1(favModel.getImage1());
                 setSharedPreference.setimg1(favModel.getImage2());
                 CachePot.getInstance().push("pDate", favModel.getDate());
-                CachePot.getInstance().push("pCountry",favModel.getCountry());
-                CachePot.getInstance().push("pBrand",  favModel.getBrand());
-                CachePot.getInstance().push("pModel",  favModel.getModel());
+                CachePot.getInstance().push("pCountry", favModel.getCountry());
+                CachePot.getInstance().push("pBrand", favModel.getBrand());
+                CachePot.getInstance().push("pModel", favModel.getModel());
 
                 CachePot.getInstance().push("uId", favModel.getId());
                 CachePot.getInstance().push("uMobile", favModel.getMobile());
@@ -191,10 +192,14 @@ public class Favourite extends Fragment {
 
             @Override
             public void onFavButtonClick(View v, int position, boolean isFav) {
-                if (isFav) {
-                    serverAddToFav(position);
-                } else {
-                    serverRemoveFromFav(position);
+                if (getSharedPreference.getLoginStatus()) {
+                    if (isFav) {
+                        serverAddToFav(position);
+                    } else {
+                        serverRemoveFromFav(position);
+                    }
+                }else {
+                    Toast.makeText(getContext(), getString(R.string.signin_first), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -67,9 +67,7 @@ public class AddItemActivity extends AppCompatActivity {
     String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-
-    };
+            Manifest.permission.ACCESS_FINE_LOCATION};
 
     Toolbar mToolbar;
     TextView mToolbarTilte;
@@ -317,8 +315,7 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
-    private void serverAddItemOne()
-    {
+    private void serverAddItemOne() {
 
         mItemName = nameET.getText().toString();
         mSerialNumber = serialNumberET.getText().toString();

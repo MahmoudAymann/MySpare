@@ -19,6 +19,7 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.model.UpdateProfileModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,12 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
     FButton updateBtn;
     String userId;
     private ProgressDialog progressDialog;
-
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        setSharedPreference = new ListSharedPreference.Set(ProfileActivity.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(ProfileActivity.this.getApplicationContext());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(" ");
@@ -61,50 +64,23 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        getDataFromIntent();
+        getData();
     }
 
-    private void getDataFromIntent() {
+    private void getData() {
 
         progressDialog.show();
         nameTV.setText(getIntent().getStringExtra("name"));
         emailTV.setText(getIntent().getStringExtra("email"));
         mobileTV.setText(getIntent().getStringExtra("mobile"));
-        userId = getIntent().getStringExtra("id");
+        userId = getSharedPreference.getUId();
 
         Picasso.with(ProfileActivity.this)
-                .load(getIntent().getStringExtra("image"))
+                .load(getSharedPreference.getImage())
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(imageView);
         progressDialog.dismiss();
-    }
-
-    private void showChangeStatusDialoge() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-
-        final EditText edittext = new EditText(ProfileActivity.this);
-        alert.setMessage("hh");
-        alert.setTitle("aaa");
-
-        alert.setView(edittext);
-
-        alert.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //What ever you want to do with the value
-                String youEditTextValue = edittext.getText().toString();
-
-            }
-        });
-
-        alert.setNegativeButton("no", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // what ever you want to do with No option.
-                dialog.dismiss();
-            }
-        });
-
-        alert.show();
     }
 
     private void initClickListener() {
@@ -166,16 +142,12 @@ public class ProfileActivity extends AppCompatActivity {
         String mobile = mobileTV.getText().toString();
         String id = userId;
 
-
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
         Call<UpdateProfileModel> call = retrofit.updateProfile(id, name, email, mobile);
-
         call.enqueue(new Callback<UpdateProfileModel>() {
             @Override
             public void onResponse(@NonNull Call<UpdateProfileModel> call, @NonNull Response<UpdateProfileModel> response) {
                 if (response.isSuccessful()) {
-
-                    Toast.makeText(ProfileActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
 
                     String name = response.body().getData().getName();
                     String email = response.body().getData().getMail();
@@ -184,10 +156,11 @@ public class ProfileActivity extends AppCompatActivity {
                     saveUserInfo(name, email, mobile);
 
                     Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                    intent.putExtra("login", 1);
                     startActivity(intent);
                     progressDialog.dismiss();
+
                 } else {
+
                     progressDialog.dismiss();
                     Toast.makeText(ProfileActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
@@ -202,15 +175,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveUserInfo(String name, String email, String mobile) {
-//        listSharedPreference.setUName(getApplicationContext(),name);
-//        listSharedPreference.setEmail(getApplicationContext(),email);
-//        listSharedPreference.setMobile(getApplicationContext(),mobile);
-
-        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-        intent.putExtra("name", name);
-        intent.putExtra("email", email);
-        intent.putExtra("mobile", mobile);
-
+        setSharedPreference.setUName(name);
+        setSharedPreference.setEmail(email);
+        setSharedPreference.setMobile(mobile);
     }
 
     private void initUI() {
@@ -253,7 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             isNameShown = true;
             nameTV.setVisibility(View.VISIBLE);
-            editNameBtn.setImageResource(R.drawable.ic_edit_36dp);
+            editNameBtn.setImageResource(R.drawable.ic_edit_grey_36);
 
             nameET.setVisibility(View.INVISIBLE);
         }
@@ -270,7 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             isEmailShown = true;
             emailTV.setVisibility(View.VISIBLE);
-            editEmailBtn.setImageResource(R.drawable.ic_edit_36dp);
+            editEmailBtn.setImageResource(R.drawable.ic_edit_grey_36);
             emailET.setVisibility(View.INVISIBLE);
         }
     }//end
@@ -286,7 +253,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             isMobileShown = true;
             mobileTV.setVisibility(View.VISIBLE);
-            editMobileBtn.setImageResource(R.drawable.ic_edit_36dp);
+            editMobileBtn.setImageResource(R.drawable.ic_edit_grey_36);
             mobileET.setVisibility(View.INVISIBLE);
         }
     }//end
