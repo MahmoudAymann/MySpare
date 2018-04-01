@@ -21,6 +21,7 @@ import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.model.RegisterModel;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,13 +34,17 @@ public class RegisterActivity extends AppCompatActivity {
     Button mSignUpButton;
     ProgressDialog progressDialog;
 
+    ListSharedPreference.Set setSharedPreference;
+    ListSharedPreference.Get getSharedPreference;
+
     TextInputLayout emailTextInputLayout,passTextInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        setSharedPreference = new ListSharedPreference.Set(RegisterActivity.this.getApplicationContext());
+        getSharedPreference = new ListSharedPreference.Get(RegisterActivity.this.getApplicationContext());
         initUI();
         initButtonClickListeners();
     }
@@ -88,7 +93,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<RegisterModel> call, @NonNull Response<RegisterModel> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     String id = response.body().getData().getId();
                     String name = response.body().getData().getName();
@@ -96,57 +100,52 @@ public class RegisterActivity extends AppCompatActivity {
                     String token = response.body().getData().getToken();
                     String mobile = response.body().getData().getMobile();
 
+                    setSharedPreference.setLoginStatus(true);
+
                     saveUserInfo(id, email, name, mobile, token);
                     startActivity(intent);
                     progressDialog.dismiss();
                 }
                 else {
                     progressDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<RegisterModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, "" + t.getMessage(), Toast.LENGTH_LONG).show();
+                t.printStackTrace();
             }
         });
     }//end serverRegister()
 
     private void saveUserInfo(String id, String name, String email, String token, String mobile) {
-        SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-        prefEditor.putString("id", id);
-        prefEditor.putString("name", name);
-        prefEditor.putString("email", email);
-        prefEditor.putString("token", token);
-        prefEditor.putString("mobile", mobile);
-        prefEditor.putBoolean("isLoggedIn",true);
-
-        prefEditor.apply();
+       setSharedPreference.setUId(id);
+       setSharedPreference.setUName(name);
+       setSharedPreference.setEmail(email);
+       setSharedPreference.setToken(token);
+       setSharedPreference.setMobile(mobile);
     }
 
     private boolean isEmailValid(String email) {
-        if (email.contains("@"))
+        if (email.contains("@") && email.contains(".com"))
             return true;
         else {
             mEmailET.setError(getString(R.string.error_invalid_email));
             YoYo.with(Techniques.Shake)
                     .duration(700)
-                    .repeat(1)
                     .playOn(emailTextInputLayout);
             return false;
         }
     }//end isEmailValid()
 
     private boolean isPasswordValid(String password) {
-        if (password.length() > 2 || password.length() == 0)
+        if (password.length() > 3 || password.length() == 0)
             return true;
         else {
             mPasswordET.setError(getString(R.string.error_invalid_password));
             YoYo.with(Techniques.Shake)
                     .duration(700)
-                    .repeat(1)
                     .playOn(passTextInputLayout);
             return false;
         }

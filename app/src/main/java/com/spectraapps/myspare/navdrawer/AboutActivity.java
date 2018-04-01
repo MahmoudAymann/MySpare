@@ -13,6 +13,7 @@ import com.spectraapps.myspare.R;
 public class AboutActivity extends AppCompatActivity {
 
     private static final String MOBILE_NUM = "+97455894745";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -89,7 +89,6 @@ public class Favourite extends Fragment {
                     try {
                         if (response.isSuccessful()) {
                             mFavDataList.addAll(response.body().getData());
-                            Toast.makeText(getContext(), "" + mFavDataList.size(), Toast.LENGTH_SHORT).show();
                             pullRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
                             recyclerView.setAdapter(mFavAdapter);
@@ -198,7 +197,7 @@ public class Favourite extends Fragment {
                     } else {
                         serverRemoveFromFav(position);
                     }
-                }else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.signin_first), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -216,15 +215,9 @@ public class Favourite extends Fragment {
             public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
 
                 if (response.isSuccessful()) {
-
-                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                     serverFavourites();
-
-                } else {
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
                 Log.v("tagy", t.getMessage());
@@ -241,12 +234,11 @@ public class Favourite extends Fragment {
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
             public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
-
-                if (response.isSuccessful()) {
-                    Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
-                    serverFavourites();
-                } else {
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                try {
+                    if (response.isSuccessful()) {
+                        serverFavourites();
+                    }
+                } catch (Exception ignored) {
                 }
             }
 

@@ -123,12 +123,10 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(@NonNull Call<LoginModel> call, @NonNull Response<LoginModel> response) {
-
                 try {
-
                     if (response.isSuccessful()) {
-
                         if (response.body().getData() != null) {
+
                             String id = response.body().getData().getId();
                             String name = response.body().getData().getName();
                             String email = response.body().getData().getMail();
@@ -137,7 +135,8 @@ public class LoginActivity extends AppCompatActivity {
                             String image = response.body().getData().getImage();
 
                             setSharedPreference.setLoginStatus(true);
-                            Toast.makeText(LoginActivity.this, getString(R.string.logged_success), Toast.LENGTH_LONG).show();
+
+                            progressDialog.dismiss();
 
                             saveUserInfo(id, name, email, mobile, token, image);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -146,12 +145,14 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         }
 
-                        progressDialog.dismiss();
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "error:" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        if (response.body().getStatus() != null)
+                        Toast.makeText(LoginActivity.this, ""+ response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
+                    progressDialog.dismiss();
+
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialogBuilder.setMessage("Error: " + e);
                     alertDialog.show();
@@ -161,14 +162,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<LoginModel> call, @NonNull Throwable t) {
-                try {
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "exc:" + t.getMessage(), Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialogBuilder.setMessage("Error: " + e);
-                    alertDialog.show();
-                }
+                t.printStackTrace();
+                progressDialog.dismiss();
             }
         });
     }
@@ -313,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        if (email.contains("@"))
+        if (email.contains("@") && email.contains(".com"))
             return true;
 
         else {

@@ -44,7 +44,7 @@
     <string name="action_update">update</string>
     <string name="title_activity_about">AboutActivity</string>
 
-    <string name="about_text" translatable="false">My Sapre, has been satisfying customers\' needs by providing them with the parts they need at the lowest prices. We house the most comprehensive collection of parts and accessories in the world. If your parts-shopping experience is a hit-or-miss or simply unsatisfactory, switch over to us. You won\'t regret it!</string>
+    <string name="about_text">My Sapre, has been satisfying customers\' needs by providing them with the parts they need at the lowest prices. We house the most comprehensive collection of parts and accessories in the world. If your parts-shopping experience is a hit-or-miss or simply unsatisfactory, switch over to us. You won\'t regret it!</string>
     <string name="change_language">Change Language</string>
     <string name="forgot_password"><u>forgot password?</u></string>
     <string name="country">Country</string>

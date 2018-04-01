@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_person_white_36dp"
                     android:hint="@string/name"
+                    android:drawablePadding="15dp"
                     android:inputType="textPersonName"
                     android:singleLine="true"
                     android:textColor="@android:color/white"/>
@@ -49,6 +50,7 @@
                     android:id="@+id/reg_phoneET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="15dp"
                     android:drawableStart="@drawable/ic_phone_white_36dp"
                     android:hint="@string/enter_phone_number"
                     android:inputType="phone"
@@ -70,6 +72,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_email_white_36"
                     android:hint="@string/prompt_email"
+                    android:drawablePadding="15dp"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:textColor="@android:color/white"/>
@@ -86,6 +89,7 @@
                     android:id="@+id/reg_passwordET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="15dp"
                     android:drawableStart="@drawable/ic_lock_white_36"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
