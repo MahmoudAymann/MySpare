@@ -1,4 +1,4 @@
-package com.spectraapps.myspare.adapters.adpProfile;
+package com.spectraapps.myspare.adapters.adpFav;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.model.ProfileProdModel;
+import com.spectraapps.myspare.model.FavouriteModel;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
@@ -21,34 +21,32 @@ import java.util.ArrayList;
  * Created by MahmoudAyman on 03/01/2018.
  */
 
-public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfileAdapter.MyViewHolder> {
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyViewHolder> {
 
-    ListAllListeners listAllListeners;
-    private ArrayList<ProfileProdModel.DataBean> mProfileArrayList;
-    private Context mContext;
-    private boolean isFav = false;
+    private Context context;
+    private ListAllListeners listAllListeners;
+    private ArrayList<FavouriteModel.DataBean> mFavArrayList;
     private ListSharedPreference.Set setSharedPreference ;
     private ListSharedPreference.Get getSharedPreference ;
 
-
-    public RecyclerProfileAdapter(Context mContext, ArrayList<ProfileProdModel.DataBean> productsAllModelList,
-                                  ListAllListeners listAllListeners) {
-        this.mContext = mContext;
-        this.mProfileArrayList = productsAllModelList;
+    public FavouriteAdapter(Context context, ArrayList<FavouriteModel.DataBean> FavArrayList,
+                            ListAllListeners listAllListeners) {
+        this.mFavArrayList = FavArrayList;
         this.listAllListeners = listAllListeners;
+        this.context = context;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.single_item_profile_view, parent, false);
+        View view = inflater.inflate(R.layout.single_item_favourite_view, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public int getItemCount() {
-        if (mProfileArrayList != null)
-            return mProfileArrayList.size();
+        if (mFavArrayList != null)
+            return mFavArrayList.size();
         else
             return 0;
     }
@@ -56,50 +54,55 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        setSharedPreference = new ListSharedPreference.Set(mContext);
-        getSharedPreference = new ListSharedPreference.Get(mContext);
+        setSharedPreference = new ListSharedPreference.Set(context);
+        getSharedPreference = new ListSharedPreference.Get(context);
 
-        holder.nameTV.setText(mProfileArrayList.get(position).getProductName());
-        holder.priceTV.setText(mProfileArrayList.get(position).getProductPrice());
-        holder.currencyTV.setText(mProfileArrayList.get(position).getCurrency());
+        holder.nameTV.setText(mFavArrayList.get(position).getProductName());
+        holder.priceTV.setText(mFavArrayList.get(position).getProductPrice());
+        holder.currencyTV.setText(mFavArrayList.get(position).getCurrency());
 
         Picasso.with(holder.itemView.getContext())
-                .load(mProfileArrayList.get(position).getImage1())
+                .load(mFavArrayList.get(position).getImage1())
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (!getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid()).equals("true"))
-            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-        else
+
+        if (mFavArrayList.get(holder.getAdapterPosition()).getIsFavorite().equals("true")) {
+            setSharedPreference.setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "true");
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+        } else {
+            setSharedPreference.setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProfileArrayList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mFavArrayList.get(holder.getAdapterPosition()));
             }
         });
 
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getSharedPreference.getFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
+                if (getSharedPreference.getFav(mFavArrayList.get(holder.getAdapterPosition()).getPid()).equals("true")) {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-                    setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+                    setSharedPreference.setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "false");
                     listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), false);
                 } else {
                     holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-                    setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "true");
+                    setSharedPreference.setFav(mFavArrayList.get(holder.getAdapterPosition()).getPid(), "true");
                     listAllListeners.onFavButtonClick(view, holder.getAdapterPosition(), true);
                 }
             }
         });
+
     }//end onBindViewHolder()
 
     public interface ListAllListeners {
 
-        void onCardViewClick(ProfileProdModel.DataBean produtsAllModel);
+        void onCardViewClick(FavouriteModel.DataBean favouriteDataBean);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }
@@ -117,10 +120,13 @@ public class RecyclerProfileAdapter extends RecyclerView.Adapter<RecyclerProfile
             nameTV = itemView.findViewById(R.id.textName);
             priceTV = itemView.findViewById(R.id.textPrice);
             currencyTV = itemView.findViewById(R.id.textCurrency);
+
             btnFav = itemView.findViewById(R.id.imageButtonFav);
 
-            imageView = itemView.findViewById(R.id.image);
+            imageView = itemView.findViewById(R.id.fav_image);
+
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
             imageView.setCornerRadiiDP(4, 4, 0, 0);
         }
     }//end class MyViewHolder

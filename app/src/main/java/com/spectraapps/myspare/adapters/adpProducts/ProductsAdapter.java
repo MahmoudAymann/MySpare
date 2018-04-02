@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by MahmoudAyman on 13/01/2018.
  */
 
-public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.MyViewHolder> {
+public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyViewHolder> {
 
     private ListAllListeners listAllListeners;
     private ArrayList<ProductsModel.DataBean> mProductsModelList;
@@ -30,7 +30,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     private ListSharedPreference.Get getSharedPreference ;
 
 
-    public ProductsRecyclerAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, ListAllListeners listener) {
+    public ProductsAdapter(Context mContext, ArrayList<ProductsModel.DataBean> productsModelArrayList, ListAllListeners listener) {
         this.mProductsModelList = productsModelArrayList;
         this.listAllListeners = listener;
         this.mContext = mContext;
@@ -59,10 +59,18 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
                 .placeholder(R.drawable.place_holder)
                 .into(holder.imageView);
 
-        if (!getSharedPreference.getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true"))
-            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-        else
+//        if (!getSharedPreference.getFav(mProductsModelList.get(holder.getAdapterPosition()).getPid()).equals("true"))
+//            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+//        else
+//            holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+
+        if (mProductsModelList.get(holder.getAdapterPosition()).getIsFavorite().equals("true")) {
+            setSharedPreference.setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "true");
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+        } else {
+            setSharedPreference.setFav(mProductsModelList.get(holder.getAdapterPosition()).getPid(), "false");
+            holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

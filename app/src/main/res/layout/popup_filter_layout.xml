@@ -110,7 +110,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@color/colorPrimary"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:corner_radius="10dp">
 
             <TextView
@@ -130,7 +130,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:corner_radius="10dp">
 
             <Spinner

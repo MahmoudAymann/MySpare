@@ -17,7 +17,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.adapters.adpProfile.RecyclerProfileAdapter;
+import com.spectraapps.myspare.adapters.adpProfile.ProfileAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
 import com.spectraapps.myspare.model.ProfileProdModel;
@@ -33,7 +33,7 @@ import retrofit2.Response;
 public class SellerProfilePD extends Fragment {
 
     RecyclerView recyclerView;
-    RecyclerProfileAdapter mRecyclerProfileAdapter;
+    ProfileAdapter mProfileAdapter;
     ArrayList<ProfileProdModel.DataBean> mProfileDataList;
     PullRefreshLayout pullRefreshLayout;
 
@@ -78,7 +78,7 @@ public class SellerProfilePD extends Fragment {
         super.onStart();
         turnOnServer();
         initAdapterProfileProducts();
-        recyclerView.setAdapter(mRecyclerProfileAdapter);
+        recyclerView.setAdapter(mProfileAdapter);
     }
 
     private String getLang() {
@@ -115,8 +115,8 @@ public class SellerProfilePD extends Fragment {
     }
 
     private void initAdapterProfileProducts() {
-        mRecyclerProfileAdapter = new RecyclerProfileAdapter(getContext(), mProfileDataList,
-                new RecyclerProfileAdapter.ListAllListeners() {
+        mProfileAdapter = new ProfileAdapter(getContext(), mProfileDataList,
+                new ProfileAdapter.ListAllListeners() {
                     @Override
                     public void onCardViewClick(ProfileProdModel.DataBean produtsAllModel) {
 
@@ -126,10 +126,8 @@ public class SellerProfilePD extends Fragment {
                         CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
 
-                        if (produtsAllModel.getImage1() != null)
-                            CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
-                        if (produtsAllModel.getImage2() != null)
-                            CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+                        setSharedPreference.setimg1(produtsAllModel.getImage1());
+                        setSharedPreference.setimg2(produtsAllModel.getImage2());
 
                         CachePot.getInstance().push("pDate", produtsAllModel.getDate());
                         CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
@@ -194,7 +192,7 @@ public class SellerProfilePD extends Fragment {
                         mProfileDataList.addAll(response.body().getData());
                         pullRefreshLayout.setRefreshing(false);
                         progressDialog.dismiss();
-                        mRecyclerProfileAdapter.notifyDataSetChanged();
+                        mProfileAdapter.notifyDataSetChanged();
                     } else {
                         pullRefreshLayout.setRefreshing(false);
                         progressDialog.dismiss();

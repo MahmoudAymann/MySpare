@@ -58,19 +58,21 @@ public class FavProductDetail extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_fav_product_detail, container, false);
 
         MainActivity.mToolbarText.setText(pName);
+
         setSharedPreference = new ListSharedPreference.Set(FavProductDetail.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(FavProductDetail.this.getContext().getApplicationContext());
 
-        initUI(rootView);
+        langhere = getSharedPreference.getLanguage();
 
+        initUI(rootView);
         getProductData();
 
         fireBackButtonEvent();
-        langhere = getSharedPreference.getLanguage();
 
         return rootView;
     }
@@ -78,6 +80,7 @@ public class FavProductDetail extends Fragment
     private void initUI(View rootView) {
         mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
+
 
         relativeLayout = rootView.findViewById(R.id.relative_user_info);
         relativeLayout.setOnClickListener(this);
@@ -101,13 +104,13 @@ public class FavProductDetail extends Fragment
 
         uName_tv.setText(uName);
         uMobile_tv.setText(uMobile);
+
         if (uImage != null) {
             Picasso.with(getContext()).load(uImage)
                     .error(R.drawable.place_holder)
                     .placeholder(R.drawable.place_holder)
                     .into(userImageView);
-        } else
-            Toast.makeText(getContext(), "null", Toast.LENGTH_SHORT).show();
+        }
         pName_tv.setText(pName);
         pPrice_tv.setText(pPrice);
         pNumber_tv.setText(pNumber);
@@ -121,19 +124,18 @@ public class FavProductDetail extends Fragment
 
     private void getProductData() {
         try {
-            pName = CachePot.getInstance().pop("pName");
             pId = CachePot.getInstance().pop("pId");
+            pName = CachePot.getInstance().pop("pName");
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
-
-            pImage1 = CachePot.getInstance().pop("pImage1");
-            pImage2 = CachePot.getInstance().pop("pImage2");
-
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
+
+            pImage1 = getSharedPreference.getImg1();
+            pImage2 = getSharedPreference.getImg2();
 
             MainActivity.mToolbarText.setText(pName);
 
@@ -145,6 +147,7 @@ public class FavProductDetail extends Fragment
             Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/ " + pImage1 + "/ " + pImage2 + " /" + pDate + "/" + pCountry
                     + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/ " + uImage);
             setData();
+
         } catch (Exception e) {
             Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -170,10 +173,10 @@ public class FavProductDetail extends Fragment
     private void imageSliderInitilaize() {
 
         HashMap<String, String> file_maps = new HashMap<>();
-        if (pImage1 != null)
-        file_maps.put(pName, getSharedPreference.getImg1());
-        if (pImage2 != null || pImage2.equals(""))
-        file_maps.put(pName, getSharedPreference.getImg2());
+        if (!pImage1.equals(""))
+            file_maps.put(pName, pImage1);
+        if (!pImage2.equals(""))
+            file_maps.put(pName, pImage2);
 
         for (String name : file_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -229,13 +232,8 @@ public class FavProductDetail extends Fragment
                 startActivity(dialIntent);
                 break;
             case R.id.relative_user_info:
-
-                CachePot.getInstance().push("suid", uId);
-                CachePot.getInstance().push("slangh", langhere);
-
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
-
                 break;
         }
     }

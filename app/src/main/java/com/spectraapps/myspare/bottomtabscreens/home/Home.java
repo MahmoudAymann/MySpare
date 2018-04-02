@@ -108,7 +108,8 @@ public class Home extends Fragment {
                 } else {
                     progressDialog.dismiss();
                     pullRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    if (response.body() != null)
+                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -137,6 +138,7 @@ public class Home extends Fragment {
     }//end back pressed
 
     private void initUI(View rootView) {
+        MainActivity.imageButtonFav.setVisibility(View.INVISIBLE);
         initPullRefreshLayout(rootView);
 
         progressDialog = new ProgressDialog(getContext());

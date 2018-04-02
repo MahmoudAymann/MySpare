@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                app:srcCompat="@drawable/ic_call_nav_24dp" />
+                app:srcCompat="@drawable/ic_call_nav_24dp"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvNumber1"
@@ -79,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                app:srcCompat="@drawable/ic_email_black_24dp" />
+                app:srcCompat="@drawable/ic_email_black_24dp"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvNumber3"
@@ -106,91 +108,6 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/item_divider" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:padding="@dimen/activity_horizontal_margin">
-
-            <ImageView
-                android:id="@+id/ivContactItem5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                app:srcCompat="@drawable/ic_location_black_24dp" />
-
-            <TextView
-                android:id="@+id/tvNumber5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/ivContactItem5"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/address"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvNumber5"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:layout_toEndOf="@id/ivContactItem5"
-                android:text="@string/headquarter"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
-
-        </RelativeLayout>
-
-        <include layout="@layout/item_divider" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/activity_horizontal_margin">
-
-            <ImageView
-                android:id="@+id/loc1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_web_24dp" />
-
-            <ImageButton
-                android:id="@+id/image11"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/loc1"
-                app:srcCompat="@drawable/ic_facebook_24dp"/>
-
-            <ImageButton
-                android:id="@+id/image22"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/image11"
-                app:srcCompat="@drawable/ic_twitter_24dp"/>
-
-
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/image22"
-                app:srcCompat="@drawable/ic_google_plus_24dp"/>
-        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

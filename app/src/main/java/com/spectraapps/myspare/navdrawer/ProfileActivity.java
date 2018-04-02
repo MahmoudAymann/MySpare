@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
@@ -41,9 +43,10 @@ public class ProfileActivity extends AppCompatActivity {
     boolean isNameShown = true, isEmailShown = true, isMobileShown = true;
     FButton updateBtn;
     String userId;
-    private ProgressDialog progressDialog;
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getData() {
 
-        progressDialog.show();
         nameTV.setText(getIntent().getStringExtra("name"));
         emailTV.setText(getIntent().getStringExtra("email"));
         mobileTV.setText(getIntent().getStringExtra("mobile"));
@@ -80,7 +82,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(imageView);
-        progressDialog.dismiss();
     }
 
     private void initClickListener() {
@@ -127,8 +128,20 @@ public class ProfileActivity extends AppCompatActivity {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-                serverUpdateUserInfo();
+                if (isNameShown) {
+                    if (isEmailShown) {
+                        if (isMobileShown) {
+                            serverUpdateUserInfo();
+                        } else {
+                            YoYo.with(Techniques.Shake).playOn(editMobileBtn);
+                        }
+                    } else {
+                        YoYo.with(Techniques.Shake).playOn(editEmailBtn);
+                    }
+                } else {
+                    YoYo.with(Techniques.Shake).playOn(editNameBtn);
+                }
+
             }
         });
 
@@ -136,10 +149,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void serverUpdateUserInfo() {
-
+        progressDialog.show();
         String name = nameTV.getText().toString();
         String email = emailTV.getText().toString();
         String mobile = mobileTV.getText().toString();
+
         String id = userId;
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
@@ -148,21 +162,21 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<UpdateProfileModel> call, @NonNull Response<UpdateProfileModel> response) {
                 if (response.isSuccessful()) {
-
                     String name = response.body().getData().getName();
                     String email = response.body().getData().getMail();
                     String mobile = response.body().getData().getMobile();
 
                     saveUserInfo(name, email, mobile);
+                    progressDialog.dismiss();
 
                     Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                     startActivity(intent);
-                    progressDialog.dismiss();
-
                 } else {
-
                     progressDialog.dismiss();
-                    Toast.makeText(ProfileActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    if (response.body().getStatus() != null)
+                        Toast.makeText(ProfileActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(ProfileActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -196,7 +210,6 @@ public class ProfileActivity extends AppCompatActivity {
         mobileTV = findViewById(R.id.tvMobile_profile);
         mobileET = findViewById(R.id.etMobile_profile);
 
-
         progressDialog = new ProgressDialog(ProfileActivity.this);
         progressDialog.setTitle(getString(R.string.loading));
         progressDialog.setMessage(getString(R.string.please_wait));
@@ -204,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         updateBtn = findViewById(R.id.updateButton_PA);
         updateBtn.setButtonColor(getResources().getColor(R.color.dark_yellow));
-        updateBtn.setShadowColor(getResources().getColor(R.color.white_gray_transperant));
+        updateBtn.setShadowColor(getResources().getColor(R.color.green_complete));
         updateBtn.setCornerRadius(10);
         updateBtn.setShadowEnabled(true);
         updateBtn.setShadowHeight(7);
@@ -217,11 +230,12 @@ public class ProfileActivity extends AppCompatActivity {
             nameTV.setVisibility(View.INVISIBLE);
             editNameBtn.setImageResource(R.drawable.ic_accept_36dp);
             nameET.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "" + isNameShown, Toast.LENGTH_SHORT).show();
         } else {
             isNameShown = true;
             nameTV.setVisibility(View.VISIBLE);
             editNameBtn.setImageResource(R.drawable.ic_edit_grey_36);
-
+            Toast.makeText(this, "" + isNameShown, Toast.LENGTH_SHORT).show();
             nameET.setVisibility(View.INVISIBLE);
         }
     }//end

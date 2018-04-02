@@ -43,11 +43,11 @@ public class ProfileProductDetail extends Fragment
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 
+    boolean isFav;
 
     CircleImageView profileImageView;
 
     public ProfileProductDetail() {
-
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ProfileProductDetail extends Fragment
         initUI(rootView);
         getProductData();
         setData();
-
+        imageSliderInitilaize();
         return rootView;
     }
 
@@ -81,6 +81,9 @@ public class ProfileProductDetail extends Fragment
         pCountry_tv = rootView.findViewById(R.id.get_PCountry_PD);
         pBrand_tv = rootView.findViewById(R.id.get_PBrand_PD);
         pModel_tv = rootView.findViewById(R.id.get_PModel_PD);
+
+        setButtonFavUI();
+
         //user
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
@@ -94,6 +97,45 @@ public class ProfileProductDetail extends Fragment
             }
         });
         profileImageView = rootView.findViewById(R.id.user_image_PD);
+    }
+
+    private void setButtonFavUI() {
+//        if (!getSharedPreference.getFav(pId).equals("false")) {
+//            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+//            isFav = true;
+//            Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
+//        }else{
+//            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+//            isFav = false;
+//            Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
+//        }
+//
+//        MainActivity.imageButtonFav.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (isFav){
+////                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+////                    serverRemoveFromFav();
+//                    //Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
+//                    isFav = false;
+//                }else{
+////                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+////                    serverAddToFav();
+//                    //Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
+//                    isFav = true;
+//                }
+//            }
+//        });
+        MainActivity.imageButtonFav.setVisibility(View.VISIBLE);
+        Toast.makeText(getContext(), "" + getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
+    }
+
+    private void serverRemoveFromFav() {
+        Toast.makeText(getContext(), "remove", Toast.LENGTH_SHORT).show();
+    }
+
+    private void serverAddToFav() {
+        Toast.makeText(getContext(), "add", Toast.LENGTH_SHORT).show();
     }
 
     private void setData() {
@@ -126,7 +168,6 @@ public class ProfileProductDetail extends Fragment
             pPrice = CachePot.getInstance().pop("pPrice");
             pNumber = CachePot.getInstance().pop("pNumber");
             pCurrency = CachePot.getInstance().pop("pCurrency");
-
             pImage1 = getSharedPreference.getImg1();
             pImage2 = getSharedPreference.getImg2();
 
@@ -164,7 +205,7 @@ public class ProfileProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        imageSliderInitilaize();
+
     }
 
     @Override

@@ -21,8 +21,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.github.kimkevin.cachepot.CachePot;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
@@ -34,7 +32,7 @@ import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpProducts.AllProductsAdapter;
-import com.spectraapps.myspare.adapters.adpProducts.ProductsRecyclerAdapter;
+import com.spectraapps.myspare.adapters.adpProducts.ProductsAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
@@ -70,7 +68,7 @@ public class ProductsFragment extends Fragment {
 
     AllProductsAdapter mAllProductsAdapter;
 
-    ProductsRecyclerAdapter productsAdapter;
+    ProductsAdapter productsAdapter;
 
     ArrayList<ProductsModel.DataBean> mProductDataList;
 
@@ -292,7 +290,6 @@ public class ProductsFragment extends Fragment {
     private void serverProductsWithMail() {
         try {
             if (getArguments() != null) {
-                Toast.makeText(getContext(), "other", Toast.LENGTH_SHORT).show();
                 if (getArguments().containsKey("country")) {
                     serverFilterWithCountry(getArguments().getString("country"));
                 } else if (getArguments().containsKey("brand")) {
@@ -318,7 +315,7 @@ public class ProductsFragment extends Fragment {
                 serverNormal();
             }
         } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
 
     }//end serverProductsWithMail
@@ -339,11 +336,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -357,7 +352,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -377,11 +372,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -395,7 +388,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -415,11 +408,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -433,7 +424,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -498,15 +489,12 @@ public class ProductsFragment extends Fragment {
                     getBrands(response.body().getData(), context, spinner);
                     getBrandsId(response.body().getData());
 
-                } else
-                    Toast.makeText(getContext(), response.body().getStatus().getTitle(),
-                            Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<BrandsModel> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }//end serverBrands()
@@ -545,15 +533,12 @@ public class ProductsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     getModels(response.body().getData(), context, spinner);
                     getModelsId(response.body().getData());
-                } else
-                    Toast.makeText(getContext(), response.body().getStatus().getTitle(),
-                            Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<ModelsModel> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }//end
@@ -612,11 +597,6 @@ public class ProductsFragment extends Fragment {
                             mAllProductsAdapter.notifyDataSetChanged();
                             Log.v("jkjk", response.body().getData().size() + "");
                             pullRefreshLayout.setRefreshing(false);
-                        } else {
-                            if (response.body() != null) {
-                                pullRefreshLayout.setRefreshing(false);
-                                Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
-                            }
                         }
                     }catch (Exception exc){
                         exc.printStackTrace();
@@ -627,7 +607,6 @@ public class ProductsFragment extends Fragment {
                 public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
                     Log.v("tagy", t.getMessage());
                     pullRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         } catch (Exception e) {
@@ -693,11 +672,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -711,7 +688,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -731,11 +708,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -749,7 +724,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -769,11 +744,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -787,7 +760,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -807,11 +780,9 @@ public class ProductsFragment extends Fragment {
                             pullRefreshLayout.setRefreshing(false);
                             recyclerView.setAdapter(productsAdapter);
                             productsAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
-                        Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                        exc.printStackTrace();
                     }
                 }
 
@@ -825,7 +796,7 @@ public class ProductsFragment extends Fragment {
                 }
             });
         } catch (Exception exc) {
-            Toast.makeText(getContext(), "" + exc, Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
@@ -847,11 +818,9 @@ public class ProductsFragment extends Fragment {
                             productsAdapter.notifyDataSetChanged();
                         } else {
                             pullRefreshLayout.setRefreshing(false);
-                            Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception exc) {
                         pullRefreshLayout.setRefreshing(false);
-                        // Toast.makeText(getContext(), "" + exc.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -880,15 +849,14 @@ public class ProductsFragment extends Fragment {
                 initAdapterAllProducts();
                 break;
             default:
-                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
                 break;
 
         }
     }
 
     private void initAdapterWith() {
-        productsAdapter = new ProductsRecyclerAdapter(getContext(), mProductDataList,
-                new ProductsRecyclerAdapter.ListAllListeners() {
+        productsAdapter = new ProductsAdapter(getContext(), mProductDataList,
+                new ProductsAdapter.ListAllListeners() {
                     @Override
                     public void onCardViewClick(ProductsModel.DataBean produtsModel) {
 
@@ -946,15 +914,11 @@ public class ProductsFragment extends Fragment {
 
                     if (response.isSuccessful()) {
 
-                        Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                         if (getSharedPreference.getLoginStatus()) {
                             turnOnServers(1);
                         } else if (!getSharedPreference.getLoginStatus()) {
                             turnOnServers(3);
                         }
-
-                    } else {
-                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception ignored) {
                 }
@@ -982,15 +946,12 @@ public class ProductsFragment extends Fragment {
 
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "" + response.body().getStatus().getTitle(), Toast.LENGTH_SHORT).show();
                         if (getSharedPreference.getLoginStatus()) {
                             turnOnServers(1);
                         } else if (!getSharedPreference.getLoginStatus()) {
                             turnOnServers(3);
                         }
 
-                    } else {
-                        Toast.makeText(getActivity(), "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception ignored) {
                 }
@@ -1029,7 +990,6 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
-                        CachePot.getInstance().push("langy", getLang());
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();

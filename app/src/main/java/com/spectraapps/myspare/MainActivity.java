@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,19 +71,18 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_GALLERY_CODE = 200;
     @SuppressLint("StaticFieldLeak")
     public static TextView mToolbarText;
+    @SuppressLint("StaticFieldLeak")
+    public static ImageButton imageButtonFav;
     protected IOnBackPressed onBackPressedListener;
     protected DrawerLayout mDrawer;
     protected NavigationView navigationView;
-
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
-
     Locale locale;
     Toolbar mToolBar;
     CircleImageView mNavCircleImageView;
     TextView mNavNameTextView, mNavEmailTextView;
     String mId, mName, mEmail, mToken, mMobile, mImage;
-
     boolean mIsLogged;
     AlertDialog.Builder alertDialogBuilder;
     String[] permissions = new String[]{
@@ -93,11 +93,27 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.CALL_PHONE,
             Manifest.permission.GET_ACCOUNTS
     };
-    private String langhere;
     private ProgressDialog progressDialog;
+    private String langhere;
 
     public static void restartActivity(Activity activity) {
         activity.recreate();
+    }
+
+    public static String getRealPathFromUri(Uri contentURI, Context context) {
+        try {
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(contentURI, filePathColumn, null, null, null);
+            assert cursor != null;
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     @Override
@@ -114,6 +130,9 @@ public class MainActivity extends AppCompatActivity
         mToolBar = findViewById(R.id.main_toolbar);
         mToolbarText = findViewById(R.id.toolbar_title);
         mToolbarText.setText(R.string.home_title);
+
+        imageButtonFav = findViewById(R.id.toolbar_fav_button);
+        imageButtonFav.setVisibility(View.INVISIBLE);
 
         initNavigationDrawer();
 
@@ -287,22 +306,6 @@ public class MainActivity extends AppCompatActivity
             Uri uri = data.getData();
             String image_path = getRealPathFromUri(uri, MainActivity.this);
             serverUpdateProfileImage(image_path);
-        }
-    }
-
-    public static String getRealPathFromUri(Uri contentURI, Context context) {
-        try {
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(contentURI, filePathColumn, null, null, null);
-            assert cursor != null;
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imagePath = cursor.getString(columnIndex);
-            cursor.close();
-            return imagePath;
-        } catch (Exception ignored) {
-            return null;
         }
     }
 

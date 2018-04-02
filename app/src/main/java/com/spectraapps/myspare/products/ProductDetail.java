@@ -43,8 +43,6 @@ public class ProductDetail extends Fragment
             uName_tv, uMobile_tv;
 
     RelativeLayout relativeLayout;
-
-    String langhere;
     CircleImageView imageView;
 
     ListSharedPreference.Set setSharedPreference;
@@ -70,7 +68,6 @@ public class ProductDetail extends Fragment
 
         imageSliderInitilaize();
         fireBackButtonEvent();
-        langhere = CachePot.getInstance().pop("langy");
 
         return rootView;
     }
@@ -210,9 +207,6 @@ public class ProductDetail extends Fragment
                 startActivity(dialIntent);
                 break;
             case R.id.relative_user_info:
-                CachePot.getInstance().push("suid", uId);
-                CachePot.getInstance().push("slangh", langhere);
-
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
                 break;

@@ -18,7 +18,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.adapters.adpFav.RecyclerFavouriteAdapter;
+import com.spectraapps.myspare.adapters.adpFav.FavouriteAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
@@ -37,7 +37,7 @@ import retrofit2.Response;
 public class Favourite extends Fragment {
 
     RecyclerView recyclerView;
-    RecyclerFavouriteAdapter mFavAdapter;
+    FavouriteAdapter mFavAdapter;
     ArrayList<FavouriteModel.DataBean> mFavDataList;
 
     ListSharedPreference.Set setSharedPreference;
@@ -158,7 +158,7 @@ public class Favourite extends Fragment {
     }//end initRecyclerView()
 
     private void initAdapter() {
-        mFavAdapter = new RecyclerFavouriteAdapter(Favourite.this.getContext(), mFavDataList, new RecyclerFavouriteAdapter.ListAllListeners() {
+        mFavAdapter = new FavouriteAdapter(Favourite.this.getContext(), mFavDataList, new FavouriteAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(FavouriteModel.DataBean favModel) {
 
@@ -167,10 +167,10 @@ public class Favourite extends Fragment {
                 CachePot.getInstance().push("pPrice", favModel.getProductPrice());
                 CachePot.getInstance().push("pNumber", favModel.getProductNumber());
                 CachePot.getInstance().push("pCurrency", favModel.getCurrency());
-                CachePot.getInstance().push("pImage1", favModel.getImage1());
-                CachePot.getInstance().push("pImage2", favModel.getImage2());
+
                 setSharedPreference.setimg1(favModel.getImage1());
-                setSharedPreference.setimg1(favModel.getImage2());
+                setSharedPreference.setimg2(favModel.getImage2());
+
                 CachePot.getInstance().push("pDate", favModel.getDate());
                 CachePot.getInstance().push("pCountry", favModel.getCountry());
                 CachePot.getInstance().push("pBrand", favModel.getBrand());
@@ -216,6 +216,7 @@ public class Favourite extends Fragment {
 
                 if (response.isSuccessful()) {
                     serverFavourites();
+                    initAdapter();
                 }
             }
             @Override

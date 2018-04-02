@@ -144,15 +144,17 @@ public class LoginActivity extends AppCompatActivity {
 
                             finish();
                         }
-
+                        progressDialog.dismiss();
+                        if (!response.body().getStatus().getTitle().equals("Successfull request"))
+                            Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                     } else {
                         progressDialog.dismiss();
                         if (response.body().getStatus() != null)
-                        Toast.makeText(LoginActivity.this, ""+ response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "" + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
-                    progressDialog.dismiss();
 
+                    progressDialog.dismiss();
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialogBuilder.setMessage("Error: " + e);
                     alertDialog.show();
@@ -184,52 +186,69 @@ public class LoginActivity extends AppCompatActivity {
         mainLayout.setBackgroundResource(R.drawable.app_background);
         mEmailEditText = findViewById(R.id.emailET);
         mPasswordEditText = findViewById(R.id.passwordET);
-        mPasswordEditText.addTextChangedListener(new TextWatcher() {
+//        mPasswordEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if (!isPasswordShown) {
+//                    if (getSharedPreference.getLanguage().equals("ar")) {
+//                        if (s.length() > 0) {
+//                            if (!inputTypeChanged) {
+//
+//                                // When a character is typed, dynamically change the EditText's
+//                                // InputType to PASSWORD, to show the dots and conceal the typed characters.
+//                                mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+//                                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//
+//                                // Move the cursor to the correct place (after the typed character)
+//                                mPasswordEditText.setSelection(s.length());
+//
+//                                inputTypeChanged = true;
+//                            }
+//                        } else {
+//                            // Reset EditText: Make the "Enter password" hint display on the right
+//                            mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+//                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+//
+//                            inputTypeChanged = false;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+        mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!isPasswordShown) {
-                    if (getSharedPreference.getLanguage().equals("ar")) {
-                        if (s.length() > 0) {
-                            if (!inputTypeChanged) {
-
-                                // When a character is typed, dynamically change the EditText's
-                                // InputType to PASSWORD, to show the dots and conceal the typed characters.
-                                mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
-                                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-                                // Move the cursor to the correct place (after the typed character)
-                                mPasswordEditText.setSelection(s.length());
-
-                                inputTypeChanged = true;
-                            }
-                        } else {
-                            // Reset EditText: Make the "Enter password" hint display on the right
-                            mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
-                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
-                            inputTypeChanged = false;
-                        }
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    if (mPasswordEditText.length() > 0 || mPasswordEditText.length() == 0) {
+                        mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+                } else {
+                    if (mPasswordEditText.length() > 0)
+                        mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    else {
+                        mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     }
                 }
             }
         });
-
         mSignInButton = findViewById(R.id.email_sign_in_button);
         mSignInButton.setText(R.string.action_sign_in);
 
         mRegisterButton = findViewById(R.id.button_Register);
         mSkipButton = findViewById(R.id.button_later);
-        mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         mImagePasswrdVisible = findViewById(R.id.image_visible);
 
         textViewForgetPassword = findViewById(R.id.forgot_password_text);

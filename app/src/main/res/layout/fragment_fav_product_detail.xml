@@ -62,6 +62,8 @@
                         android:layout_below="@id/user_image_PD"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@id/user_image_PD"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
                         android:textColor="@android:color/holo_blue_dark"
                         android:textSize="18sp"
                         android:visibility="visible"/>
@@ -73,10 +75,12 @@
                         android:layout_alignParentStart="true"
                         android:layout_below="@id/user_image_PD"
                         android:layout_marginStart="20dp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
                         android:text="@string/mobile_in_productdetail"
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
