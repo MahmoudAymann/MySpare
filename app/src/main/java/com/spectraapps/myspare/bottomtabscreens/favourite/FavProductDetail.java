@@ -3,6 +3,7 @@ package com.spectraapps.myspare.bottomtabscreens.favourite;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,14 +22,20 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.model.AddToFavModel;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FavProductDetail extends Fragment
         implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
@@ -44,12 +51,13 @@ public class FavProductDetail extends Fragment
 
     RelativeLayout relativeLayout;
 
-    ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
 
 
     String langhere;
     private String uImage;
+    private String pIdFav;
+    private boolean isFav;
 
     public FavProductDetail() {
         // Required empty public constructor
@@ -64,7 +72,6 @@ public class FavProductDetail extends Fragment
 
         MainActivity.mToolbarText.setText(pName);
 
-        setSharedPreference = new ListSharedPreference.Set(FavProductDetail.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(FavProductDetail.this.getContext().getApplicationContext());
 
         langhere = getSharedPreference.getLanguage();
@@ -100,6 +107,93 @@ public class FavProductDetail extends Fragment
         userImageView = rootView.findViewById(R.id.user_image_PD);
     }
 
+    private void setButtonFavUI() {
+        if (pIdFav.equals("true")) {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+            isFav = true;
+        } else {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+            isFav = false;
+        }
+
+        MainActivity.imageButtonFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFav) {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    serverRemoveFromFav(pId);
+                    isFav = false;
+                } else {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    serverAddToFav(pId);
+                    isFav = true;
+                }
+            }
+        });
+        MainActivity.imageButtonFav.setVisibility(View.VISIBLE);
+    }
+
+    private void serverRemoveFromFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, false);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void serverAddToFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, true);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), response.body().getStatus().getTitle(),
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void setData() {
 
         uName_tv.setText(uName);
@@ -134,6 +228,9 @@ public class FavProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
+            pIdFav = CachePot.getInstance().pop("pIdFav");
+            setButtonFavUI();
+
             pImage1 = getSharedPreference.getImg1();
             pImage2 = getSharedPreference.getImg2();
 
@@ -146,10 +243,10 @@ public class FavProductDetail extends Fragment
 
             Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/ " + pImage1 + "/ " + pImage2 + " /" + pDate + "/" + pCountry
                     + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/ " + uImage);
-            setData();
 
+            setData();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 
@@ -203,7 +300,6 @@ public class FavProductDetail extends Fragment
         mDemoSlider.addOnPageChangeListener(this);
     }
 
-
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
@@ -231,9 +327,12 @@ public class FavProductDetail extends Fragment
                 dialIntent.setData(Uri.parse("tel:" + uMobile));
                 startActivity(dialIntent);
                 break;
+
             case R.id.relative_user_info:
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
+                break;
+            default:
                 break;
         }
     }

@@ -1,12 +1,13 @@
 package com.spectraapps.myspare.products;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,11 +25,6 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.github.kimkevin.cachepot.CachePot;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.michael.easydialog.EasyDialog;
-import com.spectraapps.myspare.model.AddToFavModel;
-import com.spectraapps.myspare.model.BrandsModel;
-import com.spectraapps.myspare.model.CountriesModel;
-import com.spectraapps.myspare.model.ModelsModel;
-import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.adapters.adpProducts.AllProductsAdapter;
@@ -36,10 +32,14 @@ import com.spectraapps.myspare.adapters.adpProducts.ProductsAdapter;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.home.Home;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.model.AddToFavModel;
+import com.spectraapps.myspare.model.BrandsModel;
+import com.spectraapps.myspare.model.CountriesModel;
+import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.model.inproducts.ProductsAllModel;
 import com.spectraapps.myspare.model.inproducts.ProductsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
-
+import com.spectraapps.myspare.utility.ListSharedPreference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -169,7 +169,7 @@ public class ProductsFragment extends Fragment {
 
     private void showPopUp() {
 
-        final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
+        @SuppressLint("InflateParams") final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
        final EasyDialog easyDialog = new EasyDialog(getActivity())
                 .setLayout(popupView)
                 .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.app_background_color))
@@ -968,7 +968,7 @@ public class ProductsFragment extends Fragment {
     }
 
     private void initAdapterAllProducts() {
-        mAllProductsAdapter = new AllProductsAdapter(getContext(), mProductAllDataList,
+        mAllProductsAdapter = new AllProductsAdapter(ProductsFragment.this.getContext().getApplicationContext(), mProductAllDataList,
                 new AllProductsAdapter.ListAllListeners() {
                     @Override
                     public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
@@ -1022,6 +1022,5 @@ public class ProductsFragment extends Fragment {
 
         void filter(String one, String two, String three, int num);
     }
-
 
 }

@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +31,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jcminarro.roundkornerlayout.RoundKornerLinearLayout;
 import com.spectraapps.myspare.MainActivity;
-import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.spectraapps.myspare.R;
 import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.model.AddModel;
@@ -42,6 +41,7 @@ import com.spectraapps.myspare.model.CurrencyModel;
 import com.spectraapps.myspare.model.ManufacturerCountriesModel;
 import com.spectraapps.myspare.model.ModelsModel;
 import com.spectraapps.myspare.network.MyRetrofitClient;
+import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class AddItemActivity extends AppCompatActivity {
     private static final int IMG_CODE1 = 10001;
     private static final int IMG_CODE2 = 10002;
 
-    public static String image_path1, image_path2;
+    protected static String image_path1, image_path2;
 
     // Storage Permissions
     String[] permissions = new String[]{
@@ -817,6 +817,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void initUI() {
         mCalendar = Calendar.getInstance();
+        MainActivity.imageButtonFav.setVisibility(View.INVISIBLE);
         //////////////////////////////////////
         roundKornerTV = findViewById(R.id.model_tv_roundedCorner);
         roundKornerSpinner = findViewById(R.id.model_spinner_roundedCorner);

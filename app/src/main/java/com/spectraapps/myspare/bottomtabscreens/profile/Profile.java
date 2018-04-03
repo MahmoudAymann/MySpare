@@ -114,11 +114,11 @@ public class Profile extends Fragment {
 
     private void initAdapterProfileProducts() {
 
-        mProfileAdapter = new ProfileAdapter(getContext(), mProfileDataList,
+        mProfileAdapter = new ProfileAdapter(Profile.this.getContext().getApplicationContext(), mProfileDataList,
                 new ProfileAdapter.ListAllListeners() {
 
                     @Override
-                    public void onCardViewClick(ProfileProdModel.DataBean profileProdData) {
+                    public void onCardViewClick(ProfileProdModel.DataBean profileProdData, int position) {
 
                         CachePot.getInstance().push("pName", profileProdData.getProductName());
                         CachePot.getInstance().push("pId", profileProdData.getPid());
@@ -135,16 +135,19 @@ public class Profile extends Fragment {
                         CachePot.getInstance().push("pBrand", profileProdData.getBrand());
                         CachePot.getInstance().push("pModel", profileProdData.getModel());
 
-                        CachePot.getInstance().push("uEmail", profileProdData.getId());
+                        CachePot.getInstance().push("uId", profileProdData.getId());
                         CachePot.getInstance().push("uMobile", profileProdData.getMobile());
                         CachePot.getInstance().push("uName", profileProdData.getName());
                         CachePot.getInstance().push("uImage", profileProdData.getImage());
 
+                        CachePot.getInstance().push("pIdFav", getSharedPreference.getFav(mProfileDataList.get(position).getPid()));
+
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
 
-                        Log.v("jkjkl", profileProdData.getImage() + " push ");
-                        Log.v("jkjkl", profileProdData.getName() + profileProdData.getMobile() + "push");
+//                        Log.v("jkjkl", profileProdData.getImage() + " push ");
+//                        Log.v("jkjkl", profileProdData.getName() + profileProdData.getMobile() + "push");
+
                     }
 
                     @Override

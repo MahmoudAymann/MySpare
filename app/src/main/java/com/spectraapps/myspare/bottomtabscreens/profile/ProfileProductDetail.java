@@ -3,11 +3,13 @@ package com.spectraapps.myspare.bottomtabscreens.profile;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,17 +22,22 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
-import com.spectraapps.myspare.bottomtabscreens.profile.Profile;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.model.AddToFavModel;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileProductDetail extends Fragment
-        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+        implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
 
     SliderLayout mDemoSlider;
     PagerIndicator pagerIndicator;
@@ -44,8 +51,9 @@ public class ProfileProductDetail extends Fragment
     ListSharedPreference.Get getSharedPreference;
 
     boolean isFav;
-
+    RelativeLayout relativeLayout;
     CircleImageView profileImageView;
+    private String pIdFav;
 
     public ProfileProductDetail() {
     }
@@ -71,6 +79,8 @@ public class ProfileProductDetail extends Fragment
     private void initUI(View rootView) {
         mDemoSlider = rootView.findViewById(R.id.slider);
         pagerIndicator = rootView.findViewById(R.id.custom_indicator);
+        relativeLayout = rootView.findViewById(R.id.relative_user_info);
+        relativeLayout.setOnClickListener(this);
 
         //product
         pName_tv = rootView.findViewById(R.id.get_PName_PD);
@@ -82,61 +92,99 @@ public class ProfileProductDetail extends Fragment
         pBrand_tv = rootView.findViewById(R.id.get_PBrand_PD);
         pModel_tv = rootView.findViewById(R.id.get_PModel_PD);
 
-        setButtonFavUI();
-
         //user
         uName_tv = rootView.findViewById(R.id.user_name_PD);
         uMobile_tv = rootView.findViewById(R.id.textView_phone_PD);
-        uMobile_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                dialIntent.setData(Uri.parse("tel:" + uMobile));
-                startActivity(dialIntent);
-            }
-        });
+        uMobile_tv.setOnClickListener(this);
         profileImageView = rootView.findViewById(R.id.user_image_PD);
     }
 
     private void setButtonFavUI() {
-//        if (!getSharedPreference.getFav(pId).equals("false")) {
-//            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-//            isFav = true;
-//            Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
-//        }else{
-//            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-//            isFav = false;
-//            Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
-//        }
-//
-//        MainActivity.imageButtonFav.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isFav){
-////                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
-////                    serverRemoveFromFav();
-//                    //Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
-//                    isFav = false;
-//                }else{
-////                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
-////                    serverAddToFav();
-//                    //Toast.makeText(getContext(), ""+getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
-//                    isFav = true;
-//                }
-//            }
-//        });
+        if (pIdFav.equals("true")) {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+            isFav = true;
+        } else {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+            isFav = false;
+        }
+
+        MainActivity.imageButtonFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFav) {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    serverRemoveFromFav(pId);
+                    isFav = false;
+                } else {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    serverAddToFav(pId);
+                    isFav = true;
+                }
+            }
+        });
         MainActivity.imageButtonFav.setVisibility(View.VISIBLE);
-        Toast.makeText(getContext(), "" + getSharedPreference.getFav(pId), Toast.LENGTH_SHORT).show();
     }
 
-    private void serverRemoveFromFav() {
-        Toast.makeText(getContext(), "remove", Toast.LENGTH_SHORT).show();
+    private void serverRemoveFromFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, false);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void serverAddToFav() {
-        Toast.makeText(getContext(), "add", Toast.LENGTH_SHORT).show();
+    private void serverAddToFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, true);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), response.body().getStatus().getTitle(),
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     private void setData() {
 
@@ -176,13 +224,16 @@ public class ProfileProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
-            uId = CachePot.getInstance().pop("uEmail");
+            uId = CachePot.getInstance().pop("uId");
             uMobile = CachePot.getInstance().pop("uMobile");
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
 
-            Log.v("jkjkl", uId + " "+uMobile+ " pop ");
-            Log.v("jkjkl", uName + " "+uImage + "pop");
+            pIdFav = CachePot.getInstance().pop("pIdFav");
+            setButtonFavUI();
+
+            Log.v("jkjkl", uId + " " + uMobile + " pop ");
+            Log.v("jkjkl", uName + " " + uImage + "pop");
 
             MainActivity.mToolbarText.setText(pName);
 
@@ -265,5 +316,23 @@ public class ProfileProductDetail extends Fragment
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.relative_user_info:
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
+                break;
+            case R.id.textView_phone_PD:
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + uMobile));
+                startActivity(dialIntent);
+                break;
+            default:
+                break;
+        }
     }
 }//end class

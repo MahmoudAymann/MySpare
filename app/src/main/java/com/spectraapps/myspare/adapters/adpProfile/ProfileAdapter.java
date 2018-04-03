@@ -2,6 +2,7 @@ package com.spectraapps.myspare.adapters.adpProfile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         setSharedPreference = new ListSharedPreference.Set(mContext);
         getSharedPreference = new ListSharedPreference.Get(mContext);
@@ -69,18 +70,20 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
                 .into(holder.imageView);
 
 
-        if (mProfileArrayList.get(holder.getAdapterPosition()).getIsFavorite().equals("true")) {
-            setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "true");
+        if (mProfileArrayList.get(position).getIsFavorite().equals("true")) {
+            setSharedPreference.setFav(mProfileArrayList.get(position).getPid(), "true");
+            Log.v("tagy", getSharedPreference.getFav(mProfileArrayList.get(position).getPid()));
             holder.btnFav.setImageResource(R.drawable.ic_favorite_full_24dp);
         } else {
-            setSharedPreference.setFav(mProfileArrayList.get(holder.getAdapterPosition()).getPid(), "false");
+            setSharedPreference.setFav(mProfileArrayList.get(position).getPid(), "false");
+            Log.v("tagy", getSharedPreference.getFav(mProfileArrayList.get(position).getPid()));
             holder.btnFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProfileArrayList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mProfileArrayList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
 
@@ -102,7 +105,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
     public interface ListAllListeners {
 
-        void onCardViewClick(ProfileProdModel.DataBean produtsAllModel);
+        void onCardViewClick(ProfileProdModel.DataBean produtsAllModel, int position);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }

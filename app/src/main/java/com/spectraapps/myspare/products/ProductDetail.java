@@ -3,6 +3,7 @@ package com.spectraapps.myspare.products;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +21,20 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.github.kimkevin.cachepot.CachePot;
 import com.spectraapps.myspare.MainActivity;
 import com.spectraapps.myspare.R;
+import com.spectraapps.myspare.api.Api;
 import com.spectraapps.myspare.bottomtabscreens.profile.SellerProfilePD;
 import com.spectraapps.myspare.helper.BaseBackPressedListener;
+import com.spectraapps.myspare.model.AddToFavModel;
+import com.spectraapps.myspare.network.MyRetrofitClient;
 import com.spectraapps.myspare.utility.ListSharedPreference;
 import com.squareup.picasso.Picasso;
-
 
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetail extends Fragment
         implements View.OnClickListener {
@@ -38,7 +44,7 @@ public class ProductDetail extends Fragment
 
     String pName, pId, pPrice, pNumber, pCurrency, uMobile, uId, uName, uImage, pDate, pCountry, pBrand, pModel;
     String pImage1;
-    String pImage2 ;
+    String pImage2;
     TextView pName_tv, pPrice_tv, pNumber_tv, pCurrency_tv, pDate_tv, pCountry_tv, pBrand_tv, pModel_tv,
             uName_tv, uMobile_tv;
 
@@ -47,6 +53,8 @@ public class ProductDetail extends Fragment
 
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
+    private String pIdFav;
+    private boolean isFav;
 
     public ProductDetail() {
 
@@ -112,6 +120,32 @@ public class ProductDetail extends Fragment
         pModel_tv.setText(pModel);
     }
 
+    private void setButtonFavUI() {
+        if (pIdFav.equals("true")) {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+            isFav = true;
+        } else {
+            MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+            isFav = false;
+        }
+
+        MainActivity.imageButtonFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFav) {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_empty_24dp);
+                    serverRemoveFromFav(pId);
+                    isFav = false;
+                } else {
+                    MainActivity.imageButtonFav.setImageResource(R.drawable.ic_favorite_full_24dp);
+                    serverAddToFav(pId);
+                    isFav = true;
+                }
+            }
+        });
+        MainActivity.imageButtonFav.setVisibility(View.VISIBLE);
+    }
+
     private void getProductData() {
         try {
             pName = CachePot.getInstance().pop("pName");
@@ -127,6 +161,8 @@ public class ProductDetail extends Fragment
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
+            pIdFav = CachePot.getInstance().pop("pIdFav");
+            setButtonFavUI();
 
             MainActivity.mToolbarText.setText(pName);
 
@@ -155,15 +191,6 @@ public class ProductDetail extends Fragment
         });
     }//end back pressed
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
     private void imageSliderInitilaize() {
 
@@ -197,6 +224,65 @@ public class ProductDetail extends Fragment
         mDemoSlider.setDuration(4000);
     }
 
+    private void serverRemoveFromFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, false);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void serverAddToFav(String pId) {
+        try {
+            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, true);
+
+            addCall.enqueue(new Callback<AddToFavModel>() {
+                @Override
+                public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
+                    try {
+                        if (!response.isSuccessful()) {
+                            if (response.body().getStatus() != null)
+                                Toast.makeText(getContext(), response.body().getStatus().getTitle(),
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<AddToFavModel> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onClick(View view) {
@@ -207,8 +293,11 @@ public class ProductDetail extends Fragment
                 startActivity(dialIntent);
                 break;
             case R.id.relative_user_info:
+                CachePot.getInstance().push("uId", uId);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout, new SellerProfilePD()).commit();
+                break;
+            default:
                 break;
         }
     }

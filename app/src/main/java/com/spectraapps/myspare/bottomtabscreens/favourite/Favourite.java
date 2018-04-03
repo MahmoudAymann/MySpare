@@ -138,6 +138,7 @@ public class Favourite extends Fragment {
 
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
+        MainActivity.imageButtonFav.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(getString(R.string.loading));
@@ -158,7 +159,7 @@ public class Favourite extends Fragment {
     }//end initRecyclerView()
 
     private void initAdapter() {
-        mFavAdapter = new FavouriteAdapter(Favourite.this.getContext(), mFavDataList, new FavouriteAdapter.ListAllListeners() {
+        mFavAdapter = new FavouriteAdapter(Favourite.this.getContext().getApplicationContext(), mFavDataList, new FavouriteAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(FavouriteModel.DataBean favModel) {
 

@@ -52,18 +52,18 @@ public class SellerProfilePD extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_seller_profile, container, false);
+
         MainActivity.mToolbarText.setText(getString(R.string.profile_title));
 
         setSharedPreference = new ListSharedPreference.Set(SellerProfilePD.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(SellerProfilePD.this.getContext().getApplicationContext());
-
 
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
 
         try {
-            uId = CachePot.getInstance().pop("suid");
+            uId = CachePot.getInstance().pop("uId");
 
         } catch (Exception e) {
             Toast.makeText(getContext(), "exc: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -88,6 +88,7 @@ public class SellerProfilePD extends Fragment {
     private void initUI(View rootView) {
         initPullRefreshLayout(rootView);
         recyclerView = rootView.findViewById(R.id.profile_recycler);
+        MainActivity.imageButtonFav.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(getString(R.string.loading));
@@ -109,16 +110,14 @@ public class SellerProfilePD extends Fragment {
     }
 
     private void turnOnServer() {
-
         serverProfile();
-
     }
 
     private void initAdapterProfileProducts() {
         mProfileAdapter = new ProfileAdapter(getContext(), mProfileDataList,
                 new ProfileAdapter.ListAllListeners() {
                     @Override
-                    public void onCardViewClick(ProfileProdModel.DataBean produtsAllModel) {
+                    public void onCardViewClick(ProfileProdModel.DataBean produtsAllModel, int position) {
 
                         CachePot.getInstance().push("pName", produtsAllModel.getProductName());
                         CachePot.getInstance().push("pId", produtsAllModel.getProductNumber());
@@ -134,10 +133,12 @@ public class SellerProfilePD extends Fragment {
                         CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
                         CachePot.getInstance().push("pModel", produtsAllModel.getModel());
 
-                        CachePot.getInstance().push("uEmail", produtsAllModel.getId());
+                        CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());
                         CachePot.getInstance().push("uImage", produtsAllModel.getImage());
+
+                        CachePot.getInstance().push("pIdFav", getSharedPreference.getFav(mProfileDataList.get(position).getPid()));
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProfileProductDetail()).commit();
