@@ -159,7 +159,8 @@ public class ProfileProductDetail extends Fragment
     private void serverAddToFav(String pId) {
         try {
             Api retrofit = MyRetrofitClient.getBase().create(Api.class);
-            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(), pId, true);
+            final Call<AddToFavModel> addCall = retrofit.addToFavourite(getSharedPreference.getEmail(),
+                    pId, true);
 
             addCall.enqueue(new Callback<AddToFavModel>() {
                 @Override

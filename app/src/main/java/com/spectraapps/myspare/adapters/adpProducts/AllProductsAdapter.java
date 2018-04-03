@@ -54,9 +54,10 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
         holder.nameTV.setText(mProductsAllModelList.get(position).getProductName());
         holder.priceTV.setText(mProductsAllModelList.get(position).getProductPrice());
+        holder.currencyTV.setText(mProductsAllModelList.get(position).getCurrency());
 
         Picasso.with(holder.itemView.getContext())
-                .load(mProductsAllModelList.get(position).getImage1())
+                .load("http://myspare.net/public/upload/" + mProductsAllModelList.get(holder.getAdapterPosition()).getImage1())
                 .placeholder(R.drawable.place_holder)
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
@@ -64,28 +65,20 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProductsAllModelList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mProductsAllModelList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
 
-        holder.btnFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "plz login first", Toast.LENGTH_SHORT).show();
-            }
-        });
     }//end onBindViewHolder()
 
     public interface ListAllListeners {
-
-        void onCardViewClick(ProductsAllModel.DataBean produtsAllModel);
+        void onCardViewClick(ProductsAllModel.DataBean produtsAllModel, int adapterPosition);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTV, priceTV;
+        TextView nameTV, priceTV, currencyTV;
         SelectableRoundedImageView imageView;
-        ImageButton btnFav;
 
 
         MyViewHolder(View itemView) {
@@ -93,8 +86,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
             nameTV = itemView.findViewById(R.id.textName);
             priceTV = itemView.findViewById(R.id.textPrice);
-
-            btnFav = itemView.findViewById(R.id.imageButtonFav);
+            currencyTV = itemView.findViewById(R.id.textCurrency);
 
             imageView = itemView.findViewById(R.id.image);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);

@@ -79,7 +79,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mFavArrayList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mFavArrayList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
 
@@ -102,7 +102,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyVi
 
     public interface ListAllListeners {
 
-        void onCardViewClick(FavouriteModel.DataBean favouriteDataBean);
+        void onCardViewClick(FavouriteModel.DataBean favouriteDataBean, int adapterPosition);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }

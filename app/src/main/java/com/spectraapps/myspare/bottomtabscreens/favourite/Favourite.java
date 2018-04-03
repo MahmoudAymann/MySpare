@@ -161,10 +161,10 @@ public class Favourite extends Fragment {
     private void initAdapter() {
         mFavAdapter = new FavouriteAdapter(Favourite.this.getContext().getApplicationContext(), mFavDataList, new FavouriteAdapter.ListAllListeners() {
             @Override
-            public void onCardViewClick(FavouriteModel.DataBean favModel) {
+            public void onCardViewClick(FavouriteModel.DataBean favModel, int position) {
 
                 CachePot.getInstance().push("pName", favModel.getProductName());
-                CachePot.getInstance().push("pId", favModel.getProductNumber());
+                CachePot.getInstance().push("pId", favModel.getPid());
                 CachePot.getInstance().push("pPrice", favModel.getProductPrice());
                 CachePot.getInstance().push("pNumber", favModel.getProductNumber());
                 CachePot.getInstance().push("pCurrency", favModel.getCurrency());
@@ -176,6 +176,8 @@ public class Favourite extends Fragment {
                 CachePot.getInstance().push("pCountry", favModel.getCountry());
                 CachePot.getInstance().push("pBrand", favModel.getBrand());
                 CachePot.getInstance().push("pModel", favModel.getModel());
+
+                CachePot.getInstance().push("pIdFav", getSharedPreference.getFav(mFavDataList.get(position).getPid()));
 
                 CachePot.getInstance().push("uId", favModel.getId());
                 CachePot.getInstance().push("uMobile", favModel.getMobile());
@@ -260,8 +262,9 @@ public class Favourite extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                serverFavourites();
-                initAdapter();
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Favourite()).commit();
             }
         });
     }

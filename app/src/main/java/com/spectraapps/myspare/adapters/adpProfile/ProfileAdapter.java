@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.spectraapps.myspare.R;
@@ -69,6 +70,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
                 .error(R.drawable.place_holder)
                 .into(holder.imageView);
 
+        Log.v("tpl", mProfileArrayList.get(holder.getAdapterPosition()).getImage1());
 
         if (mProfileArrayList.get(position).getIsFavorite().equals("true")) {
             setSharedPreference.setFav(mProfileArrayList.get(position).getPid(), "true");

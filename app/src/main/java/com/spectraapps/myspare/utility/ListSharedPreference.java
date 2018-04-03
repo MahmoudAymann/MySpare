@@ -168,12 +168,12 @@ public class ListSharedPreference {
 
         public String getImg1() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg1", "");
+            return prefs.getString("getImg1", "http://myspare.net/public/upload/default.jpg");
         }
 
         public String getImg2() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getString("getImg2", "");
+            return prefs.getString("getImg2", "http://myspare.net/public/upload/default.jpg");
         }
 
         public String getCategory() {

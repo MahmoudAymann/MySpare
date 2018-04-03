@@ -83,8 +83,7 @@ public class ProductsFragment extends Fragment {
     String mUEmail, mCategory;
 
     RoundKornerLinearLayout roundKornerModelsText, roundKornerSpinner;
-    String mSerialNumber, mManfactureCountry_Id,
-            mBrand_Id, mModel_Id, mCountry_Id;
+    String mManfactureCountry_Id, mBrand_Id, mModel_Id, mCountry_Id;
     ListSharedPreference.Set setSharedPreference;
     ListSharedPreference.Get getSharedPreference;
     private ArrayList<String> countriesId_array, modelsId_array, brandId_array;
@@ -137,7 +136,10 @@ public class ProductsFragment extends Fragment {
     }//end initRecyclerView()
 
     private void initUI(View rootView) {
+
         initPullRefreshLayout(rootView);
+
+        MainActivity.imageButtonFav.setVisibility(View.INVISIBLE);
 
         fabButton = rootView.findViewById(R.id.fab);
         fabButton.setOnClickListener(new View.OnClickListener() {
@@ -146,9 +148,7 @@ public class ProductsFragment extends Fragment {
                 showPopUp();
             }
         });
-
         recyclerView = rootView.findViewById(R.id.products_recycler);
-
     }//end initUI
 
     private void initPullRefreshLayout(View rootView) {
@@ -170,7 +170,7 @@ public class ProductsFragment extends Fragment {
     private void showPopUp() {
 
         @SuppressLint("InflateParams") final View popupView = this.getLayoutInflater().inflate(R.layout.popup_filter_layout, null);
-       final EasyDialog easyDialog = new EasyDialog(getActivity())
+        final EasyDialog easyDialog = new EasyDialog(getActivity())
                 .setLayout(popupView)
                 .setBackgroundColor(ProductsFragment.this.getResources().getColor(R.color.app_background_color))
                 .setLocationByAttachedView(fabButton)
@@ -276,7 +276,7 @@ public class ProductsFragment extends Fragment {
                 } else if (spinerCountryPos > 0 && spinerBrandPos > 0 && spinerModelPos > 0 && spinerYearPos > 0 && serialNumET_HasText) {
                     myCall_back.filter(mManfactureCountry_Id, mBrand_Id, mModel_Id, spinner_year.getSelectedItem().toString(), editText.getText().toString(), 12345);
                 }
-               // popupView.setVisibility(View.INVISIBLE);
+                // popupView.setVisibility(View.INVISIBLE);
                 easyDialog.dismiss();
             }
         });
@@ -448,6 +448,7 @@ public class ProductsFragment extends Fragment {
 
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<CountriesModel> call, @NonNull Throwable t) {
             }
@@ -580,41 +581,72 @@ public class ProductsFragment extends Fragment {
     }//end addYears();
 
     private void serverProductsAll() {
+//        mProductAllDataList = new ArrayList<>();
+//        try {
+//            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+//
+//            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), mCategory);
+//
+//            productsCall.enqueue(new Callback<ProductsAllModel>() {
+//                @Override
+//                public void onResponse(@NonNull Call<ProductsAllModel> call, @NonNull Response<ProductsAllModel> response) {
+//                    try {
+//
+//                        if (response.isSuccessful()) {
+//                            mProductAllDataList.addAll(response.body().getData());
+//                            recyclerView.setAdapter(mAllProductsAdapter);
+//                            mAllProductsAdapter.notifyDataSetChanged();
+//                            Log.v("jkjk", response.body().getData().size() + " "+response.body().getData().get(1).getImage1());
+//                            pullRefreshLayout.setRefreshing(false);
+//                        }
+//                    } catch (Exception exc) {
+//                        exc.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
+//                    Log.v("tagy", t.getMessage());
+//                    pullRefreshLayout.setRefreshing(false);
+//                }
+//            });
+//        } catch (Exception e) {
+//            pullRefreshLayout.setRefreshing(false);
+//            alertDialogBuilder.setMessage(e.getMessage());
+//            AlertDialog alertDialog = alertDialogBuilder.create();
+//            alertDialog.show();
+//        }
+
         mProductAllDataList = new ArrayList<>();
-        try {
-            Api retrofit = MyRetrofitClient.getBase().create(Api.class);
+        Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-            final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), mCategory);
+        final Call<ProductsAllModel> productsCall = retrofit.productsAll(getLang(), mCategory);
 
-            productsCall.enqueue(new Callback<ProductsAllModel>() {
-                @Override
-                public void onResponse(@NonNull Call<ProductsAllModel> call, @NonNull Response<ProductsAllModel> response) {
-                    try {
-
-                        if (response.isSuccessful()) {
-                            mProductAllDataList.addAll(response.body().getData());
-                            recyclerView.setAdapter(mAllProductsAdapter);
-                            mAllProductsAdapter.notifyDataSetChanged();
-                            Log.v("jkjk", response.body().getData().size() + "");
-                            pullRefreshLayout.setRefreshing(false);
-                        }
-                    }catch (Exception exc){
-                        exc.printStackTrace();
+        productsCall.enqueue(new Callback<ProductsAllModel>() {
+            @Override
+            public void onResponse(@NonNull Call<ProductsAllModel> call, @NonNull Response<ProductsAllModel> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        mProductAllDataList.addAll(response.body().getData());
+                        pullRefreshLayout.setRefreshing(false);
+                        recyclerView.setAdapter(mAllProductsAdapter);
+                        mAllProductsAdapter.notifyDataSetChanged();
+                    } else {
+                        pullRefreshLayout.setRefreshing(false);
                     }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
-                    Log.v("tagy", t.getMessage());
+                } catch (Exception exc) {
                     pullRefreshLayout.setRefreshing(false);
                 }
-            });
-        } catch (Exception e) {
-            pullRefreshLayout.setRefreshing(false);
-            alertDialogBuilder.setMessage(e.getMessage());
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ProductsAllModel> call, @NonNull Throwable t) {
+                pullRefreshLayout.setRefreshing(false);
+                alertDialogBuilder.setMessage(t.getMessage());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
     }
 
     private String getLang() {
@@ -850,20 +882,19 @@ public class ProductsFragment extends Fragment {
                 break;
             default:
                 break;
-
         }
     }
 
     private void initAdapterWith() {
-        productsAdapter = new ProductsAdapter(getContext(), mProductDataList,
+        productsAdapter = new ProductsAdapter(ProductsFragment.this.getContext().getApplicationContext(), mProductDataList,
                 new ProductsAdapter.ListAllListeners() {
                     @Override
-                    public void onCardViewClick(ProductsModel.DataBean produtsModel) {
+                    public void onCardViewClick(ProductsModel.DataBean produtsModel, int position) {
 
                         Log.e("plz", produtsModel.getProductName());
 
                         CachePot.getInstance().push("pName", produtsModel.getProductName());
-                        CachePot.getInstance().push("pId", produtsModel.getProductNumber());
+                        CachePot.getInstance().push("pId", produtsModel.getPid());
                         CachePot.getInstance().push("pPrice", produtsModel.getProductPrice());
                         CachePot.getInstance().push("pNumber", produtsModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsModel.getCurrency());
@@ -872,6 +903,9 @@ public class ProductsFragment extends Fragment {
                         setSharedPreference.setimg2(produtsModel.getImage2());
 
                         CachePot.getInstance().push("pDate", produtsModel.getDate());
+
+                        CachePot.getInstance().push("pIdFav", getSharedPreference.getFav(mProductDataList.get(position).getPid()));
+
                         CachePot.getInstance().push("pCountry", produtsModel.getCountry());
                         CachePot.getInstance().push("pBrand", produtsModel.getBrand());
                         CachePot.getInstance().push("pModel", produtsModel.getModel());
@@ -880,7 +914,6 @@ public class ProductsFragment extends Fragment {
                         CachePot.getInstance().push("uMobile", produtsModel.getMobile());
                         CachePot.getInstance().push("uName", produtsModel.getName());
                         CachePot.getInstance().push("uImage", produtsModel.getImage());
-                        CachePot.getInstance().push("langy", getLang());
 
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.main_frameLayout, new ProductDetail()).commit();
@@ -890,35 +923,30 @@ public class ProductsFragment extends Fragment {
                     public void onFavButtonClick(View v, int position, boolean isFav) {
                         if (getSharedPreference.getLoginStatus()) {
                             if (isFav) {
-                                serverAddToFav(position);
+                                serverAddToFav(mProductDataList.get(position).getPid());
                             } else {
-                                serverRemoveFromFav(position);
+                                serverRemoveFromFav(mProductDataList.get(position).getPid());
                             }
-                        }else {
+                        } else {
                             Toast.makeText(getContext(), getString(R.string.signin_first), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    private void serverRemoveFromFav(int position) {
+    private void serverRemoveFromFav(String position) {
 
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(), false);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, position, false);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
             public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                 try {
-
-                    if (response.isSuccessful()) {
-
-                        if (getSharedPreference.getLoginStatus()) {
-                            turnOnServers(1);
-                        } else if (!getSharedPreference.getLoginStatus()) {
-                            turnOnServers(3);
-                        }
+                    if (!response.isSuccessful()) {
+                        if (response.body().getStatus() != null)
+                            Toast.makeText(getContext(), " " + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception ignored) {
                 }
@@ -934,24 +962,18 @@ public class ProductsFragment extends Fragment {
         });
     }
 
-    private void serverAddToFav(int position) {
+    private void serverAddToFav(String position) {
         Api retrofit = MyRetrofitClient.getBase().create(Api.class);
 
-        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, mProductDataList.get(position).getPid(), true);
+        final Call<AddToFavModel> productsCall = retrofit.addToFavourite(mUEmail, position, true);
 
         productsCall.enqueue(new Callback<AddToFavModel>() {
             @Override
             public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                 try {
-
-
-                    if (response.isSuccessful()) {
-                        if (getSharedPreference.getLoginStatus()) {
-                            turnOnServers(1);
-                        } else if (!getSharedPreference.getLoginStatus()) {
-                            turnOnServers(3);
-                        }
-
+                    if (!response.isSuccessful()) {
+                        if (response.body().getStatus() != null)
+                            Toast.makeText(getContext(), " " + response.body().getStatus().getTitle(), Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception ignored) {
                 }
@@ -971,22 +993,24 @@ public class ProductsFragment extends Fragment {
         mAllProductsAdapter = new AllProductsAdapter(ProductsFragment.this.getContext().getApplicationContext(), mProductAllDataList,
                 new AllProductsAdapter.ListAllListeners() {
                     @Override
-                    public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel) {
+                    public void onCardViewClick(ProductsAllModel.DataBean produtsAllModel, int adapterPosition) {
 
                         Log.e("plz", produtsAllModel.getProductName());
 
                         CachePot.getInstance().push("pName", produtsAllModel.getProductName());
-                        CachePot.getInstance().push("pId", produtsAllModel.getProductNumber());
+                        CachePot.getInstance().push("pId", produtsAllModel.getPid());
                         CachePot.getInstance().push("pPrice", produtsAllModel.getProductPrice());
                         CachePot.getInstance().push("pNumber", produtsAllModel.getProductNumber());
                         CachePot.getInstance().push("pCurrency", produtsAllModel.getCurrency());
-                        CachePot.getInstance().push("pImage1", produtsAllModel.getImage1());
-                        CachePot.getInstance().push("pImage2", produtsAllModel.getImage2());
+
                         CachePot.getInstance().push("pDate", produtsAllModel.getDate());
                         CachePot.getInstance().push("pCountry", produtsAllModel.getCountry());
                         CachePot.getInstance().push("pBrand", produtsAllModel.getBrand());
                         CachePot.getInstance().push("pModel", produtsAllModel.getModel());
 
+                        setSharedPreference.setimg1("http://myspare.net/public/upload/" + produtsAllModel.getImage1());
+                        setSharedPreference.setimg2("http://myspare.net/public/upload/" + produtsAllModel.getImage2());
+                        Log.v("uy", "http://myspare.net/public/upload/" + produtsAllModel.getImage1());
                         CachePot.getInstance().push("uId", produtsAllModel.getId());
                         CachePot.getInstance().push("uMobile", produtsAllModel.getMobile());
                         CachePot.getInstance().push("uName", produtsAllModel.getName());

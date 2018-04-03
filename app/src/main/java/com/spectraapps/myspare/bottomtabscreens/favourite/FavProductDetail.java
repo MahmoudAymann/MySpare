@@ -144,7 +144,6 @@ public class FavProductDetail extends Fragment
                 public void onResponse(@NonNull Call<AddToFavModel> call, @NonNull Response<AddToFavModel> response) {
                     try {
                         if (!response.isSuccessful()) {
-
                             if (response.body().getStatus() != null)
                                 Toast.makeText(getActivity(), " " + response.body().getStatus().getTitle() + " ", Toast.LENGTH_LONG).show();
                         }
@@ -177,6 +176,8 @@ public class FavProductDetail extends Fragment
                             if (response.body().getStatus() != null)
                                 Toast.makeText(getContext(), response.body().getStatus().getTitle(),
                                         Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "suces", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -228,9 +229,6 @@ public class FavProductDetail extends Fragment
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
 
-            pIdFav = CachePot.getInstance().pop("pIdFav");
-            setButtonFavUI();
-
             pImage1 = getSharedPreference.getImg1();
             pImage2 = getSharedPreference.getImg2();
 
@@ -241,10 +239,14 @@ public class FavProductDetail extends Fragment
             uName = CachePot.getInstance().pop("uName");
             uImage = CachePot.getInstance().pop("uImage");
 
+
             Log.v("productinfo", pName + "/" + pId + "/" + pPrice + "/" + pNumber + "/" + pCurrency + "/ " + pImage1 + "/ " + pImage2 + " /" + pDate + "/" + pCountry
                     + "/" + pBrand + "/" + pModel + "/" + uId + "/" + uMobile + "/" + uName + "/ " + uImage);
 
             setData();
+            pIdFav = CachePot.getInstance().pop("pIdFav");
+            setButtonFavUI();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,7 +266,6 @@ public class FavProductDetail extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        imageSliderInitilaize();
     }
 
     private void imageSliderInitilaize() {
@@ -321,6 +322,7 @@ public class FavProductDetail extends Fragment
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.textView_phone_PD:
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);

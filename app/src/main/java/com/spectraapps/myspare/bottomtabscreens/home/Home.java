@@ -69,8 +69,6 @@ public class Home extends Fragment {
         setSharedPreference = new ListSharedPreference.Set(Home.this.getContext().getApplicationContext());
         getSharedPreference = new ListSharedPreference.Get(Home.this.getContext().getApplicationContext());
 
-        onTouchEvent(rootView, true);
-
         fireBackButtonEvent();
         initUI(rootView);
         initRecyclerView();
@@ -160,7 +158,6 @@ public class Home extends Fragment {
     }//end initRecyclerView()
 
     private void setData() {
-
         homeAdapter = new HomeAdapter(dataBeanArrayList, new HomeAdapter.ListAllListeners() {
             @Override
             public void onCardViewClick(CategoriesModel.DataBean categoriesModel) {
@@ -185,8 +182,8 @@ public class Home extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                serverCategories();
-                onTouchEvent(rootView, false);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_frameLayout, new Home()).commit();
             }
         });
     }

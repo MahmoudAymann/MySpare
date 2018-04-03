@@ -75,7 +75,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAllListeners.onCardViewClick(mProductsModelList.get(holder.getAdapterPosition()));
+                listAllListeners.onCardViewClick(mProductsModelList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
 
@@ -106,7 +106,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
     public interface ListAllListeners {
 
-        void onCardViewClick(ProductsModel.DataBean produtsAllModel);
+        void onCardViewClick(ProductsModel.DataBean produtsAllModel, int adapterPosition);
 
         void onFavButtonClick(View v, int position, boolean isFav);
     }

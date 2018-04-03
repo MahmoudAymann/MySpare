@@ -155,15 +155,17 @@ public class ProductDetail extends Fragment
             pCurrency = CachePot.getInstance().pop("pCurrency");
 
             pImage1 = getSharedPreference.getImg1();
+            Log.v("uy", pImage1);
             pImage2 = getSharedPreference.getImg2();
 
             pDate = CachePot.getInstance().pop("pDate");
             pCountry = CachePot.getInstance().pop("pCountry");
             pBrand = CachePot.getInstance().pop("pBrand");
             pModel = CachePot.getInstance().pop("pModel");
-            pIdFav = CachePot.getInstance().pop("pIdFav");
-            setButtonFavUI();
-
+            if (getSharedPreference.getLoginStatus()) {
+                pIdFav = CachePot.getInstance().pop("pIdFav");
+                setButtonFavUI();
+            }
             MainActivity.mToolbarText.setText(pName);
 
             uId = CachePot.getInstance().pop("uId");

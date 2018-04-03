@@ -1,6 +1,5 @@
 package com.spectraapps.myspare.bottomtabscreens.additem;
 
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
